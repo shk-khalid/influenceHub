@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Search, 
   Bell, 
@@ -18,6 +18,16 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
   const [darkMode, setDarkMode] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth > 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -28,14 +38,14 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
 
   const handleClick = () => {
     navigate('/profile');
-  }
+  };
 
   return (
     <header 
       className={`
-        fixed top-0 z-30 h-16 glass-effect w-full
+        fixed top-0 right-0 z-30 h-16 glass-effect
         transition-all duration-300 shadow-glow
-        ${sidebarCollapsed ? 'lg:left-20' : 'lg:left-64'}
+        ${isDesktop ? (sidebarCollapsed ? 'left-20' : 'left-64') : 'left-0'}
       `}
     >
       <div className="h-full px-4 flex items-center justify-between">

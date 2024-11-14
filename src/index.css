@@ -5,42 +5,128 @@
 @layer base {
   :root {
     color-scheme: light;
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: rgba(17, 12, 46, 0.15);
   }
 
   :root[class~="dark"] {
     color-scheme: dark;
+    --glass-bg: rgba(17, 24, 39, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: rgba(0, 0, 0, 0.25);
+  }
+
+  body {
+    @apply antialiased bg-gradient-to-br from-indigo-50 via-white to-purple-50 
+           dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 animate-gradient
+           min-h-screen text-gray-900 dark:text-white;
+  }
+
+  /* Enhanced Scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-700 rounded-full;
   }
 }
-@layer utilities {
+
+@layer components {
   .glass-effect {
-    @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-white/20 dark:border-gray-800/20;
-  }
-  
-  .glass-effect-darker {
-    @apply bg-gray-900/80 backdrop-blur-lg border border-gray-800/20;
+    @apply backdrop-blur-lg border transition-all duration-300
+           bg-[var(--glass-bg)] border-[var(--glass-border)]
+           shadow-[0_8px_32px_0_var(--glass-shadow)];
   }
 
-  /* Gradient animation for background */
+  .glass-card {
+    @apply glass-effect rounded-xl hover:shadow-lg 
+           transform hover:-translate-y-1 transition-all duration-300;
+  }
+
+  .nav-link {
+    @apply flex items-center px-3 py-2.5 text-sm font-medium rounded-xl
+           transition-all duration-300 relative overflow-hidden
+           hover:bg-white/10 dark:hover:bg-gray-800/50;
+  }
+
+  .nav-link.active {
+    @apply bg-gradient-to-r from-indigo-500/10 to-purple-500/10 
+           text-indigo-600 dark:text-indigo-400 shadow-glow;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 bg-white/50 dark:bg-gray-800/50
+           border border-gray-200 dark:border-gray-700 rounded-xl
+           focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent
+           placeholder-gray-400 dark:placeholder-gray-500
+           transition-all duration-200;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 
+           rounded-xl font-medium transition-all duration-300
+           focus:ring-2 focus:ring-offset-2 focus:outline-none
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-[var(--primary-gradient)] text-white
+           hover:shadow-lg hover:shadow-indigo-500/25
+           focus:ring-indigo-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+           border border-gray-200 dark:border-gray-700
+           hover:bg-gray-50 dark:hover:bg-gray-700/50
+           focus:ring-gray-500;
+  }
+}
+
+@layer utilities {
   .animate-gradient {
-    background-size: 300% 300%;
-    animation: gradient 10s ease-in-out infinite;
+    background-size: 200% 200%;
+    animation: gradient 8s ease infinite;
   }
 
-  /* Keyframes for a subtle shifting gradient animation */
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
+  .shadow-glow {
+    @apply shadow-[0_0_20px_-5px_rgba(99,102,241,0.3)];
+  }
+
+  .shadow-glow-lg {
+    @apply shadow-[0_0_30px_-5px_rgba(99,102,241,0.4)];
   }
 }
 
-
-body {
-  @apply antialiased bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 animate-gradient;
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
+
+/* Enhanced Animations */
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-slide-up { animation: slideUp 0.3s ease-out; }
+.animate-slide-down { animation: slideDown 0.3s ease-out; }
+.animate-fade-in { animation: fadeIn 0.2s ease-out; }

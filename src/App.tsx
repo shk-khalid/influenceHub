@@ -5,6 +5,8 @@ import { SignUpForm } from './components/auth/SignUpForm';
 import { Layout } from './components/layout/Layout';
 import Dashboard from './components/dashboard/Dashboard';
 import Profile from './pages/Profile';
+import Campaigns from './pages/Campaigns';
+import Discovery from './pages/Discovery';
 
 function App() {
   return (
@@ -47,6 +49,23 @@ function App() {
             <Profile />
           }
         />
+
+        {/* Protected Route for Campaigns */}
+        <Route
+          path="/campaigns"
+          element={
+            <Campaigns />
+          }
+        />
+
+        {/* Protected Route for Discovery */}
+        <Route
+          path="/discovery"
+          element={
+            <Discovery />
+          }
+        />
+        
 
         {/* Default Route to Redirect to SignIn */}
         <Route

@@ -7,6 +7,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import Profile from './pages/Profile';
 import Campaigns from './pages/Campaigns';
 import Discovery from './pages/Discovery';
+import ContentManager from './pages/ContentManager';
 
 function App() {
   return (
@@ -65,9 +66,15 @@ function App() {
             <Discovery />
           }
         />
-        
 
-        {/* Default Route to Redirect to SignIn */}
+        <Route
+          path="/content"
+          element={
+            <ContentManager />
+          }
+        />
+
+          {/* Default Route to Redirect to SignIn */}
         <Route
           path="*"
           element={<Navigate to="/dashboard" replace />}

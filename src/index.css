@@ -18,6 +18,11 @@
     --glass-shadow: rgba(0, 0, 0, 0.25);
   }
 
+  :root {
+    --bottom-nav-height: 64px;
+  }
+  
+
   body {
     @apply antialiased bg-gradient-to-br from-indigo-50 via-white to-purple-50 
            dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 animate-gradient

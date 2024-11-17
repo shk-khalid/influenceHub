@@ -2,9 +2,9 @@ import React from 'react';
 import { type LucideIcon } from 'lucide-react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'social';
+  variant?: 'primary' | 'secondary' | 'social' | 'gradient';
   icon?: LucideIcon | React.FC;
-  children?: React.ReactNode; // Made optional
+  children?: React.ReactNode;
   fullWidth?: boolean;
 }
 
@@ -23,6 +23,7 @@ export function Button({
     primary: 'bg-indigo-600 text-white hover:bg-indigo-700',
     secondary: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50',
     social: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50',
+    gradient: 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 focus:ring-indigo-500 transform hover:scale-105'
   };
 
   const width = fullWidth ? 'w-full' : '';

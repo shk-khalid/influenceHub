@@ -1,73 +1,52 @@
-import { Instagram, Twitter, Youtube, Globe, Plus } from 'lucide-react';
-import { Button } from '../common/Button';
+import { Instagram, Twitter, Youtube, LucideIcon } from 'lucide-react';
 
-interface SocialLink {
+interface SocialLinkInputProps {
   platform: string;
   url: string;
-  followers?: number;
-  verified: boolean;
+  onChange: (url: string) => void;
+  isValid: boolean;
+  isEditing: boolean;
 }
 
-interface SocialLinksProps {
-  links: SocialLink[];
-  onAdd: () => void;
-}
-
-const PLATFORM_ICONS = {
+const icons: Record<string, LucideIcon> = {
   instagram: Instagram,
   twitter: Twitter,
   youtube: Youtube,
-  website: Globe,
 };
 
-export function SocialLinks({ links, onAdd }: SocialLinksProps) {
-  return (
-    <div className="glass-effect rounded-xl p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Social Media</h2>
-        <Button
-          variant="secondary"
-          icon={Plus}
-          onClick={onAdd}
-        >
-          Add Link
-        </Button>
-      </div>
+const colors: Record<string, string> = {
+  instagram: 'text-pink-500 group-hover:text-pink-600',
+  twitter: 'text-blue-400 group-hover:text-blue-500',
+  youtube: 'text-red-500 group-hover:text-red-600',
+};
 
-      <div className="space-y-4">
-        {links.map((link) => {
-          const Icon = PLATFORM_ICONS[link.platform as keyof typeof PLATFORM_ICONS] || Globe;
-          
-          return (
-            <a
-              key={link.url}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 rounded-lg hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors"
-            >
-              <div className="flex items-center space-x-3">
-                <Icon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}
-                  </p>
-                  {link.followers && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {link.followers.toLocaleString()} followers
-                    </p>
-                  )}
-                </div>
-              </div>
-              {link.verified && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800/20 dark:text-green-400">
-                  Verified
-                </span>
-              )}
-            </a>
-          );
-        })}
+export default function SocialLinkInput({ platform, url, onChange, isValid }: SocialLinkInputProps) {
+  const Icon = icons[platform];
+  const colorClass = colors[platform];
+
+  return (
+    <div className="group relative">
+      <div className="flex items-center space-x-4">
+        <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center
+          transition-transform duration-200 group-hover:scale-110">
+          <Icon className={`w-5 h-5 transition-colors duration-200 ${colorClass}`} />
+        </div>
+        <input
+          type="url"
+          value={url}
+          onChange={(e) => onChange(e.target.value)}
+          className={`flex-1 rounded-lg border-gray-300 shadow-sm 
+            focus:border-indigo-500 focus:ring-indigo-500 transition-all duration-200
+            ${url && !isValid ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}
+            ${url && isValid ? 'border-green-500 focus:border-green-500 focus:ring-green-500' : ''}`}
+          placeholder={`Your ${platform.charAt(0).toUpperCase() + platform.slice(1)} URL`}
+        />
       </div>
+      {url && !isValid && (
+        <span className="absolute -bottom-6 left-14 text-red-500 text-sm">
+          Please enter a valid URL
+        </span>
+      )}
     </div>
   );
 }

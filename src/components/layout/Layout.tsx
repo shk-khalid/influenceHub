@@ -9,11 +9,14 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth > 768);
+      const IsNowDesktop = window.innerWidth > 768
+      setIsDesktop(IsNowDesktop);
+      setIsMobile(!IsNowDesktop)
     };
 
     window.addEventListener('resize', handleResize);
@@ -34,13 +37,13 @@ export function Layout({ children }: LayoutProps) {
           pt-16 min-h-screen
           transition-all duration-300
           ${isDesktop ? (sidebarCollapsed ? 'ml-20' : 'ml-64') : 'ml-0'}
+          ${isMobile ? 'pb-16' : ''}
         `}
       >
         <div className="p-6">
           {children}
         </div>
       </main>
-      {/* BottomNav is only shown on mobile screens */}
       <BottomNav />
     </div>
   );

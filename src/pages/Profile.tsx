@@ -1,126 +1,170 @@
+import React, { useState } from 'react';
+import ProfileHeader from '../components/profile/ProfileHeader';
+import InfluencerStats from '../components/profile/ProfileStats';
+import ProfilePicture from '../components/profile/ProfilePicture';
+import PersonalDetails from '../components/profile/PersonalDetails';
+import SocialLinkInput from '../components/profile/SocialLinks';
+import Card from '../components/common/Card';
+import { Button } from '../components/common/Button';
+import { Edit2, Save, X } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
-import { ProfileHeader } from '../components/profile/ProfileHeader';
-import { ProfileStats } from '../components/profile/ProfileStats';
-import { SocialLinks } from '../components/profile/SocialLinks';
-import { Portfolio } from '../components/profile/Portfolio';
 
-// Mock data - replace with real data from your backend
-const mockUser = {
-  name: "Sarah Johnson",
-  avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-  coverImage: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-  location: "Los Angeles, CA",
-  bio: "Fashion & Lifestyle Content Creator 📸 Sharing my journey and inspiring others through authentic content. Collaborating with brands to create meaningful stories.",
-  isVerified: true,
-  followers: 158000,
-  type: 'influencer' as const,
-};
+interface SocialLink {
+  platform: string;
+  url: string;
+}
 
-const mockStats = {
-  followers: 158000,
-  rating: 4.8,
-  engagementRate: 3.2,
-  campaignsCompleted: 45,
-  totalEarnings: 125000,
-};
+interface Language {
+  id: string;
+  name: string;
+  level: 'Native' | 'Fluent' | 'Advanced' | 'Intermediate' | 'Basic';
+}
 
-const mockSocialLinks = [
-  {
-    platform: 'instagram',
-    url: 'https://instagram.com/sarahjohnson',
-    followers: 158000,
-    verified: true,
-  },
-  {
-    platform: 'youtube',
-    url: 'https://youtube.com/sarahjohnson',
-    followers: 89000,
-    verified: true,
-  },
-  {
-    platform: 'twitter',
-    url: 'https://twitter.com/sarahjohnson',
-    followers: 45000,
-    verified: true,
-  },
-  {
-    platform: 'website',
-    url: 'https://sarahjohnson.com',
-    verified: false,
-  },
-];
+export default function ProfileSetup() {
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileImage, setProfileImage] = useState<string>('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400');
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([
+    { platform: 'instagram', url: 'https://instagram.com/johndoe' },
+    { platform: 'twitter', url: 'https://twitter.com/johndoe' },
+    { platform: 'youtube', url: 'https://youtube.com/@johndoe' },
+  ]);
+  const [isAvailableForCollabs, setIsAvailableForCollabs] = useState(true);
+  const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>(['Product Reviews', 'Brand Ambassadorship']);
+  const [customUrl, setCustomUrl] = useState('johndoe');
+  const [rating] = useState(4.8);
+  const [isVerified] = useState(true);
+  const [languages, setLanguages] = useState<Language[]>([
+    { id: '1', name: 'English', level: 'Native' },
+    { id: '2', name: 'Spanish', level: 'Fluent' },
+  ]);
+  const [personalInfo, setPersonalInfo] = useState({
+    fullName: 'John Doe',
+    location: 'New York, USA',
+    bio: 'Creative content creator passionate about storytelling and authentic brand partnerships.',
+    niche: 'lifestyle',
+  });
 
-const mockPortfolio = [
-  {
-    id: '1',
-    type: 'image' as const,
-    thumbnail: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f',
-    title: 'Summer Fashion Collection',
-    description: 'Collaboration with Fashion Brand X',
-    stats: {
-      likes: 15800,
-      views: 89000,
-      engagement: 4.2,
-    },
-  },
-  {
-    id: '2',
-    type: 'video' as const,
-    thumbnail: 'https://images.unsplash.com/photo-1483985988355-763728e1935b',
-    title: 'Spring Lookbook 2024',
-    description: 'Seasonal fashion inspiration',
-    stats: {
-      likes: 12300,
-      views: 67000,
-      engagement: 3.8,
-    },
-  },
-  {
-    id: '3',
-    type: 'image' as const,
-    thumbnail: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b',
-    title: 'Lifestyle Product Review',
-    description: 'Honest review of trending products',
-    stats: {
-      likes: 9500,
-      views: 45000,
-      engagement: 3.5,
-    },
-  },
-];
-
-export default function Profile() {
-  const handleAddSocialLink = () => {
-    // Implement social link addition logic
-    console.log('Add social link');
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleAddPortfolio = () => {
-    // Implement portfolio addition logic
-    console.log('Add portfolio item');
+  const updateSocialLink = (platform: string, url: string) => {
+    setSocialLinks(prev =>
+      prev.map(link =>
+        link.platform === platform ? { ...link, url } : link
+      )
+    );
+  };
+
+  const validateUrl = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleAddLanguage = (language: Language) => {
+    setLanguages(prev => [...prev, language]);
+  };
+
+  const handleRemoveLanguage = (id: string) => {
+    setLanguages(prev => prev.filter(lang => lang.id !== id));
+  };
+
+  const handleUpdatePersonalInfo = (field: keyof typeof personalInfo, value: string) => {
+    setPersonalInfo(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSave = () => {
+    // Here you would typically save to backend
+    setIsEditing(false);
   };
 
   return (
     <Layout>
-      <div className="animate-fade-in">
-        <ProfileHeader user={mockUser} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ProfileStats stats={mockStats} />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-1">
-              <SocialLinks
-                links={mockSocialLinks}
-                onAdd={handleAddSocialLink}
-              />
-            </div>
-            <div className="lg:col-span-2">
-              <Portfolio
-                items={mockPortfolio}
-                onAdd={handleAddPortfolio}
-              />
-            </div>
+      <div className="max-w-4xl mx-auto p-6 space-y-8">
+        <div className="flex justify-between items-start">
+          <ProfileHeader isVerified={isVerified} personalInfo={personalInfo} />
+          <div className="flex gap-2">
+            {isEditing ? (
+              <>
+                <Button
+                  variant="secondary"
+                  icon={X}
+                  onClick={() => setIsEditing(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="primary"
+                  icon={Save}
+                  onClick={handleSave}
+                >
+                  Save Changes
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="secondary"
+                icon={Edit2}
+                onClick={() => setIsEditing(true)}
+              >
+                Edit Profile
+              </Button>
+            )}
           </div>
         </div>
+
+        <InfluencerStats rating={rating} />
+
+        <div className="flex flex-col items-center space-y-4">
+          <ProfilePicture
+            image={profileImage}
+            onImageUpload={handleImageUpload}
+            isEditing={isEditing}
+          />
+        </div>
+
+        <PersonalDetails
+          isVerified={isVerified}
+          isAvailableForCollabs={isAvailableForCollabs}
+          setIsAvailableForCollabs={setIsAvailableForCollabs}
+          customUrl={customUrl}
+          setCustomUrl={setCustomUrl}
+          selectedCampaigns={selectedCampaigns}
+          setSelectedCampaigns={setSelectedCampaigns}
+          languages={languages}
+          onAddLanguage={handleAddLanguage}
+          onRemoveLanguage={handleRemoveLanguage}
+          isEditing={isEditing}
+          personalInfo={personalInfo}
+          onUpdatePersonalInfo={handleUpdatePersonalInfo}
+        />
+
+        <Card>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Social Links</h2>
+          <div className="space-y-6">
+            {socialLinks.map(({ platform, url }) => (
+              <SocialLinkInput
+                key={platform}
+                platform={platform}
+                url={url}
+                onChange={(newUrl) => updateSocialLink(platform, newUrl)}
+                isValid={!url || validateUrl(url)}
+                isEditing={isEditing}
+              />
+            ))}
+          </div>
+        </Card>
       </div>
     </Layout>
   );

@@ -26,11 +26,11 @@ const PROFICIENCY_LEVELS: Array<Language['level']> = [
 ];
 
 const BADGE_COLORS: Record<Language['level'], 'purple' | 'blue' | 'green' | 'yellow' | 'gray'> = {
-  'Native': 'purple',
-  'Fluent': 'blue',
-  'Advanced': 'green',
-  'Intermediate': 'yellow',
-  'Basic': 'gray'
+  Native: 'purple',
+  Fluent: 'blue',
+  Advanced: 'green',
+  Intermediate: 'yellow',
+  Basic: 'gray'
 };
 
 export default function LanguageSection({ languages, onAddLanguage, onRemoveLanguage, isEditing }: LanguageSectionProps) {
@@ -54,7 +54,9 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <label className="block text-sm font-medium text-gray-700">Languages</label>
+        <label className="block text-lg font-medium text-gray-800 dark:text-gray-100">
+          Languages
+        </label>
         {isEditing && (
           <Button
             variant="secondary"
@@ -67,9 +69,11 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
         )}
       </div>
 
-      <div className="min-h-[4rem] p-4 bg-gray-50 rounded-lg border border-gray-200">
+      <div className="min-h-[4rem] p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
         {languages.length === 0 ? (
-          <p className="text-gray-500 text-sm text-center">Add languages you speak</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm text-center">
+            Add languages you speak
+          </p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {languages.map((lang) => (
@@ -83,9 +87,9 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
                 {isEditing && (
                   <button
                     onClick={() => onRemoveLanguage(lang.id)}
-                    className="absolute -top-2 -right-2 bg-white rounded-full p-0.5 shadow-sm 
+                    className="absolute -top-2 -right-2 bg-gray-50 dark:bg-gray-900 rounded-full p-0.5 shadow-sm 
                       opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                      hover:bg-red-50"
+                      hover:bg-red-50 dark:hover:bg-red-900"
                   >
                     <X className="w-3 h-3 text-red-500" />
                   </button>
@@ -99,12 +103,14 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl transform transition-all">
+          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 w-full max-w-md shadow-xl transform transition-all">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Add Language</h3>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                Add Language
+              </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-gray-500 transition-colors"
+                className="text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-300 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -112,24 +118,26 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-lg font-medium text-gray-800 dark:text-gray-100 mb-3">
                   Language
                 </label>
                 <select
                   value={selectedLanguage}
                   onChange={(e) => setSelectedLanguage(e.target.value)}
-                  className="w-full rounded-lg border-gray-300 shadow-sm 
+                  className="w-full p-2 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm 
                     focus:border-purple-500 focus:ring-purple-500 transition-colors"
                 >
                   <option value="">Select a language</option>
                   {LANGUAGE_OPTIONS.map((lang) => (
-                    <option key={lang} value={lang}>{lang}</option>
+                    <option key={lang} value={lang}>
+                      {lang}
+                    </option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-lg font-medium text-gray-800 dark:text-gray-100 mb-3">
                   Proficiency Level
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -139,8 +147,8 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
                       className={`relative flex items-center justify-center p-2 rounded-lg border-2 cursor-pointer
                         transition-all duration-200 ${
                           selectedLevel === level
-                            ? 'border-purple-500 bg-purple-50'
-                            : 'border-gray-200 hover:border-purple-200'
+                            ? 'border-purple-500 bg-purple-50 dark:bg-purple-900'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-purple-200 dark:hover:border-purple-700'
                         }`}
                     >
                       <input
@@ -149,7 +157,9 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
                         checked={selectedLevel === level}
                         onChange={() => setSelectedLevel(level)}
                       />
-                      <span className="text-sm">{level}</span>
+                      <span className="text-lg text-gray-900 dark:text-gray-100">
+                        {level}
+                      </span>
                     </label>
                   ))}
                 </div>

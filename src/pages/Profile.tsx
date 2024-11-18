@@ -56,8 +56,8 @@ export default function ProfileSetup() {
   };
 
   const updateSocialLink = (platform: string, url: string) => {
-    setSocialLinks(prev =>
-      prev.map(link =>
+    setSocialLinks((prev) =>
+      prev.map((link) =>
         link.platform === platform ? { ...link, url } : link
       )
     );
@@ -73,33 +73,34 @@ export default function ProfileSetup() {
   };
 
   const handleAddLanguage = (language: Language) => {
-    setLanguages(prev => [...prev, language]);
+    setLanguages((prev) => [...prev, language]);
   };
 
   const handleRemoveLanguage = (id: string) => {
-    setLanguages(prev => prev.filter(lang => lang.id !== id));
+    setLanguages((prev) => prev.filter((lang) => lang.id !== id));
   };
 
   const handleUpdatePersonalInfo = (field: keyof typeof personalInfo, value: string) => {
-    setPersonalInfo(prev => ({ ...prev, [field]: value }));
+    setPersonalInfo((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSave = () => {
-    // Here you would typically save to backend
     setIsEditing(false);
   };
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto p-6 space-y-8">
-        <div className="flex justify-between items-start">
+      <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
+        {/* Header Section */}
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-6">
           <ProfileHeader isVerified={isVerified} personalInfo={personalInfo} />
-          <div className="flex gap-2">
+          <div className="flex gap-2 sm:gap-4 flex-wrap">
             {isEditing ? (
               <>
                 <Button
                   variant="secondary"
                   icon={X}
+                  className="w-full sm:w-auto"
                   onClick={() => setIsEditing(false)}
                 >
                   Cancel
@@ -107,6 +108,7 @@ export default function ProfileSetup() {
                 <Button
                   variant="primary"
                   icon={Save}
+                  className="w-full sm:w-auto"
                   onClick={handleSave}
                 >
                   Save Changes
@@ -116,6 +118,7 @@ export default function ProfileSetup() {
               <Button
                 variant="secondary"
                 icon={Edit2}
+                className="w-full sm:w-auto"
                 onClick={() => setIsEditing(true)}
               >
                 Edit Profile
@@ -124,8 +127,10 @@ export default function ProfileSetup() {
           </div>
         </div>
 
+        {/* Influencer Stats */}
         <InfluencerStats rating={rating} />
 
+        {/* Profile Picture */}
         <div className="flex flex-col items-center space-y-4">
           <ProfilePicture
             image={profileImage}
@@ -134,6 +139,7 @@ export default function ProfileSetup() {
           />
         </div>
 
+        {/* Personal Details */}
         <PersonalDetails
           isVerified={isVerified}
           isAvailableForCollabs={isAvailableForCollabs}
@@ -150,9 +156,10 @@ export default function ProfileSetup() {
           onUpdatePersonalInfo={handleUpdatePersonalInfo}
         />
 
+        {/* Social Links */}
         <Card>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Social Links</h2>
-          <div className="space-y-6">
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6">Social Links</h2>
+          <div className="space-y-4 sm:space-y-6 p-2">
             {socialLinks.map(({ platform, url }) => (
               <SocialLinkInput
                 key={platform}

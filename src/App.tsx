@@ -1,13 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import AuthLayout from './components/auth/AuthLayout';
-import { SignInForm } from './components/auth/SignInForm';
-import { SignUpForm } from './components/auth/SignUpForm';
+import { Toaster } from 'react-hot-toast';
 import { Layout } from './components/layout/Layout';
 import Dashboard from './components/dashboard/Dashboard';
 import Profile from './pages/Profile';
 import Campaigns from './pages/Campaigns';
 import Discovery from './pages/Discovery';
 import ContentManager from './pages/ContentManager';
+import { Authorization } from './pages/Authorization';
 
 function App() {
   return (
@@ -15,21 +14,9 @@ function App() {
       <Routes>
         {/* Public Route for SignIn */}
         <Route
-          path="/signin"
+          path="/auth"
           element={
-            <AuthLayout>
-              <SignInForm onSwitchToSignUp={() => { }} />
-            </AuthLayout>
-          }
-        />
-
-        {/* Public Route for SignUp */}
-        <Route
-          path="/signup"
-          element={
-            <AuthLayout>
-              <SignUpForm onSwitchToSignIn={() => { }} />
-            </AuthLayout>
+            <Authorization />
           }
         />
 
@@ -39,6 +26,7 @@ function App() {
           element={
             <Layout>
               <Dashboard />
+              <Toaster position="top-right" />
             </Layout>
           }
         />

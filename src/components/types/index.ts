@@ -18,3 +18,21 @@ export interface FileItem {
   uploadedAt: string;
   uploadedBy: string;
 }
+
+export interface AuthFormData {
+  email: string;
+  password: string;
+  code?: string;
+}
+
+export interface AuthState {
+  isLoading: boolean;
+  error: string | null;
+  isAuthenticated: boolean;
+  requiresTwoFactor: boolean;
+  user: null | {
+    id: string;
+    email: string;
+    name: string;
+  };
+}

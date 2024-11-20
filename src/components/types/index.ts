@@ -36,3 +36,38 @@ export interface AuthState {
     name: string;
   };
 }
+
+export type CampaignStatus = 'pending' | 'under_review' | 'in_progress' | 'completed' | 'declined';
+export type PriorityLevel = 'low' | 'medium' | 'high';
+
+export interface Campaign {
+  id: string;
+  title: string;
+  brand: string;
+  description: string;
+  goals: string[];
+  deliverables: string[];
+  startDate: string;
+  endDate: string;
+  budget: number;
+  status: CampaignStatus;
+  metrics?: {
+    impressions: number;
+    reach: number;
+    engagement: number;
+  };
+  platforms: string[];
+  requirements: string[];
+  priority?: PriorityLevel;
+  progress?: number;
+}
+
+export interface Task {
+  id: string;
+  campaignId: string;
+  title: string;
+  description: string;
+  deadline: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'review';
+  progress: number;
+}

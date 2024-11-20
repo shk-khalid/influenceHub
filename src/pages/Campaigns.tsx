@@ -1,105 +1,140 @@
+import React, { useEffect } from 'react';
+import { DragDropContext, DropResult } from '@hello-pangea/dnd';
+import BoardColumn from '../components/campaigns/board/BoardColumn';
+import { useCampaignStore } from '../components/campaigns/CampaignStore';
+import SearchBar from '../components/campaigns/visuals/SearchBar';
+import DashboardOverview from '../components/campaigns/visuals/CampaignOverview';
 import { Layout } from '../components/layout/Layout';
-import { CampaignList } from '../components/campaigns/CampaignList';
-import { CampaignStats } from '../components/campaigns/CampaignStats';
-import { CampaignFilters } from '../components/campaigns/CampaignFilters';
-import { Plus } from 'lucide-react';
-import { Button } from '../components/common/Button';
 
-const mockCampaigns = [
-  {
-    id: '1',
-    title: 'Summer Fashion Collection Launch',
-    status: 'active',
-    budget: 25000,
-    startDate: '2024-04-01',
-    endDate: '2024-05-15',
-    progress: 45,
-    influencers: [
-      {
-        id: '1',
-        name: 'Emma Thompson',
-        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
-        status: 'confirmed',
-      },
-      {
-        id: '2',
-        name: 'Alex Rivera',
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
-        status: 'pending',
-      },
-    ],
-    metrics: {
-      reach: 1200000,
-      engagement: 4.8,
-      clicks: 15800,
-      conversions: 420,
-    },
-    nextMilestone: {
-      title: 'Content Submission',
-      dueDate: '2024-04-10',
-    },
-  },
-  {
-    id: '2',
-    title: 'Tech Product Launch',
-    status: 'draft',
-    budget: 50000,
-    startDate: '2024-05-01',
-    endDate: '2024-06-30',
-    progress: 0,
-    influencers: [],
-    metrics: {
-      reach: 0,
-      engagement: 0,
-      clicks: 0,
-      conversions: 0,
-    },
-    nextMilestone: {
-      title: 'Campaign Brief',
-      dueDate: '2024-04-20',
-    },
-  },
-];
+// Define allowed values for 'status' to ensure type safety.
+type CampaignStatus = 'pending' | 'under_review' | 'in_progress' | 'completed';
 
-const mockStats = {
-  activeCampaigns: 3,
-  totalBudget: 75000,
-  avgEngagement: 4.2,
-  totalReach: 2500000,
-};
+// Interface for a campaign.
+interface Campaign {
+  id: string;
+  title: string;
+  brand: string;
+  description: string;
+  goals: string[];
+  deliverables: string[];
+  startDate: string;
+  endDate: string;
+  budget: number;
+  status: CampaignStatus;
+  platforms: string[];
+  requirements: string[];
+  priority: 'high' | 'medium' | 'low';
+  progress: number;
+}
 
-export default function Campaigns() {
+const Campaign: React.FC = () => {
+  const { campaigns, setCampaigns, updateCampaignStatus, getFilteredCampaigns } = useCampaignStore();
+
+  // Mock campaigns with type safety.
+  const mockCampaigns: Campaign[] = [
+    {
+      id: '1',
+      title: 'Summer Fashion Collection',
+      brand: 'StyleCo',
+      description: 'Promote our new summer collection',
+      goals: ['Increase brand awareness', 'Drive sales'],
+      deliverables: ['Instagram post', 'TikTok video', 'Story series'],
+      startDate: '2024-03-15',
+      endDate: '2024-04-15',
+      budget: 2500,
+      status: 'in_progress',
+      platforms: ['Instagram', 'TikTok'],
+      requirements: ['Min 10k followers', 'Fashion niche'],
+      priority: 'high',
+      progress: 65,
+    },
+    {
+      id: '2',
+      title: 'Fitness App Launch',
+      brand: 'FitTech',
+      description: 'Launch campaign for new fitness app',
+      goals: ['App downloads', 'User engagement'],
+      deliverables: ['YouTube review', 'Instagram stories'],
+      startDate: '2024-03-20',
+      endDate: '2024-04-20',
+      budget: 3000,
+      status: 'pending',
+      platforms: ['YouTube', 'Instagram'],
+      requirements: ['Fitness focus', 'Min 20k followers'],
+      priority: 'medium',
+      progress: 0,
+    },
+  ];
+
+  // Load mock campaigns on component mount.
+  useEffect(() => {
+    setCampaigns(mockCampaigns);
+  }, [setCampaigns]);
+
+  // Handle drag and drop actions.
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source, draggableId } = result;
+
+    if (!destination) return;
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    updateCampaignStatus(draggableId, destination.droppableId as CampaignStatus);
+  };
+
+  // Filter campaigns into columns.
+  const filteredCampaigns = getFilteredCampaigns();
+  const columns = {
+    pending: filteredCampaigns.filter((c) => c.status === 'pending'),
+    under_review: filteredCampaigns.filter((c) => c.status === 'under_review'),
+    in_progress: filteredCampaigns.filter((c) => c.status === 'in_progress'),
+    completed: filteredCampaigns.filter((c) => c.status === 'completed'),
+  };
+
   return (
     <Layout>
-      <div className="animate-fade-in">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              Campaign Management
-            </h1>
-            <p className="text-gray-600 dark:text-gray-300">
-              Create and manage your influencer marketing campaigns
-            </p>
-          </div>
-          <Button
-            variant="primary"
-            icon={Plus}
-          >
-            Create Campaign
-          </Button>
+      <div>
+        <div className="mb-8 space-y-6">
+          <SearchBar />
+          <DashboardOverview />
         </div>
 
-        <CampaignStats stats={mockStats} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-8">
-          <div className="lg:col-span-1">
-            <CampaignFilters />
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <BoardColumn
+              title="Pending"
+              campaigns={columns.pending}
+              droppableId="pending"
+              color="yellow"
+            />
+            <BoardColumn
+              title="Under Review"
+              campaigns={columns.under_review}
+              droppableId="under_review"
+              color="blue"
+            />
+            <BoardColumn
+              title="In Progress"
+              campaigns={columns.in_progress}
+              droppableId="in_progress"
+              color="green"
+            />
+            <BoardColumn
+              title="Completed"
+              campaigns={columns.completed}
+              droppableId="completed"
+              color="purple"
+            />
           </div>
-          <div className="lg:col-span-3">
-            <CampaignList campaigns={mockCampaigns} />
-          </div>
-        </div>
+        </DragDropContext>
       </div>
     </Layout>
   );
-}
+};
+
+export default Campaign;

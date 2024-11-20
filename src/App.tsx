@@ -3,10 +3,11 @@ import { Toaster } from 'react-hot-toast';
 import { Layout } from './components/layout/Layout';
 import Dashboard from './components/dashboard/Dashboard';
 import Profile from './pages/Profile';
-import Campaigns from './pages/Campaigns';
+import CampaignLayout from './pages/Campaigns';
 import Discovery from './pages/Discovery';
 import ContentManager from './pages/ContentManager';
 import { Authorization } from './pages/Authorization';
+
 
 function App() {
   return (
@@ -43,7 +44,7 @@ function App() {
         <Route
           path="/campaigns"
           element={
-            <Campaigns />
+            <CampaignLayout />
           }
         />
 

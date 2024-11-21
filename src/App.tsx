@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Layout } from './components/layout/Layout';
-import Dashboard from './components/dashboard/Dashboard';
+import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import CampaignLayout from './pages/Campaigns';
 import Discovery from './pages/Discovery';
@@ -26,7 +26,7 @@ function App() {
           path="/dashboard"
           element={
             <Layout>
-              <Dashboard />
+              <Dashboard />     
               <Toaster position="top-right" />
             </Layout>
           }

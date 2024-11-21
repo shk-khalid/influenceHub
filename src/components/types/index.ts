@@ -71,3 +71,27 @@ export interface Task {
   status: 'pending' | 'in_progress' | 'completed' | 'review';
   progress: number;
 }
+
+export interface DemographicData {
+  age: { label: string; value: number }[];
+  gender: { label: string; value: number }[];
+  location: { country: string; value: number }[];
+}
+
+export interface EngagementMetric {
+  date: string;
+  likes: number;
+  comments: number;
+  shares: number;
+  reach: number;
+}
+
+export interface CampaignMetrics {
+  id: string;
+  name: string;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  startDate: string;
+  endDate: string;
+}

@@ -5,6 +5,7 @@ import { useCampaignStore } from '../components/campaigns/CampaignStore';
 import SearchBar from '../components/campaigns/visuals/SearchBar';
 import DashboardOverview from '../components/campaigns/visuals/CampaignOverview';
 import { Layout } from '../components/layout/Layout';
+import { motion } from 'framer-motion';
 
 // Define allowed values for 'status' to ensure type safety.
 type CampaignStatus = 'pending' | 'under_review' | 'in_progress' | 'completed';
@@ -98,7 +99,16 @@ const Campaign: React.FC = () => {
 
   return (
     <Layout>
-      <div>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <header className="relative mb-20 text-center">
+          <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="absolute -top-4 left-1/2 -translate-x-1/2 w-48 h-48 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl" />
+          <motion.h1 className="text-6xl font-bold gradient-text mb-4 relative" initial={{ y: 20 }} animate={{ y: 0 }}>
+            Campaign Overview
+          </motion.h1>
+          <motion.p className="text-gray-600 dark:text-gray-400 text-lg relative max-w-2xl mx-auto" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
+            Analyze and manage your ongoing campaigns effectively.
+          </motion.p>
+        </header>
         <div className="mb-8 space-y-6">
           <SearchBar />
           <DashboardOverview />
@@ -132,7 +142,7 @@ const Campaign: React.FC = () => {
             />
           </div>
         </DragDropContext>
-      </div>
+      </motion.div>
     </Layout>
   );
 };

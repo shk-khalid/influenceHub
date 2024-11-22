@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
-import { useCampaignStore } from '../CampaignStore';
+import { useCampaignStore } from '../../../hooks/UseCampaign';
 import { Campaign } from '../../types';
 
 interface EditCampaignModalProps {

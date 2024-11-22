@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Campaign, CampaignStatus } from '../types';
+import { Campaign, CampaignStatus } from '../components/types';
 
 interface Filters {
   search: string;

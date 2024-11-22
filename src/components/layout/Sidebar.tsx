@@ -1,14 +1,4 @@
-import { 
-  LayoutDashboard, 
-  Megaphone, 
-  Users, 
-  MessageSquare, 
-  BarChart2, 
-  Wallet, 
-  Settings,
-  ChevronLeft,
-  ChevronRight
-} from 'lucide-react';
+import { LayoutDashboard, Megaphone, Users, MessageSquare, BarChart2, Settings, ChevronLeft, ChevronRight} from 'lucide-react';
 import { NavLink } from './NavLink';
 
 interface SidebarProps {
@@ -20,9 +10,8 @@ const navigation = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { name: 'Campaigns', icon: Megaphone, href: '/campaigns' },
   { name: 'Influencer Discovery', icon: Users, href: '/discovery' },
-  { name: 'Messages', icon: MessageSquare, href: '/messages', badge: '3' },
-  { name: 'Analytics', icon: BarChart2, href: '/analytics' },
-  { name: 'Payments', icon: Wallet, href: '/payments' },
+  { name: 'Messages', icon: MessageSquare, href: '/messages'},
+  { name: 'Trend Analysis', icon: BarChart2, href: '/analytics' },
   { name: 'Settings', icon: Settings, href: '/settings' },
 ];
 

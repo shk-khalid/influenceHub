@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import CampaignLayout from './pages/Campaigns';
 import Discovery from './pages/Discovery';
-import ContentManager from './pages/ContentManager';
+import Analytics from './pages/Analytics';
 import { Authorization } from './pages/Authorization';
 
 
@@ -57,9 +57,9 @@ function App() {
         />
 
         <Route
-          path="/content"
+          path="/analytics"
           element={
-            <ContentManager />
+            <Analytics />
           }
         />
 

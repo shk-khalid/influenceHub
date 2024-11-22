@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Search, Filter, Plus, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
 import CreateCampaignModal from '../modal/CreateCampaign';
-import { useCampaignStore } from '../CampaignStore';
+import { useCampaignStore } from '../../../hooks/UseCampaign';
 
 export default function SearchBar() {
   const [isModalOpen, setIsModalOpen] = useState(false);

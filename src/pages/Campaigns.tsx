@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import BoardColumn from '../components/campaigns/board/BoardColumn';
-import { useCampaignStore } from '../components/campaigns/CampaignStore';
+import { useCampaignStore } from '../hooks/UseCampaign';
 import SearchBar from '../components/campaigns/visuals/SearchBar';
 import DashboardOverview from '../components/campaigns/visuals/CampaignOverview';
 import { Layout } from '../components/layout/Layout';

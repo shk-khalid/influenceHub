@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { 
-  Search, 
+import {  
   Bell, 
   Sun,
   Moon,
@@ -50,14 +49,7 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
     >
       <div className="h-full px-4 flex items-center justify-between">
         <div className="flex-1 max-w-2xl">
-          <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 transition-transform duration-200 group-focus-within:scale-110" />
-            <input
-              type="search"
-              placeholder="Search anything..."
-              className="w-full pl-10 pr-4 py-2 text-sm bg-white/50 dark:bg-gray-800/50 border border-white/20 dark:border-gray-700/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 dark:focus:ring-indigo-400/50 transition-all duration-200 placeholder-gray-400 dark:placeholder-gray-500"
-            />
-          </div>
+          
         </div>
 
         <div className="flex items-center space-x-4">

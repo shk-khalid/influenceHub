@@ -1,5 +1,5 @@
 import { TrendingUp, Users, DollarSign, Calendar } from 'lucide-react';
-import { useCampaignStore } from '../CampaignStore';
+import { useCampaignStore } from '../../../hooks/UseCampaign';
 
 export default function DashboardOverview() {
   const campaigns = useCampaignStore((state) => state.campaigns);

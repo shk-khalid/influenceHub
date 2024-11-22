@@ -95,3 +95,49 @@ export interface CampaignMetrics {
   startDate: string;
   endDate: string;
 }
+
+export interface Trend {
+  id: string;
+  keyword: string;
+  volume: number;
+  growth: number;
+  category: string;
+  region: string;
+}
+
+export interface Campaigns {
+  id: string;
+  name: string;
+  type: string;
+  season: string;
+  startDate: string;
+  endDate: string;
+  metrics: {
+    engagement: number;
+    reach: number;
+    conversion: number;
+  };
+}
+
+export interface Competitor {
+  id: string;
+  name: string;
+  handle: string;
+  followers: number;
+  engagement: number;
+  category: string;
+  recentPosts: Array<{
+    id: string;
+    content: string;
+    likes: number;
+    comments: number;
+    date: string;
+  }>;
+}
+
+export interface Tab {
+  id: string;
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+  gradient: string;
+}

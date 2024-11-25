@@ -1,8 +1,11 @@
+
 import { Search, TrendingUp, Filter, ExternalLink } from 'lucide-react';
 import { useTrendStore } from '../../hooks/useTrend';
 import { Input } from '../common/Input';
+import { Select } from '../common/Select';
 import { Button } from '../common/Button';
-import Card from '../common/Card';
+import { Card } from '../common/Card';
+import { StatCard } from '../common/StatCard';
 
 const categories = ['all', 'Tech', 'Fashion', 'Lifestyle', 'Food'];
 
@@ -12,78 +15,81 @@ export default function TrendingTopics() {
     searchTerm,
     setSearchTerm,
     selectedCategory,
-    setSelectedCategory
+    setSelectedCategory,
   } = useTrendStore();
 
   const trends = filteredTrends();
 
   return (
-    <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 p-8 rounded-2xl shadow-lg">
+    <Card gradient className="p-6 sm:p-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
-          <h2 className="text-3xl font-bold gradient-text flex items-center gap-2 mb-2">
+          <h2 className="text-2xl sm:text-3xl font-bold gradient-text flex items-center gap-2 mb-2">
             <TrendingUp className="text-indigo-600 dark:text-indigo-400" />
             Trending Topics
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">Track real-time social media trends and insights</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Track real-time social media trends and insights
+          </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
           <Input
-            label=""
             placeholder="Search trends..."
-            icon={<Search className="text-gray-400 w-5 h-5" />}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            icon={<Search className="text-gray-400" />}
           />
-          <Input
-            label=""
-            isSelect
-            icon={<Filter className="text-gray-400 w-5 h-5" />}
+          <Select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category === 'all' ? 'All Categories' : category}
-              </option>
-            ))}
-          </Input>
+            options={categories.map((category) => ({
+              value: category,
+              label: category === 'all' ? 'All Categories' : category,
+            }))}
+            icon={<Filter />}
+          />
         </div>
       </div>
 
       {trends.length === 0 ? (
-        <Card className="text-center p-8">
-          <TrendingUp className="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-gray-600" />
-          <h3 className="text-xl font-semibold mb-2">No Trends Found</h3>
-          <p className="text-gray-600 dark:text-gray-400">
-            Try adjusting your search or filter criteria.
-          </p>
+        <Card className="text-center">
+          <StatCard
+            icon={TrendingUp}
+            title="No Trends Found"
+            description="Try adjusting your search or filter criteria."
+            iconColor="text-gray-400"
+          />
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {trends.map((trend) => (
             <Card
               key={trend.id}
-              className="group hover:bg-gradient-to-br hover:from-indigo-50 hover:to-purple-50 dark:hover:from-indigo-900/20 dark:hover:to-purple-900/20"
+              gradient
+              className="hover:scale-105 transition-transform"
             >
               <div className="flex justify-between items-start mb-4">
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 group-hover:gradient-text">
                   {trend.keyword}
                 </h3>
                 <span
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-1 ${trend.growth > 0
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-1 ${
+                    trend.growth > 0
                       ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400'
                       : 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-400'
-                    }`}
+                  }`}
                 >
-                  {trend.growth > 0 ? '+' : ''}{trend.growth}%
+                  {trend.growth > 0 ? '+' : ''}
+                  {trend.growth}%
                   <TrendingUp className="w-4 h-4" />
                 </span>
               </div>
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                   <span>Volume</span>
-                  <span className="font-semibold">{trend.volume.toLocaleString()}</span>
+                  <span className="font-semibold">
+                    {trend.volume.toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                   <span>Category</span>
@@ -96,10 +102,12 @@ export default function TrendingTopics() {
               </div>
               <Button
                 variant="secondary"
-                className="w-full mt-4"
-                icon={ExternalLink}
+                fullWidth
+                className="mt-4"
+                onClick={() => console.log(`Viewing details for ${trend.keyword}`)}
               >
                 View Details
+                <ExternalLink className="w-4 h-4" />
               </Button>
             </Card>
           ))}

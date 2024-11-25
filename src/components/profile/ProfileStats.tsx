@@ -1,4 +1,4 @@
-import Card from '../common/Card';
+import { Card } from '../common/Card';
 import RatingStars from '../common/RatingStar';
 import { Target, Star, Megaphone, Globe2 } from 'lucide-react';
 

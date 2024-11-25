@@ -4,7 +4,7 @@ import InfluencerStats from '../components/profile/ProfileStats';
 import ProfilePicture from '../components/profile/ProfilePicture';
 import PersonalDetails from '../components/profile/PersonalDetails';
 import SocialLinkInput from '../components/profile/SocialLinks';
-import Card from '../components/common/Card';
+import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Edit2, Save, X } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';

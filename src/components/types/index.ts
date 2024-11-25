@@ -9,22 +9,6 @@ export interface ContentEvent {
   assignee: string;
 }
 
-export interface FileItem {
-  id: string;
-  name: string;
-  url: string;
-  type: string;
-  size: number;
-  uploadedAt: string;
-  uploadedBy: string;
-}
-
-export interface AuthFormData {
-  email: string;
-  password: string;
-  code?: string;
-}
-
 export interface AuthState {
   isLoading: boolean;
   error: string | null;
@@ -49,15 +33,16 @@ export interface Campaign {
   deliverables: string[];
   startDate: string;
   endDate: string;
-  budget: number;
-  status: CampaignStatus;
+  budget?: number;
+  status?: CampaignStatus;
   metrics?: {
-    impressions: number;
     reach: number;
     engagement: number;
+    conversion?: number;
+    impressions?: number;
   };
-  platforms: string[];
-  requirements: string[];
+  platforms?: string[];
+  requirements?: string[];
   priority?: PriorityLevel;
   progress?: number;
 }

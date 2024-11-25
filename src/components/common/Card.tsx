@@ -1,13 +1,21 @@
+import { cn } from '../../lib/Utils';
 import React from 'react';
 
-interface CardProps {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  className?: string;
+  gradient?: boolean;
 }
 
-export default function Card({ children, className = '' }: CardProps) {
+export function Card({ children, className, gradient, ...props }: CardProps) {
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 ${className}`}>
+    <div
+      className={cn(
+        'card p-4 sm:p-6',
+        gradient && 'group hover:bg-gradient-to-br hover:from-blue-50 hover:to-cyan-50 dark:hover:from-blue-900/20 dark:hover:to-cyan-900/20',
+        className
+      )}
+      {...props}
+    >
       {children}
     </div>
   );

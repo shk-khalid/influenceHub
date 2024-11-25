@@ -1,4 +1,4 @@
-import Card from '../common/Card';
+import { Card } from '../common/Card';
 import Toggle from '../common/Toggle';
 import LanguageSection from './LanguangeSection';
 

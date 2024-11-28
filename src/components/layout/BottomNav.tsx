@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { LayoutDashboard, Megaphone, Users, MessageSquare, BarChart2, Settings } from 'lucide-react';
-import { NavLink } from './NavLink';
+import { LayoutDashboard, Megaphone, Users, MessageSquare, Briefcase, BarChart2, Settings } from 'lucide-react';
+import { NavLink } from '../common/NavLink';
 
 const navigation = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { name: 'Campaigns', icon: Megaphone, href: '/campaigns' },
   { name: 'Influencer Discovery', icon: Users, href: '/discovery' },
   { name: 'Messages', icon: MessageSquare, href: '/messages'},
+  { name: 'Brands Insight', icon: Briefcase, href: '/insights'},
   { name: 'Analytics', icon: BarChart2, href: '/analytics' },
   { name: 'Settings', icon: Settings, href: '/settings' },
 ];

@@ -22,7 +22,7 @@ interface Language {
 
 export default function ProfileSetup() {
   const [isEditing, setIsEditing] = useState(false);
-  const [profileImage, setProfileImage] = useState<string>('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400');
+  const [profileImage, setProfileImage] = useState<string>('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400');
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([
     { platform: 'instagram', url: 'https://instagram.com/johndoe' },
     { platform: 'twitter', url: 'https://twitter.com/johndoe' },

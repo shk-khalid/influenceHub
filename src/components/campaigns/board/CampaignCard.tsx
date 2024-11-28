@@ -41,40 +41,44 @@ export default function CampaignCard({ campaign, index }: CampaignCardProps) {
             <div className="flex justify-between items-start mb-3">
               <div>
                 <h4 className="font-medium text-gray-900 dark:text-white">
-                  {campaign.title}
+                  {campaign.title || 'Untitled Campaign'}
                 </h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {campaign.brand}
+                  {campaign.brand || 'Unknown Brand'}
                 </p>
               </div>
               <div className="flex items-center space-x-2">
                 {campaign.priority && (
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${priorityColors[campaign.priority]}`}>
+                  <span className={`px-3 py-1 rounded-lg text-xs font-medium ${priorityColors[campaign.priority]}`}>
                     {campaign.priority}
                   </span>
                 )}
-                <span className={`px-2 py-1 rounded-full text-xs font-medium text-white ${statusColors[campaign.status]}`}>
-                  {campaign.status.replace('_', ' ').toUpperCase()}
-                </span>
+                {campaign.status && (
+                  <span className={`px-3 py-1 rounded-lg text-xs font-medium text-white ${statusColors[campaign.status]}`}>
+                    {campaign.status.replace('_', ' ').toUpperCase()}
+                  </span>
+                )}
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                 <Calendar className="w-4 h-4 mr-2" />
-                <span>{new Date(campaign.startDate).toLocaleDateString()}</span>
+                <span>
+                  {campaign.startDate ? new Date(campaign.startDate).toLocaleDateString() : 'No Start Date'}
+                </span>
               </div>
               <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                 <Target className="w-4 h-4 mr-2" />
-                <span>{campaign.goals.length} Goals</span>
+                <span>{campaign.goals?.length || 0} Goals</span>
               </div>
               <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                 <Clock className="w-4 h-4 mr-2" />
-                <span>{campaign.deliverables.length} Deliverables</span>
+                <span>{campaign.deliverables?.length || 0} Deliverables</span>
               </div>
               <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                 <DollarSign className="w-4 h-4 mr-2" />
-                <span>${campaign.budget.toLocaleString()}</span>
+                <span>${campaign.budget?.toLocaleString() || '0'}</span>
               </div>
             </div>
 
@@ -94,14 +98,16 @@ export default function CampaignCard({ campaign, index }: CampaignCardProps) {
             )}
 
             <div className="mt-3 flex flex-wrap gap-1">
-              {campaign.platforms.map((platform) => (
-                <span 
-                  key={platform}
-                  className="px-2 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
-                >
-                  {platform}
-                </span>
-              ))}
+              {campaign.platforms?.length
+                ? campaign.platforms.map((platform) => (
+                    <span
+                      key={platform}
+                      className="px-2 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
+                    >
+                      {platform}
+                    </span>
+                  ))
+                : <span className="text-sm text-gray-600 dark:text-gray-400">No Platforms</span>}
             </div>
 
             <button

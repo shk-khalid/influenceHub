@@ -126,3 +126,35 @@ export interface Tab {
   icon: React.ComponentType<{ className?: string }>;
   gradient: string;
 }
+
+export interface Brand {
+  id: string;
+  name: string;
+  logo: string;
+  location: string;
+  sector: 'Electronics' | 'Cosmetics' | 'Automobile' | 'Fashion';
+  rating: number;
+  value: {
+    year: number;
+    amount: number;
+  }[];
+  competitors: string[];
+  demographics: {
+    gender: {
+      male: number;
+      female: number;
+      other: number;
+    };
+  };
+  metrics: {
+    engagementRate: number;
+    marketShare: number;
+  };
+  sentiment: {
+    positive: number;
+    neutral: number;
+    negative: number;
+    keywords: string[];
+    trends: string[];
+  };
+}

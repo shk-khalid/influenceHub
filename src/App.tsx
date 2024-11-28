@@ -7,6 +7,7 @@ import CampaignLayout from './pages/Campaigns';
 import Discovery from './pages/Discovery';
 import Analytics from './pages/Analytics';
 import { Authorization } from './pages/Authorization';
+import { Insights } from './pages/Insights';
 
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
           path="/dashboard"
           element={
             <Layout>
-              <Dashboard />     
+              <Dashboard />
               <Toaster position="top-right" />
             </Layout>
           }
@@ -63,7 +64,14 @@ function App() {
           }
         />
 
-          {/* Default Route to Redirect to SignIn */}
+        <Route
+          path="/insights"
+          element={
+            <Insights />
+          }
+        />
+
+        {/* Default Route to Redirect to SignIn */}
         <Route
           path="*"
           element={<Navigate to="/dashboard" replace />}

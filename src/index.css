@@ -6,32 +6,31 @@
   :root {
     color-scheme: light;
     --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    --glass-bg: rgba(255, 255, 255, 0.8);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --glass-shadow: rgba(17, 12, 46, 0.15);
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-shadow: rgba(17, 12, 46, 0.1);
   }
 
   :root[class~="dark"] {
     color-scheme: dark;
-    --glass-bg: rgba(17, 24, 39, 0.8);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: rgba(0, 0, 0, 0.25);
+    --glass-bg: rgba(17, 24, 39, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-shadow: rgba(0, 0, 0, 0.2);
   }
 
   :root {
     --bottom-nav-height: 64px;
   }
-  
 
   body {
     @apply antialiased bg-gradient-to-br from-indigo-50 via-white to-purple-50 
-           dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 animate-gradient
-           min-h-screen text-gray-900 dark:text-white;
+           dark:from-gray-900 dark:via-gray-800 dark:to-gray-900
+           min-h-screen text-gray-900 dark:text-white
+           transition-colors duration-300;
   }
 
-  /* Enhanced Scrollbar */
   ::-webkit-scrollbar {
-    @apply w-2;
+    @apply w-1.5;
   }
 
   ::-webkit-scrollbar-track {
@@ -39,58 +38,65 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+    @apply bg-gray-300/80 dark:bg-gray-700/80 rounded-full 
+           hover:bg-gray-400 dark:hover:bg-gray-600 
+           transition-colors duration-200;
   }
 }
 
 @layer components {
   .glass-effect {
-    @apply backdrop-blur-lg border transition-all duration-300
+    @apply backdrop-blur-md border transition-all duration-200
            bg-[var(--glass-bg)] border-[var(--glass-border)]
-           shadow-[0_8px_32px_0_var(--glass-shadow)];
+           shadow-[0_4px_16px_0_var(--glass-shadow)];
   }
 
   .glass-card {
-    @apply glass-effect rounded-xl hover:shadow-lg 
-           transform hover:-translate-y-1 transition-all duration-300;
+    @apply glass-effect rounded-xl 
+           hover:shadow-[0_8px_24px_0_var(--glass-shadow)]
+           transform hover:-translate-y-0.5 transition-all duration-200;
   }
 
   .nav-link {
-    @apply flex items-center px-3 py-2.5 text-sm font-medium rounded-xl
-           transition-all duration-300 relative overflow-hidden
-           hover:bg-white/10 dark:hover:bg-gray-800/50;
+    @apply flex items-center px-4 py-2.5 text-sm font-medium rounded-xl
+           transition-all duration-200 relative
+           hover:bg-white/20 dark:hover:bg-gray-800/70
+           active:scale-[0.98];
   }
 
   .nav-link.active {
-    @apply bg-gradient-to-r from-indigo-500/10 to-purple-500/10 
-           text-indigo-600 dark:text-indigo-400 shadow-glow;
+    @apply bg-gradient-to-r from-indigo-500/20 to-purple-500/20 
+           text-indigo-600 dark:text-indigo-400
+           shadow-[0_0_12px_-2px_rgba(99,102,241,0.3)];
   }
 
   .input-field {
-    @apply w-full px-4 py-2.5 bg-white/50 dark:bg-gray-800/50
+    @apply w-full px-4 py-2.5 bg-white/80 dark:bg-gray-800/80
            border border-gray-200 dark:border-gray-700 rounded-xl
            focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent
            placeholder-gray-400 dark:placeholder-gray-500
-           transition-all duration-200;
+           transition-all duration-200
+           hover:bg-white/90 dark:hover:bg-gray-800/90;
   }
 
   .btn {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 
-           rounded-xl font-medium transition-all duration-300
+           rounded-xl font-medium transition-all duration-200
            focus:ring-2 focus:ring-offset-2 focus:outline-none
-           disabled:opacity-50 disabled:cursor-not-allowed;
+           disabled:opacity-60 disabled:cursor-not-allowed
+           active:scale-[0.98];
   }
 
   .btn-primary {
     @apply btn bg-[var(--primary-gradient)] text-white
-           hover:shadow-lg hover:shadow-indigo-500/25
+           hover:shadow-[0_8px_16px_-4px_rgba(99,102,241,0.3)]
            focus:ring-indigo-500;
   }
 
   .btn-secondary {
-    @apply btn bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200
+    @apply btn bg-white/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-200
            border border-gray-200 dark:border-gray-700
-           hover:bg-gray-50 dark:hover:bg-gray-700/50
+           hover:bg-white dark:hover:bg-gray-800
            focus:ring-gray-500;
   }
 }
@@ -98,32 +104,42 @@
 @layer utilities {
   .animate-gradient {
     background-size: 200% 200%;
-    animation: gradient 8s ease infinite;
+    animation: gradient 12s ease infinite;
   }
 
   .shadow-glow {
-    @apply shadow-[0_0_20px_-5px_rgba(99,102,241,0.3)];
+    @apply shadow-[0_0_16px_-4px_rgba(99,102,241,0.3)];
   }
 
   .shadow-glow-lg {
-    @apply shadow-[0_0_30px_-5px_rgba(99,102,241,0.4)];
+    @apply shadow-[0_0_24px_-4px_rgba(99,102,241,0.4)];
   }
 }
 
 @keyframes gradient {
-  0% { background-position: 0% 50%; }
+  0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }
 
-/* Enhanced Animations */
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 @keyframes slideUp {
-  from { transform: translateY(10px); opacity: 0; }
+  from { transform: translateY(8px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes slideDown {
-  from { transform: translateY(-10px); opacity: 0; }
+  from { transform: translateY(-8px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
@@ -131,7 +147,3 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
-.animate-slide-up { animation: slideUp 0.3s ease-out; }
-.animate-slide-down { animation: slideDown 0.3s ease-out; }
-.animate-fade-in { animation: fadeIn 0.2s ease-out; }

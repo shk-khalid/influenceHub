@@ -1,4 +1,5 @@
-import { Brand } from '../components/types';
+import {Campaign, DemographicData, Brand } from '../components/types';
+
 
 export const mockBrands: Brand[] = [
   {
@@ -138,3 +139,79 @@ export const mockBrands: Brand[] = [
     }
   }
 ];
+
+export const mockCampaigns: Campaign[] = [
+  {
+    id: '1',
+    title: 'Summer Collection Launch',
+    brand: 'Fashion Co',
+    description: 'Launch of the new summer collection',
+    goals: ['Increase brand awareness', 'Drive sales'],
+    deliverables: ['Instagram posts', 'TikTok videos'],
+    startDate: '2024-06-01',
+    endDate: '2024-07-31',
+    budget: 50000,
+    status: 'in_progress',
+    metrics: {
+      reach: 150000,
+      engagement: 4.5,
+      conversion: 2.3,
+      impressions: 200000
+    },
+    platforms: ['Instagram', 'TikTok'],
+    requirements: ['Minimum 100k followers', 'Fashion niche'],
+    priority: 'high',
+    progress: 45,
+    roi: 320
+  },
+  {
+    id: '2',
+    title: 'Back to School Campaign',
+    brand: 'EduTech Inc',
+    description: 'Promoting educational technology products',
+    goals: ['Lead generation', 'Product demos'],
+    deliverables: ['YouTube reviews', 'Blog posts'],
+    startDate: '2024-08-01',
+    endDate: '2024-09-15',
+    budget: 35000,
+    status: 'pending',
+    metrics: {
+      reach: 120000,
+      engagement: 3.8,
+      conversion: 1.8,
+      impressions: 180000
+    },
+    platforms: ['YouTube', 'Blog'],
+    requirements: ['Tech focus', 'Educational content'],
+    priority: 'medium',
+    progress: 0,
+    roi: 280
+  }
+];
+
+export const performanceData = [
+  { name: 'Jan', value: 4000 },
+  { name: 'Feb', value: 3000 },
+  { name: 'Mar', value: 5000 },
+  { name: 'Apr', value: 4500 },
+  { name: 'May', value: 6000 },
+  { name: 'Jun', value: 5500 },
+];
+
+export const demographicData: DemographicData = {
+  age: [
+    { label: '18-24', value: 30 },
+    { label: '25-34', value: 40 },
+    { label: '35-44', value: 20 },
+    { label: '45+', value: 10 },
+  ],
+  gender: [
+    { label: 'Male', value: 45 },
+    { label: 'Female', value: 55 },
+  ],
+  location: [
+    { country: 'USA', users: 50000 },
+    { country: 'UK', users: 30000 },
+    { country: 'Canada', users: 20000 },
+  ],
+};

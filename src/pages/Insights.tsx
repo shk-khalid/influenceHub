@@ -3,7 +3,7 @@ import { BrandList } from '../components/insights/BrandList';
 import { BrandDetails } from '../components/insights/BrandDetails';
 import { Brand } from '../components/types';
 import { ArrowLeft } from 'lucide-react';
-import { mockBrands } from '../data/mockBrand';
+import { mockBrands } from '../data/mockData';
 import { Layout } from '../components/layout/Layout';
 
 export const Insights: React.FC = () => {
@@ -11,7 +11,7 @@ export const Insights: React.FC = () => {
 
   return (
     <Layout>
-        <div className="min-h-screen max-w-7xl mx-auto px-4 py-8">
+        <div>
           {selectedBrand ? (
             <div className="space-y-6 animate-fadeIn">
               <button

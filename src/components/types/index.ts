@@ -1,14 +1,3 @@
-export type CalendarViewType = 'day' | 'week' | 'month';
-
-export interface ContentEvent {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  status: 'draft' | 'pending' | 'approved' | 'rejected';
-  assignee: string;
-}
-
 export interface AuthState {
   isLoading: boolean;
   error: string | null;
@@ -45,6 +34,9 @@ export interface Campaign {
   requirements?: string[];
   priority?: PriorityLevel;
   progress?: number;
+  name?: string; // For backward compatibility
+  roi?: number; // For backward compatibility
+  conversions?: number; // For backward compatibility
 }
 
 export interface Task {
@@ -60,7 +52,7 @@ export interface Task {
 export interface DemographicData {
   age: { label: string; value: number }[];
   gender: { label: string; value: number }[];
-  location: { country: string; value: number }[];
+  location: { country: string; users: number }[];
 }
 
 export interface EngagementMetric {

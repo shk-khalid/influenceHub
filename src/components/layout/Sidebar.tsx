@@ -1,4 +1,4 @@
-import { LayoutDashboard, Megaphone, Users, MessageSquare, Briefcase, BarChart2, Settings, ChevronLeft, ChevronRight} from 'lucide-react';
+import { LayoutDashboard, Megaphone, Users, Handshake, Briefcase, BarChart2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { NavLink } from '../common/NavLink';
 
 interface SidebarProps {
@@ -10,10 +10,9 @@ const navigation = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { name: 'Campaigns', icon: Megaphone, href: '/campaigns' },
   { name: 'Influencer Discovery', icon: Users, href: '/discovery' },
-  { name: 'Messages', icon: MessageSquare, href: '/messages'},
+  { name: 'Match Making', icon: Handshake, href: '/match'},
   { name: 'Brands Insight', icon: Briefcase, href: '/insights'},
   { name: 'Trend Analysis', icon: BarChart2, href: '/analytics' },
-  { name: 'Settings', icon: Settings, href: '/settings' },
 ];
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {

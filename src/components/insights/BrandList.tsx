@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Star, MapPin, Users, TrendingUp } from 'lucide-react';
 import { Brand } from '../types';
 import { FilterSection } from './FilterSection';
+import { motion } from 'framer-motion';
 
 interface BrandListProps {
   brands: Brand[];
@@ -28,18 +29,17 @@ export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) =
   );
 
   return (
-    <div className="min-h-screen max-w-7xl mx-auto px-4 py-8 space-y-6">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-12" >
       {/* Header Section */}
-      <div className="text-center space-y-4">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent 
-                       bg-gradient-to-r from-gray-900 to-gray-700
-                       dark:from-white dark:to-gray-300">
+      <header className="relative mb-20 text-center">
+        <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="absolute -top-4 left-1/2 -translate-x-1/2 w-48 h-48 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl" />
+        <motion.h1 className="text-6xl font-bold gradient-text mb-4 relative" initial={{ y: 20 }} animate={{ y: 0 }}>
           Brand Insights
-        </h1>
-        <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-sm sm:text-base">
-          Explore detailed insights about various brands and discover their market performance
-        </p>
-      </div>
+        </motion.h1>
+        <motion.p className="text-gray-600 dark:text-gray-400 text-lg relative max-w-2xl mx-auto" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
+          Explore detailed insights about various brands and discover their market performance.
+        </motion.p>
+      </header>
 
       {/* Filter Section */}
       <FilterSection
@@ -49,6 +49,8 @@ export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) =
         setSelectedSector={setSelectedSector}
         sectors={sectors}
       />
+
+      <div className="my-8"></div>
 
       {/* Brand Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -110,26 +112,28 @@ export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) =
         ))}
       </div>
 
-      {filteredBrands.length === 0 && (
-        <div className="text-center py-12 bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg 
+      {
+        filteredBrands.length === 0 && (
+          <div className="text-center py-12 bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg 
                          rounded-xl shadow-lg dark:shadow-gray-900/30
                          border border-gray-200/50 dark:border-gray-700/50">
-          <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base mb-4">
-            No brands found matching your criteria
-          </p>
-          <button
-            onClick={() => {
-              setSearchTerm('');
-              setSelectedSector(null);
-            }}
-            className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm rounded-lg
+            <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base mb-4">
+              No brands found matching your criteria
+            </p>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedSector(null);
+              }}
+              className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm rounded-lg
                        hover:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300
                        shadow-md hover:shadow-lg dark:shadow-blue-500/20"
-          >
-            Clear filters
-          </button>
-        </div>
-      )}
-    </div>
+            >
+              Clear filters
+            </button>
+          </div>
+        )
+      }
+    </motion.div>
   );
 };

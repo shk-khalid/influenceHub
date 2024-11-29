@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Layout } from './components/layout/Layout';
-import Dashboard from './pages/Dashboard';
+import { Dashboard } from './pages/Dashboard';
 import Profile from './pages/Profile';
 import CampaignLayout from './pages/Campaigns';
 import Discovery from './pages/Discovery';

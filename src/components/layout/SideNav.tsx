@@ -10,14 +10,14 @@ const navigation = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { name: 'Campaigns', icon: Megaphone, href: '/campaigns' },
   { name: 'Influencer Discovery', icon: Users, href: '/discovery' },
-  { name: 'Match Making', icon: Handshake, href: '/match'},
-  { name: 'Brands Insight', icon: Briefcase, href: '/insights'},
+  { name: 'Match Making', icon: Handshake, href: '/match' },
+  { name: 'Brands Insight', icon: Briefcase, href: '/insights' },
   { name: 'Trend Analysis', icon: BarChart2, href: '/analytics' },
 ];
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
-    <aside 
+    <aside
       className={`
         fixed left-0 top-0 z-40 h-screen glass-effect
         transition-all duration-300 ease-in-out shadow-glow
@@ -50,11 +50,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
         <nav className="flex-1 space-y-1 px-3 py-4">
           {navigation.map((item) => (
-            <NavLink
-              key={item.name}
-              {...item}
-              collapsed={collapsed}
-            />
+            <NavLink key={item.name} {...item} collapsed={collapsed} />
           ))}
         </nav>
       </div>

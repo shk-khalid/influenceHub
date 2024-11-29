@@ -6,8 +6,8 @@ const navigation = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { name: 'Campaigns', icon: Megaphone, href: '/campaigns' },
   { name: 'Influencer Discovery', icon: Users, href: '/discovery' },
-  { name: 'Match Making', icon: Handshake, href: '/match'},
-  { name: 'Brands Insight', icon: Briefcase, href: '/insights'},
+  { name: 'Match Making', icon: Handshake, href: '/match' },
+  { name: 'Brands Insight', icon: Briefcase, href: '/insights' },
   { name: 'Analytics', icon: BarChart2, href: '/analytics' },
 ];
 
@@ -30,11 +30,7 @@ export function BottomNav() {
     <nav className="fixed bottom-0 left-0 z-40 w-full glass-effect border-t border-white/10 dark:border-gray-800/50 shadow-glow">
       <div className="flex justify-around py-2">
         {navigation.map((item) => (
-          <NavLink 
-            key={item.name} 
-            {...item} 
-            isBottomNav 
-          />
+          <NavLink key={item.name} {...item} isBottomNav />
         ))}
       </div>
     </nav>

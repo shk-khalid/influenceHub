@@ -10,7 +10,7 @@ export interface AuthState {
   };
 }
 
-export type CampaignStatus = 'pending' | 'under_review' | 'in_progress' | 'completed' | 'declined';
+export type CampaignStatus = 'pending' | 'under_review' | 'in_progress' | 'completed';
 export type PriorityLevel = 'low' | 'medium' | 'high';
 
 export interface Campaign {
@@ -80,20 +80,6 @@ export interface Trend {
   growth: number;
   category: string;
   region: string;
-}
-
-export interface Campaigns {
-  id: string;
-  name: string;
-  type: string;
-  season: string;
-  startDate: string;
-  endDate: string;
-  metrics: {
-    engagement: number;
-    reach: number;
-    conversion: number;
-  };
 }
 
 export interface Competitor {

@@ -109,8 +109,9 @@ export interface Brand {
   id: string;
   name: string;
   logo: string;
+  description?: string;
   location: string;
-  sector: 'Electronics' | 'Cosmetics' | 'Automobile' | 'Fashion';
+  sector: string;
   rating: number;
   value: {
     year: number;
@@ -124,7 +125,7 @@ export interface Brand {
       other: number;
     };
   };
-  metrics: {
+  metrics?: {
     engagementRate: number;
     marketShare: number;
   };

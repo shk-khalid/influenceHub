@@ -1,4 +1,4 @@
-import { LayoutDashboard, Megaphone, Users, Handshake, Briefcase, BarChart2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Megaphone, Handshake, Briefcase, BarChart2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { NavLink } from '../common/NavLink';
 
 interface SidebarProps {
@@ -9,7 +9,6 @@ interface SidebarProps {
 const navigation = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { name: 'Campaigns', icon: Megaphone, href: '/campaigns' },
-  { name: 'Influencer Discovery', icon: Users, href: '/discovery' },
   { name: 'Match Making', icon: Handshake, href: '/match' },
   { name: 'Brands Insight', icon: Briefcase, href: '/insights' },
   { name: 'Trend Analysis', icon: BarChart2, href: '/analytics' },
@@ -25,17 +24,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       `}
     >
       <div className="flex h-full flex-col">
-        <div className="flex h-16 items-center justify-between px-4 border-b border-white/10 dark:border-gray-800/50">
-          {!collapsed && (
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
-                <LayoutDashboard className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                InfluenceHub
-              </span>
-            </div>
-          )}
+        <div className="flex h-16 items-center justify-end px-4 border-b border-white/10 dark:border-gray-800/50">
           <button
             onClick={onToggle}
             className="p-1.5 rounded-lg hover:bg-white/10 dark:hover:bg-gray-800/50 transition-colors"

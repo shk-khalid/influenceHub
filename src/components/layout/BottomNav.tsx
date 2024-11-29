@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { LayoutDashboard, Megaphone, Users, Handshake, Briefcase, BarChart2 } from 'lucide-react';
+import { LayoutDashboard, Megaphone, Handshake, Briefcase, BarChart2 } from 'lucide-react';
 import { NavLink } from '../common/NavLink';
 
 const navigation = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { name: 'Campaigns', icon: Megaphone, href: '/campaigns' },
-  { name: 'Influencer Discovery', icon: Users, href: '/discovery' },
   { name: 'Match Making', icon: Handshake, href: '/match' },
   { name: 'Brands Insight', icon: Briefcase, href: '/insights' },
   { name: 'Analytics', icon: BarChart2, href: '/analytics' },

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import {  
-  Bell, 
+import {
+  Bell,
   Sun,
   Moon,
   User,
@@ -8,6 +8,10 @@ import {
   LogOut
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import MobileLightLogo from '../../assets/logo/LightLogoOnly.png';
+import MobileDarkLogo from '../../assets/logo/DarkLogoOnly.png';
+import DesktopLightLogo from '../../assets/logo/LightLogo.png';
+import DesktopDarkLogo from '../../assets/logo/DarkLogo.png';
 
 interface TopbarProps {
   sidebarCollapsed: boolean;
@@ -40,18 +44,28 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
   };
 
   return (
-    <header 
-      className={`
-        fixed top-0 right-0 z-30 h-16 glass-effect
-        transition-all duration-300 shadow-glow
-        ${isDesktop ? (sidebarCollapsed ? 'left-20' : 'left-64') : 'left-0'}
-      `}
+    <header
+      className={` fixed top-0 right-0 z-30 h-16 glass-effect transition-all duration-300 shadow-glow ${isDesktop ? (sidebarCollapsed ? 'left-20' : 'left-64') : 'left-0'}`}
     >
       <div className="h-full px-4 flex items-center justify-between">
-        <div className="flex-1 max-w-2xl">
-          
+        {/* Logo Section */}
+        <div className="flex items-center space-x-4">
+          {isDesktop ? (
+            <img
+              src={darkMode ? DesktopDarkLogo : DesktopLightLogo}
+              alt="Collabwise Logo"
+              className="h-12"
+            />
+          ) : (
+            <img
+              src={darkMode ? MobileDarkLogo : MobileLightLogo}
+              alt="Collabwise Logo"
+              className="h-12"
+            />
+          )}
         </div>
 
+        {/* Right Side Actions */}
         <div className="flex items-center space-x-4">
           <button
             onClick={toggleDarkMode}
@@ -132,5 +146,6 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
         </div>
       </div>
     </header>
+
   );
 }

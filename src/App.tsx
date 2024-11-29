@@ -3,8 +3,8 @@ import { Toaster } from 'react-hot-toast';
 import { Layout } from './components/layout/Layout';
 import { Dashboard } from './pages/Dashboard';
 import Profile from './pages/Profile';
-import CampaignLayout from './pages/Campaigns';
-import Discovery from './pages/Discovery';
+import Campaign from './pages/Campaigns';
+import { BrandMatchingDashboard } from './pages/Matching';
 import Analytics from './pages/Analytics';
 import { Authorization } from './pages/Authorization';
 import { Insights } from './pages/Insights';
@@ -45,15 +45,14 @@ function App() {
         <Route
           path="/campaigns"
           element={
-            <CampaignLayout />
+            <Campaign />
           }
         />
 
-        {/* Protected Route for Discovery */}
         <Route
-          path="/discovery"
+          path="/match"
           element={
-            <Discovery />
+            <BrandMatchingDashboard />
           }
         />
 

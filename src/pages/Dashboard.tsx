@@ -48,7 +48,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Metrics Grid */}
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
@@ -75,6 +75,7 @@ export const Dashboard: React.FC = () => {
           value="$52,000"
           change={15.2}
           icon={<DollarSign className="w-6 h-6 text-yellow-500" />}
+          className='sm:col-span-3'
         />
       </motion.div>
 

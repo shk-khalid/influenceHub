@@ -64,7 +64,7 @@ export const useCampaignStore = create<CampaignStore>((set, get) => ({
           || campaign.brand.toLowerCase().includes(filters.search.toLowerCase());
 
         const matchesPlatform = !filters.platform
-          || campaign.platforms.includes(filters.platform);
+          || campaign.platforms?.includes(filters.platform);
 
         const matchesPriority = !filters.priority
           || campaign.priority === filters.priority;
@@ -72,9 +72,9 @@ export const useCampaignStore = create<CampaignStore>((set, get) => ({
         const matchesBudget = !filters.budgetRange || (() => {
           const [min, max] = filters.budgetRange.split('-').map(Number);
           if (filters.budgetRange === '5000+') {
-            return campaign.budget >= 5000;
+            return (campaign.budget ?? 0) >= 5000;
           }
-          return campaign.budget >= min && campaign.budget <= max;
+          return (campaign.budget ?? 0) >= min && (campaign.budget ?? 0) <= max;
         })();
 
         return matchesSearch && matchesPlatform && matchesPriority && matchesBudget;
@@ -88,7 +88,7 @@ export const useCampaignStore = create<CampaignStore>((set, get) => ({
           case 'date':
             return (new Date(a.startDate).getTime() - new Date(b.startDate).getTime()) * direction;
           case 'budget':
-            return (a.budget - b.budget) * direction;
+            return ((a.budget ?? 0) - (b.budget ?? 0)) * direction;
           case 'priority': {
             const priorityWeight = { high: 3, medium: 2, low: 1 };
             return ((priorityWeight[a.priority || 'low'] - priorityWeight[b.priority || 'low']) * direction);

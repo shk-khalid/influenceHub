@@ -11,7 +11,7 @@ export function Card({ children, className, gradient, ...props }: CardProps) {
     <div
       className={cn(
         'card p-4 sm:p-6',
-        gradient && 'group hover:bg-gradient-to-br hover:from-blue-50 hover:to-cyan-50 dark:hover:from-blue-900/20 dark:hover:to-cyan-900/20',
+        gradient && 'bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg',
         className
       )}
       {...props}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, ArrowUpRight, MessageCircle, UserPlus, Activity, Target, Search, Filter } from 'lucide-react';
+import { Users, ArrowUpRight, MessageCircle, UserPlus, Activity, Target, Search, Filter, User2 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useCompetitorStore } from '../../hooks/UseCompetitor';
 import { CompetitorForm } from '../analytics/CompetitorForm';
@@ -46,7 +46,19 @@ export default function CompetitorMonitoring() {
   const averageEngagement = calculateAverageEngagement();
 
   return (
-    <div className="space-y-6">
+    <Card gradient className="sm:p-8">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 mb-8">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold gradient-text flex items-center gap-2 mb-2">
+            <User2 className="text-indigo-600 dark:text-indigo-400" />
+            Competitor Monitoring
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+          Analyze and track your competitors' performance.
+          </p>
+        </div>
+      </div>
       {/* Search and Filter Section */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <Input
@@ -90,11 +102,12 @@ export default function CompetitorMonitoring() {
           iconColor="text-green-600 dark:text-green-400"
           valueColor="text-green-600 dark:text-green-400"
           className="sm:col-span-2 lg:col-span-1"
+
         />
       </div>
 
       {/* Add Competitor Button */}
-      <div className="flex justify-end mb-6">
+      <div className="flex sm:justify-end justify-center mb-6">
         <Button
           onClick={() => setShowForm(!showForm)}
           variant="primary"
@@ -135,7 +148,7 @@ export default function CompetitorMonitoring() {
                   </h3>
                   <div className="flex flex-wrap items-center gap-3">
                     <p className="text-sm text-gray-600 dark:text-gray-400">{competitor.handle}</p>
-                    <span className="text-sm px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                    <span className="text-sm px-2 py-1 rounded-full bg-gray-700 dark:bg-gray-300 text-gray-200 dark:text-gray-800">
                       {competitor.category}
                     </span>
                   </div>
@@ -191,7 +204,7 @@ export default function CompetitorMonitoring() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {competitor.recentPosts.map((post) => (
-                      <Card key={post.id} className="hover:scale-105 transition-transform">
+                      <Card key={post.id} className="transition-transform bg-slate-200 dark:bg-slate-600 rounded-xl">
                         <p className="text-sm text-gray-800 dark:text-gray-200 mb-4">{post.content}</p>
                         <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                           <span className="flex items-center gap-1">
@@ -212,6 +225,6 @@ export default function CompetitorMonitoring() {
           ))
         )}
       </div>
-    </div>
+    </Card>
   );
 }

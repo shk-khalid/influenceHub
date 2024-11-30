@@ -21,7 +21,7 @@ export default function TrendingTopics() {
   const trends = filteredTrends();
 
   return (
-    <Card gradient className="p-6 sm:p-8">
+    <Card gradient className="sm:p-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold gradient-text flex items-center gap-2 mb-2">
@@ -29,7 +29,7 @@ export default function TrendingTopics() {
             Trending Topics
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            Track real-time social media trends and insights
+            Track real-time social media trends and insights.
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
@@ -61,7 +61,7 @@ export default function TrendingTopics() {
           />
         </Card>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {trends.map((trend) => (
             <Card
               key={trend.id}

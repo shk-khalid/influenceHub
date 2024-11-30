@@ -3,7 +3,7 @@ import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import BoardColumn from '../components/campaigns/board/BoardColumn';
 import { useCampaignStore } from '../hooks/UseCampaign';
 import SearchBar from '../components/campaigns/visuals/SearchBar';
-import DashboardOverview from '../components/campaigns/visuals/CampaignOverview';
+import CampaignOverview from '../components/campaigns/visuals/CampaignOverview';
 import { Layout } from '../components/layout/Layout';
 import { motion } from 'framer-motion';
 import type { CampaignStatus, Campaign } from '../components/types';
@@ -69,7 +69,7 @@ const Campaign: React.FC = () => {
         </header>
         <div className="mb-8 space-y-6">
           <SearchBar />
-          <DashboardOverview />
+          <CampaignOverview />
         </div>
 
         <DragDropContext onDragEnd={onDragEnd}>

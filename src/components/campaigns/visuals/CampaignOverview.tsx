@@ -1,18 +1,18 @@
 import { TrendingUp, Users, DollarSign, Calendar } from 'lucide-react';
 import { useCampaignStore } from '../../../hooks/UseCampaign';
 
-export default function DashboardOverview() {
+export default function CampaignOverview() {
   const campaigns = useCampaignStore((state) => state.campaigns);
 
   const stats = {
     total: campaigns.length,
     active: campaigns.filter((c) => c.status === 'in_progress').length,
     completed: campaigns.filter((c) => c.status === 'completed').length,
-    totalBudget: campaigns.reduce((acc, curr) => acc + curr.budget, 0),
+    totalBudget: campaigns.reduce((acc, curr) => acc + (curr.budget ?? 0), 0),
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
         <div className="flex items-center">
           <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
@@ -61,7 +61,7 @@ export default function DashboardOverview() {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 sm:col-span-3 xl:col-span-1">
         <div className="flex items-center">
           <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
             <DollarSign className="h-6 w-6 text-yellow-600 dark:text-yellow-200" />

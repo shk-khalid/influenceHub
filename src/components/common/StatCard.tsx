@@ -22,7 +22,7 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <div className={cn(
-      'card p-6 flex flex-col items-center text-center group hover:scale-105 transition-transform',
+      'card bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 p-6 flex flex-col  items-center text-center group transition-transform',
       className
     )}>
       <div className={cn(

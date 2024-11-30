@@ -53,7 +53,7 @@ export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) =
       <div className="my-8"></div>
 
       {/* Brand Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
         {filteredBrands.map((brand) => (
           <div
             key={brand.id}
@@ -97,7 +97,7 @@ export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) =
                 <div className="text-center p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30">
                   <Users className="w-4 h-4 text-blue-500 dark:text-blue-400 mx-auto mb-1" />
                   <p className="text-xs text-gray-600 dark:text-gray-400">Market Share</p>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{brand.metrics.marketShare}%</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{brand.metrics?.marketShare}%</p>
                 </div>
                 <div className="text-center p-2 rounded-lg bg-green-50 dark:bg-green-900/30">
                   <TrendingUp className="w-4 h-4 text-green-500 dark:text-green-400 mx-auto mb-1" />

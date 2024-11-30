@@ -38,7 +38,7 @@ export default function CampaignCard({ campaign, index }: CampaignCardProps) {
               snapshot.isDragging ? 'shadow-lg ring-2 ring-blue-500' : ''
             }`}
           >
-            <div className="flex justify-between items-start mb-3">
+            <div className="flex justify-between items-start mb-3 mr-2">
               <div>
                 <h4 className="font-medium text-gray-900 dark:text-white">
                   {campaign.title || 'Untitled Campaign'}
@@ -47,7 +47,7 @@ export default function CampaignCard({ campaign, index }: CampaignCardProps) {
                   {campaign.brand || 'Unknown Brand'}
                 </p>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-col space-y-2">
                 {campaign.priority && (
                   <span className={`px-3 py-1 rounded-lg text-xs font-medium ${priorityColors[campaign.priority]}`}>
                     {campaign.priority}

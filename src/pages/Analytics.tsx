@@ -19,7 +19,7 @@ const Analytic: React.FC = () => {
 
   return (
     <Layout>
-      <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-[90rem] mx-auto sm:px-6 py-12">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <Card className="relative mb-16 text-center">
             <motion.div
@@ -45,7 +45,7 @@ const Analytic: React.FC = () => {
           </Card>
         </motion.div>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8">
           <div className="flex flex-wrap justify-center gap-4 mb-8">
             {tabs.map((tab) => (
               <Button

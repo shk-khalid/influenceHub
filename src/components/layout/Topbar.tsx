@@ -1,17 +1,8 @@
 import { useState, useEffect } from 'react';
-import {
-  Bell,
-  Sun,
-  Moon,
-  User,
-  Settings as SettingsIcon,
-  LogOut
-} from 'lucide-react';
+import { Bell, Sun, Moon, User, Settings as SettingsIcon, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import MobileLightLogo from '../../assets/logo/LightLogoOnly.png';
 import MobileDarkLogo from '../../assets/logo/DarkLogoOnly.png';
-import DesktopLightLogo from '../../assets/logo/LightLogo.png';
-import DesktopDarkLogo from '../../assets/logo/DarkLogo.png';
 
 interface TopbarProps {
   sidebarCollapsed: boolean;
@@ -50,13 +41,7 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
       <div className="h-full px-4 flex items-center justify-between">
         {/* Logo Section */}
         <div className="flex items-center space-x-4">
-          {isDesktop ? (
-            <img
-              src={darkMode ? DesktopDarkLogo : DesktopLightLogo}
-              alt="Collabwise Logo"
-              className="h-12"
-            />
-          ) : (
+          {isDesktop ? <></> : (
             <img
               src={darkMode ? MobileDarkLogo : MobileLightLogo}
               alt="Collabwise Logo"

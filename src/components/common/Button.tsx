@@ -3,7 +3,7 @@ import { type LucideIcon, Loader2 } from 'lucide-react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'social' | 'gradient' | 'outline';
-  icon?: LucideIcon | React.FC;
+  icon?: React.ReactNode;
   isLoading?: boolean;
   fullWidth?: boolean;
   children?: React.ReactNode;
@@ -30,20 +30,15 @@ export function Button({
   };
 
   return (
-    <button
-      className={`${baseStyles} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}
-      disabled={isLoading}
-      {...props}
-    >
-      {isLoading && (
-        <span className="absolute inset-0 flex items-center justify-center">
-          <Loader2 className="w-5 h-5 animate-spin" />
+    <button className={`${baseStyles} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`} disabled={isLoading} {...props}>
+      {isLoading ? (
+        <Loader2 className="h-5 w-5 animate-spin" />
+      ) : Icon ? (
+        <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+          {Icon}
         </span>
-      )}
-      {!isLoading && Icon && <Icon className="w-5 h-5" />}
-      <span className={isLoading ? 'opacity-0' : ''}>
-        {children || (Icon && <span className="sr-only">Button</span>)}
-      </span>
+      ) : null}
+      {children}
     </button>
   );
 }

@@ -6,22 +6,24 @@ import Profile from './pages/Profile';
 import Campaign from './pages/Campaigns';
 import { BrandMatchingDashboard } from './pages/Matching';
 import Analytics from './pages/Analytics';
-import { Authorization } from './pages/Authorization';
+import { SignupForm } from './components/auth/SignupForm';
+import { LoginForm } from './components/auth/LoginFrom';
+import { UserDetailsForm } from './components/auth/UserDetails';
+import { AuthProvider } from './hooks/useAuth';
 import { Insights } from './pages/Insights';
-
 
 function App() {
   return (
     <Router>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/signup" element={<SignupForm />} />
+          <Route path="/complete-profile" element={<UserDetailsForm />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </AuthProvider>
       <Routes>
-        {/* Public Route for SignIn */}
-        <Route
-          path="/auth"
-          element={
-            <Authorization />
-          }
-        />
-
         {/* Protected Route for Dashboard */}
         <Route
           path="/dashboard"

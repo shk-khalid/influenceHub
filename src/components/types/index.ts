@@ -1,13 +1,27 @@
+export interface User {
+  email: string;
+  fullName: string;
+  location?: string;
+  bio?: string;
+  socialLinks?: {
+    instagram?: string;
+    twitter?: string;
+    youtube?: string;
+  };
+}
+
 export interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-  isAuthenticated: boolean;
-  requiresTwoFactor: boolean;
-  user: null | {
-    id: string;
-    email: string;
-    name: string;
-  };
+}
+
+export interface TwoFactorAuthProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onVerify: (code: string) => void;
+  email: string;
 }
 
 export type CampaignStatus = 'pending' | 'under_review' | 'in_progress' | 'completed';

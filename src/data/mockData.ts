@@ -1,4 +1,33 @@
-import { Campaign, DemographicData, Brand } from '../components/types';
+import { Campaign, DemographicData, Brand, User } from '../components/types';
+
+export const mockUsers: User[] = [
+  {
+    email: 'john@example.com',
+    fullName: 'John Doe',
+    location: 'San Francisco, CA',
+    bio: 'Senior Software Engineer passionate about building great products',
+    socialLinks: {
+      instagram: 'johndoe',
+      twitter: 'johndoe',
+      youtube: 'johndoecodes'
+    }
+  },
+  {
+    email: 'jane@example.com',
+    fullName: 'Jane Smith',
+    location: 'New York, NY',
+    bio: 'UX Designer with 5+ years of experience',
+    socialLinks: {
+      instagram: 'janesmith',
+      twitter: 'janesdesigns'
+    }
+  }
+];
+
+export const mockCredentials = {
+  'john@example.com': 'password123',
+  'jane@example.com': 'password123'
+};
 
 export const mockBrands: Brand[] = [
   {

@@ -1,7 +1,7 @@
 import { LayoutDashboard, Megaphone, Handshake, Briefcase, BarChart2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { NavLink } from '../common/NavLink';
-import DesktopLightLogo from '../../assets/logo/LightLogo.png';
-import DesktopDarkLogo from '../../assets/logo/DarkLogo.png';
+import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
+import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -29,12 +29,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     >
       <div className="flex h-full flex-col">
         {/* Logo Section */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-white/10 dark:border-gray-800/50">
-          <img
-            src={isDarkMode ? DesktopDarkLogo : DesktopLightLogo}
-            alt="Logo"
-            className={`h-12 mt-3 ml-5 transition-opacity ${collapsed ? 'hidden' : 'block'}`}
-          />
+        <div className="flex h-16 items-center justify-between px-4 border-b border-white/10 dark:border-gray-800/50 mt-3">
+          <img src={isDarkMode ? DesktopDarkLogo : DesktopLightLogo} alt="Logo" className={`h-12 transition-opacity ${collapsed ? 'hidden' : 'block'}`}/>
+          <span className={`text-2xl font-bold text-gray-900 dark:text-white ${collapsed ? 'hidden' : 'block'}`}>CollabWise</span>
           <button
             onClick={onToggle}
             className="p-1.5 rounded-lg hover:bg-white/10 dark:hover:bg-gray-800/50 transition-colors"

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, TrendingUp, Users, Target, BarChart } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { Brand } from '../components/types';
 import { BrandCard } from '../components/matching/BrandCard';
-import { InsightCard } from '../components/matching/InsightCard';
+import { SidePanel } from '../components/matching/SidePanel';
 import { Layout } from '../components/layout/Layout';
-import { mockBrands } from '../data/mockData'; // Import mock data
+import { mockBrands } from '../data/mockData';
 
 export const BrandMatchingDashboard = () => {
   const [currentBrandIndex, setCurrentBrandIndex] = useState(0);
@@ -51,90 +51,41 @@ export const BrandMatchingDashboard = () => {
             for you.
           </motion.p>
         </header>
-
-        {/* Content Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Brand Matches Section */}
-          <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-              Brand Matches
-            </h2>
-            <div className="flex justify-center items-center min-h-[600px]">
-              <AnimatePresence mode="wait">
-                {currentBrandIndex < mockBrands.length ? (
-                  <BrandCard
-                    key={mockBrands[currentBrandIndex].id}
-                    brand={mockBrands[currentBrandIndex]}
-                    onAccept={handleAccept}
-                    onDecline={handleDecline}
-                  />
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-center"
-                  >
-                    <Sparkles className="w-16 h-16 text-indigo-500 mx-auto mb-4" />
-                    <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-2">
-                      You're all caught up!
-                    </h2>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      Check back later for new brand matches.
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-
-          {/* Insights Section */}
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-4">
-              <InsightCard
-                icon={<Users className="w-6 h-6 text-indigo-500" />}
-                title="Total Matches"
-                value="24"
-                trend={{ direction: 'up', value: '+12% this week' }}
-              />
-              <InsightCard
-                icon={<Target className="w-6 h-6 text-indigo-500" />}
-                title="Avg. Match Rate"
-                value="85%"
-                trend={{ direction: 'up', value: '+5% this month' }}
-              />
-              <InsightCard
-                icon={<BarChart className="w-6 h-6 text-indigo-500" />}
-                title="Campaign Success"
-                value="92%"
-              />
-            </div>
-
-            {/* Recent Activity Section */}
-            <div className="bg-gray-50 dark:bg-gray-900 rounded-xl shadow-md p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <TrendingUp className="w-6 h-6 text-indigo-500" />
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-                  Recent Activity
-                </h2>
-              </div>
-              <div className="space-y-4">
-                {['Electronics', 'Fashion', 'Cosmetics'].map((sector) => (
-                  <div
-                    key={sector}
-                    className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
-                  >
-                    <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
-                      {sector}
-                    </span>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {Math.floor(Math.random() * 10) + 1} new matches
-                    </span>
-                  </div>
-                ))}
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/50 p-8 transition-colors duration-300">
+              <div className="flex justify-center items-center min-h-[600px]">
+                <AnimatePresence mode="wait">
+                  {currentBrandIndex < mockBrands.length ? (
+                    <BrandCard
+                      key={mockBrands[currentBrandIndex].id}
+                      brand={mockBrands[currentBrandIndex]}
+                      onAccept={handleAccept}
+                      onDecline={handleDecline}
+                    />
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="text-center"
+                    >
+                      <Sparkles className="w-16 h-16 text-blue-500 dark:text-blue-400 mx-auto mb-4" />
+                      <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                        You're all caught up!
+                      </h2>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        Check back later for new brand matches.
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
+          <SidePanel/>
         </div>
+
       </motion.div>
     </Layout>
   );

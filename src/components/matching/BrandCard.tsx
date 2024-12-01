@@ -1,7 +1,12 @@
 import { motion } from 'framer-motion';
-import { Building2, Target, DollarSign, MapPin, Star } from 'lucide-react';
+import { MapPin, Star, Building, Zap } from 'lucide-react';
 import { Brand } from '../types';
-import { MatchStrengthIndicator } from './MatchStrengthIndicator';
+import { BrandMetrics } from './brandCard/BrandMetrics';
+import { BrandDemographics } from './brandCard/BrandDemographics';
+import { BrandTrends } from './brandCard/BrandTrends';
+import { BrandValueChart } from './brandCard/BrandValueChart';
+import { CompetitorsList } from './brandCard/CompetitorList';
+import { Button } from '../common/Button';
 
 interface BrandCardProps {
   brand: Brand;
@@ -12,107 +17,85 @@ interface BrandCardProps {
 export const BrandCard = ({ brand, onAccept, onDecline }: BrandCardProps) => {
   return (
     <motion.div
-      className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full"
+      className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 max-w-2xl w-full border border-gray-200 dark:border-gray-700 transition-all duration-300"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
-      {/* Header: Brand Logo and Info */}
-      <div className="flex items-center gap-4 mb-4">
-        <img
-          src={brand.logo}
-          alt={brand.name}
-          className="w-16 h-16 rounded-lg object-cover"
-        />
-        <div>
-          <h3 className="text-xl font-semibold text-gray-900">{brand.name}</h3>
-          <div className="flex items-center gap-2 text-gray-600">
-            <Building2 size={16} />
-            <span className="text-sm">{brand.sector}</span>
+      {/* Brand Header */}
+      <div className="flex items-start gap-6 mb-8">
+        <div className="relative">
+          <motion.img
+            src={brand.logo}
+            alt={brand.name}
+            className="w-24 h-24 rounded-xl object-cover ring-4 ring-blue-100 dark:ring-blue-800"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          />
+          <motion.div
+            className="absolute -bottom-2 -right-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xs font-medium px-2 py-1 rounded-full shadow-md"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            {brand.sector}
+          </motion.div>
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{brand.name}</h3>
+            <div className="flex items-center gap-1 bg-yellow-100 dark:bg-yellow-800 px-3 py-1 rounded-full">
+              <Star className="w-4 h-4 text-yellow-500 fill-current" />
+              <span className="text-sm font-medium text-yellow-800 dark:text-yellow-300">
+                {brand.rating}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <MapPin size={16} />
-            <span className="text-sm">{brand.location}</span>
+          <div className="flex flex-wrap gap-4 text-sm text-gray-700 dark:text-gray-400 mb-4">
+            <div className="flex items-center gap-1">
+              <Building className="w-4 h-4" />
+              <span>{brand.sector}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <MapPin className="w-4 h-4" />
+              <span>{brand.location}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Zap className="w-4 h-4 text-yellow-500" />
+              <span>Match Score: 92%</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Brand Rating */}
-      <div className="mb-4 flex items-center gap-2">
-        <Star size={16} className="text-yellow-500" />
-        <span className="text-gray-700 text-sm">Rating: {brand.rating.toFixed(1)}/5</span>
-      </div>
-
-      {/* Value Over Time */}
-      <div className="mb-4">
-        <p className="text-sm font-medium text-gray-700 mb-2">Brand Value Over Time:</p>
-        <ul className="text-gray-600 text-sm">
-          {brand.value.map((entry) => (
-            <li key={entry.year}>
-              {entry.year}: ${entry.amount.toLocaleString()}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Demographics */}
-      <div className="mb-4">
-        <p className="text-sm font-medium text-gray-700 mb-2">Target Demographics:</p>
-        <div className="text-gray-600 text-sm">
-          <p>Male: {brand.demographics.gender.male}%</p>
-          <p>Female: {brand.demographics.gender.female}%</p>
-          <p>Other: {brand.demographics.gender.other}%</p>
+      {/* Brand Details */}
+      <div className="space-y-6 mb-8">
+        <BrandMetrics metrics={brand.metrics} sentiment={brand.sentiment} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <BrandDemographics demographics={brand.demographics} />
+          <CompetitorsList competitors={brand.competitors} />
         </div>
-      </div>
-
-      {/* Metrics */}
-      <div className="space-y-3 mb-4">
-        <div className="flex items-center gap-2 text-gray-700">
-          <Target size={16} />
-          <span>Engagement Rate: {brand.metrics.engagementRate.toFixed(2)}%</span>
-        </div>
-        <div className="flex items-center gap-2 text-gray-700">
-          <DollarSign size={16} />
-          <span>Market Share: {brand.metrics.marketShare.toFixed(2)}%</span>
-        </div>
-      </div>
-
-      {/* Sentiment Analysis */}
-      <div className="mb-6">
-        <p className="text-sm font-medium text-gray-700 mb-2">Sentiment Analysis:</p>
-        <ul className="text-gray-600 text-sm">
-          <li>Positive: {brand.sentiment.positive}%</li>
-          <li>Neutral: {brand.sentiment.neutral}%</li>
-          <li>Negative: {brand.sentiment.negative}%</li>
-        </ul>
-        <p className="text-gray-600 text-sm mt-2">
-          Keywords: {brand.sentiment.keywords.join(', ')}
-        </p>
-        <p className="text-gray-600 text-sm mt-1">
-          Trends: {brand.sentiment.trends.join(', ')}
-        </p>
-      </div>
-
-      {/* Match Strength Indicator */}
-      <div className="mb-6">
-        <p className="text-sm font-medium text-gray-700 mb-2">Match Strength</p>
-        <MatchStrengthIndicator strength={brand.metrics.engagementRate} size="lg" />
+        <BrandValueChart value={brand.value} />
+        <BrandTrends trends={brand.sentiment.trends} keywords={brand.sentiment.keywords} />
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3">
-        <button
+      <div className="flex gap-4">
+        <Button
+          variant="outline"
+          className="flex-1 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
           onClick={() => onDecline(brand)}
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
         >
           Skip
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="gradient"
+          className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-lg transition"
           onClick={() => onAccept(brand)}
-          className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           Connect
-        </button>
+        </Button>
       </div>
     </motion.div>
   );

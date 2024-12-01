@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Bell, Sun, Moon, User, Settings as SettingsIcon, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useThemeToggler } from '../../hooks/UseTheme';
 import MobileLightLogo from '../../assets/logo/LightLogoOnly.png';
 import MobileDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
@@ -9,7 +10,7 @@ interface TopbarProps {
 }
 
 export function Topbar({ sidebarCollapsed }: TopbarProps) {
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, toggleDarkMode } = useThemeToggler();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
@@ -23,11 +24,6 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.documentElement.classList.toggle('dark');
-  };
-
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -36,12 +32,14 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
 
   return (
     <header
-      className={` fixed top-0 right-0 z-30 h-16 glass-effect transition-all duration-300 shadow-glow ${isDesktop ? (sidebarCollapsed ? 'left-20' : 'left-64') : 'left-0'}`}
+      className={`fixed top-0 right-0 z-30 h-16 glass-effect transition-all duration-300 shadow-glow ${
+        isDesktop ? (sidebarCollapsed ? 'left-20' : 'left-64') : 'left-0'
+      }`}
     >
       <div className="h-full px-4 flex items-center justify-between">
         {/* Logo Section */}
         <div className="flex items-center space-x-4">
-          {isDesktop ? <></> : (
+          {!isDesktop && (
             <img
               src={darkMode ? MobileDarkLogo : MobileLightLogo}
               alt="Collabwise Logo"
@@ -56,11 +54,7 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
             onClick={toggleDarkMode}
             className="p-2 text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 rounded-xl hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-105"
           >
-            {darkMode ? (
-              <Sun className="w-5 h-5" />
-            ) : (
-              <Moon className="w-5 h-5" />
-            )}
+            {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
 
           <div className="relative">
@@ -79,7 +73,9 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
                 </div>
                 <div className="max-h-96 overflow-y-auto">
                   <div className="p-4 hover:bg-white/10 dark:hover:bg-gray-800/50 transition-colors">
-                    <p className="text-sm text-gray-600 dark:text-gray-300">New campaign request from Brand X</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      New campaign request from Brand X
+                    </p>
                     <span className="text-xs text-gray-400">2 minutes ago</span>
                   </div>
                 </div>
@@ -112,7 +108,10 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
                   <p className="text-xs text-gray-500 dark:text-gray-400">john@example.com</p>
                 </div>
                 <div className="p-2">
-                  <button className="w-full flex items-center px-3 py-2 text-sm text-gray-600 dark:text-gray-300 rounded-lg hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-200" onClick={handleClick}>
+                  <button
+                    className="w-full flex items-center px-3 py-2 text-sm text-gray-600 dark:text-gray-300 rounded-lg hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-200"
+                    onClick={handleClick}
+                  >
                     <User className="w-4 h-4 mr-2" />
                     View Profile
                   </button>
@@ -131,6 +130,5 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
         </div>
       </div>
     </header>
-
   );
 }

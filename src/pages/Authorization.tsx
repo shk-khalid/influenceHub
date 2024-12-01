@@ -1,5 +1,5 @@
 import { AuthForms } from '../components/auth/AuthForm';
-import { Zap } from 'lucide-react';
+import DesktopLogo from '../assets/logo/LightLogoOnly.png';
 
 export const Authorization = () => {
     return (
@@ -9,8 +9,8 @@ export const Authorization = () => {
                 <div className="flex items-center justify-center w-full">
                     <div className="max-w-lg">
                         <div className="flex items-center gap-3 mb-6">
-                            <Zap className="w-8 h-8 text-indigo-600" />
-                            <span className="text-2xl font-bold text-gray-900">InfluenceHub</span>
+                            <img src={DesktopLogo}alt="InfluenceHub Logo" className="w-12 h-12"/>
+                            <span className="text-2xl font-bold text-gray-900">CollabWise</span>
                         </div>
                         <h1 className="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6">
                             Connect. Collaborate. Create.

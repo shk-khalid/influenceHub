@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MapPin, Link as LinkIcon, Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/AuthContext';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Card } from '../common/Card';

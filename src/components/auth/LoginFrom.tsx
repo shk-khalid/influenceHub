@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { TwoFactorAuth } from './TwoFactorAuth';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/AuthContext';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Card } from '../common/Card';

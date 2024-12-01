@@ -9,20 +9,20 @@ import Analytics from './pages/Analytics';
 import { SignupForm } from './components/auth/SignupForm';
 import { LoginForm } from './components/auth/LoginFrom';
 import { UserDetailsForm } from './components/auth/UserDetails';
-import { AuthProvider } from './hooks/useAuth';
+// import { AuthProvider } from './hooks/useAuth';
 import { Insights } from './pages/Insights';
 
 function App() {
   return (
     <Router>
-      <AuthProvider>
+      {/* <AuthProvider> */}
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/complete-profile" element={<UserDetailsForm />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
-      </AuthProvider>
+      {/* </AuthProvider> */}
       <Routes>
         {/* Protected Route for Dashboard */}
         <Route

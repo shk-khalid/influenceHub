@@ -21,7 +21,7 @@ export const MetricsCard: React.FC<MetricsCardProps> = ({ brand }) => {
               <PieChart className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               <p className="text-sm text-gray-600 dark:text-gray-400">Market Share</p>
             </div>
-            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{brand.metrics.marketShare}%</p>
+            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{brand.metrics?.marketShare}%</p>
           </div>
         </div>
         

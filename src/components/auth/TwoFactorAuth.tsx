@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import type { TwoFactorAuthProps } from '../types';
+import { Button } from '../common/Button';
 
 export function TwoFactorAuth({ isOpen, onClose, onVerify, email }: TwoFactorAuthProps) {
   const [code, setCode] = useState('');
@@ -19,18 +20,20 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify, email }: TwoFactorAut
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md transform transition-all">
+      <div className="backdrop-blur-xl bg-white/30 dark:bg-gray-800/30 border border-gray-300/40 dark:border-gray-700/40 rounded-lg p-6 w-full max-w-md shadow-lg transform transition-all">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold dark:text-white">Two-Factor Authentication</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Two-Factor Authentication
+          </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
           >
             <X size={20} />
           </button>
         </div>
         <p className="text-gray-600 dark:text-gray-300 mb-4">
-          We've sent a verification code to {email}
+          We've sent a verification code to <span className="font-medium">{email}</span>.
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -38,16 +41,17 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify, email }: TwoFactorAut
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="Enter verification code"
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-2 bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-yellow-400 focus:outline-none transition-all"
             maxLength={6}
           />
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white dark:bg-yellow-400 dark:hover:bg-yellow-300 dark:text-gray-900 py-2 rounded-lg transition-colors"
+          <Button 
+            variant='primary'
+            type='submit'
+            className='w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 transition-transform duration-200'
           >
             Verify
-          </button>
+          </Button>
         </form>
       </div>
     </div>

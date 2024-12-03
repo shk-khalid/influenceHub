@@ -52,7 +52,7 @@ const Analytic: React.FC = () => {
                 key={tab.id}
                 variant={activeTab === tab.id ? 'primary' : 'outline'}
                 onClick={() => setActiveTab(tab.id)}
-                icon={tab.icon}
+                icon={<tab.icon className='w-5 h-5'/>}
               >
                 {tab.name}
               </Button>

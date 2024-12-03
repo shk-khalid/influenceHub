@@ -1,6 +1,6 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
-import { useCompetitorStore } from '../../hooks/UseCompetitor';
+import { useCompetitorStore } from '../../hooks/useCompetitor';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Select } from '../common/Select';

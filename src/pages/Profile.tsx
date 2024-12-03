@@ -3,7 +3,7 @@ import ProfileHeader from '../components/profile/ProfileHeader';
 import InfluencerStats from '../components/profile/ProfileStats';
 import ProfilePicture from '../components/profile/ProfilePicture';
 import PersonalDetails from '../components/profile/PersonalDetails';
-import SocialLinkInput from '../components/profile/SocialLinks';
+import SocialLinkInput from '../components/common/SocialLinks';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Edit2, Save, X } from 'lucide-react';
@@ -99,7 +99,7 @@ export default function ProfileSetup() {
               <>
                 <Button
                   variant="secondary"
-                  icon={X}
+                  icon={<X className='w-5 h-5'/>}
                   className="w-full sm:w-auto"
                   onClick={() => setIsEditing(false)}
                 >
@@ -107,7 +107,7 @@ export default function ProfileSetup() {
                 </Button>
                 <Button
                   variant="primary"
-                  icon={Save}
+                  icon={<Save className='w-5 h-5'/>}
                   className="w-full sm:w-auto"
                   onClick={handleSave}
                 >
@@ -117,7 +117,7 @@ export default function ProfileSetup() {
             ) : (
               <Button
                 variant="secondary"
-                icon={Edit2}
+                icon={<Edit2 className='w-5 h-5'/>}
                 className="w-full sm:w-auto"
                 onClick={() => setIsEditing(true)}
               >

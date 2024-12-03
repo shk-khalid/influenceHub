@@ -104,8 +104,9 @@ export const Dashboard: React.FC = () => {
             <h2 className="text-lg md:text-xl font-semibold">Active Campaigns</h2>
             <Button
               variant="primary"
-              icon={Download}
+              icon={<Download className='w-5 h-5'/>}
               onClick={handleDownloadReport}
+              className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 transition-transform duration-200"
             >
               Download Report
             </Button>

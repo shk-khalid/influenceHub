@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { TwoFactorAuth } from './TwoFactorAuth';
-import { useAuth } from '../../hooks/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Card } from '../common/Card';
@@ -13,6 +13,7 @@ export function LoginForm() {
   const [showTwoFactor, setShowTwoFactor] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,27 +26,32 @@ export function LoginForm() {
 
   const handleTwoFactorVerify = async (code: string) => {
     setIsLoading(true);
-    await login(email, password);
-    setIsLoading(false);
-    setShowTwoFactor(false);
+    try {
+      await login(email, password);
+      setIsLoading(false);
+      setShowTwoFactor(false);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login failed:', error);
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col py-12 sm:px-6 lg:px-8">
-      <div className="fixed top-8 left-8">
-      </div>
-
+    <div
+      className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20"
+    >
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+        <h2 className="mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
           Welcome back
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+        <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-300">
           Sign in to your account to continue
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <Card>
+        <Card className="p-8 shadow-lg rounded-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-md border border-gray-300/40 dark:border-gray-700/40">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <Input
               label="Email address"
@@ -54,6 +60,7 @@ export function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               icon={<Mail className="h-5 w-5 text-gray-400" />}
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
             />
 
             <Input
@@ -63,12 +70,13 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               icon={<Lock className="h-5 w-5 text-gray-400" />}
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
             />
 
             <div className="flex items-center justify-between">
               <Link
                 to="/forgot-password"
-                className="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors duration-200"
+                className="text-sm font-medium text-[#2563eb] hover:text-[#1e3a8a] dark:text-[#facc15] dark:hover:text-[#f59e0b] transition duration-150 ease-in-out"
               >
                 Forgot your password?
               </Link>
@@ -78,11 +86,12 @@ export function LoginForm() {
               type="submit"
               isLoading={isLoading}
               icon={<ArrowRight className="h-5 w-5" />}
+              className="w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 transition-transform duration-200"
             >
               Sign in
             </Button>
 
-            <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
               <p>Demo accounts:</p>
               <ul className="mt-1 list-disc list-inside">
                 <li>john@example.com / password123</li>
@@ -97,7 +106,7 @@ export function LoginForm() {
                 <div className="w-full border-t border-gray-300 dark:border-gray-600" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                <span className="px-2 text-gray-500 dark:text-gray-400">
                   New to Collabwise?
                 </span>
               </div>
@@ -105,7 +114,10 @@ export function LoginForm() {
 
             <div className="mt-6">
               <Link to="/signup">
-                <Button variant="secondary">
+                <Button
+                  variant="outline"
+                  className="w-full border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400"
+                >
                   Create new account
                 </Button>
               </Link>

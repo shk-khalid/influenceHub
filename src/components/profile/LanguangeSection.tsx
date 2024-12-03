@@ -60,7 +60,7 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
         {isEditing && (
           <Button
             variant="secondary"
-            icon={Plus}
+            icon={<Plus className='w-5 h-5' />}
             onClick={() => setIsModalOpen(true)}
             className="text-sm py-1.5 px-3"
           >

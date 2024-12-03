@@ -29,8 +29,8 @@ export default function CampaignCard({ campaign, onClick }: CampaignCardProps) {
             {campaign.brand}
           </p>
         </div>
-        <span className={`px-3 py-1 rounded-full text-xs font-medium text-white ${statusColors[campaign.status]}`}>
-          {campaign.status.replace('_', ' ').toUpperCase()}
+        <span className={`px-3 py-1 rounded-full text-xs font-medium text-white ${statusColors[campaign?.status] ?? 'text-gray-500'}`}>
+          {campaign.status?.replace('_', ' ').toUpperCase()}
         </span>
       </div>
 
@@ -49,12 +49,12 @@ export default function CampaignCard({ campaign, onClick }: CampaignCardProps) {
         </div>
         <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
           <DollarSign className="w-4 h-4 mr-2" />
-          <span>${campaign.budget.toLocaleString()}</span>
+          <span>${campaign.budget?.toLocaleString()}</span>
         </div>
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {campaign.platforms.map((platform) => (
+        {campaign.platforms?.map((platform) => (
           <span 
             key={platform}
             className="px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"

@@ -1,3 +1,4 @@
+// Authorization
 export interface User {
   email: string;
   fullName: string;
@@ -23,6 +24,15 @@ export interface TwoFactorAuthProps {
   onVerify: (code: string) => void;
   email: string;
 }
+
+export interface AuthContextType extends AuthState {
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, fullName: string) => Promise<void>;
+  logout: () => void;
+  updateUserDetails: (details: Partial<User>) => void;
+}
+
+// Campaign
 
 export type CampaignStatus = 'pending' | 'under_review' | 'in_progress' | 'completed';
 export type PriorityLevel = 'low' | 'medium' | 'high';
@@ -63,6 +73,8 @@ export interface Task {
   progress: number;
 }
 
+// Dashboard
+
 export interface DemographicData {
   age: { label: string; value: number }[];
   gender: { label: string; value: number }[];
@@ -96,6 +108,8 @@ export interface Trend {
   region: string;
 }
 
+// Trend Analysis
+
 export interface Competitor {
   id: string;
   name: string;
@@ -118,6 +132,8 @@ export interface Tab {
   icon: React.ComponentType<{ className?: string }>;
   gradient: string;
 }
+
+// brand insights
 
 export interface Brand {
   id: string;

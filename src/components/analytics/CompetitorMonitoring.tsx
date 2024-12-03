@@ -1,7 +1,7 @@
 import React from 'react';
 import { Users, ArrowUpRight, MessageCircle, UserPlus, Activity, Target, Search, Filter, User2 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { useCompetitorStore } from '../../hooks/UseCompetitor';
+import { useCompetitorStore } from '../../hooks/useCompetitor';
 import { CompetitorForm } from '../analytics/CompetitorForm';
 import { Card } from '../common/Card';
 import { Input } from '../common/Input';

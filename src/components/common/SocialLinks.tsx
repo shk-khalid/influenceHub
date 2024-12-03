@@ -5,7 +5,7 @@ interface SocialLinkInputProps {
   url: string;
   onChange: (url: string) => void;
   isValid: boolean;
-  isEditing: boolean;
+  isEditing?: boolean;
 }
 
 const icons: Record<string, LucideIcon> = {

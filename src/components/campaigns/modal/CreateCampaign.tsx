@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
-import { X } from 'lucide-react';
-import { useCampaignStore } from '../../../hooks/UseCampaign';
+import { Save, X } from 'lucide-react';
+import { useCampaignStore } from '../../../hooks/useCampaign';
 import { Campaign } from '../../types';
+import { Button } from '../../common/Button';
+import { Input } from '../../common/Input';
+import { Card } from '../../common/Card';
 
 interface CreateCampaignModalProps {
   isOpen: boolean;
@@ -39,108 +42,82 @@ export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignM
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-      
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="mx-auto max-w-2xl w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg">
-          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-            <Dialog.Title className="text-lg font-semibold text-gray-900 dark:text-white">
+        <Card className="mx-auto max-w-2xl w-full p-8 shadow-lg rounded-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-md border border-gray-300/40 dark:border-gray-700/40">
+          <div className="flex items-center justify-between mb-6">
+            <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
               Create New Campaign
             </Dialog.Title>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-500"
+              className="text-gray-400 hover:text-gray-500 transition duration-150 ease-in-out"
             >
               <X className="h-6 w-6" />
             </button>
           </div>
-
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Campaign Title
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Brand
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.brand}
-                  onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Start Date
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.startDate}
-                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    End Date
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.endDate}
-                    onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Budget
-                </label>
-                <input
-                  type="number"
-                  required
-                  value={formData.budget}
-                  onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Input
+              label="Campaign Title"
+              type="text"
+              required
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+            />
+            <Input
+              label="Brand"
+              type="text"
+              required
+              value={formData.brand}
+              onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+            />
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                label="Start Date"
+                type="date"
+                required
+                value={formData.startDate}
+                onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+              />
+              <Input
+                label="End Date"
+                type="date"
+                required
+                value={formData.endDate}
+                onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+              />
             </div>
-
-            <div className="flex justify-end space-x-3">
-              <button
-                type="button"
+            <Input
+              label="Budget"
+              type="number"
+              required
+              value={formData.budget}
+              onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+            />
+            <div className="flex justify-end space-x-4">
+              <Button
+                variant="outline"
+                icon={<X className="w-5 h-5" />}
                 onClick={onClose}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
+                icon={<Save className="w-5 h-5" />}
                 type="submit"
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400"
               >
                 Create Campaign
-              </button>
+              </Button>
             </div>
           </form>
-        </Dialog.Panel>
+        </Card>
       </div>
     </Dialog>
   );

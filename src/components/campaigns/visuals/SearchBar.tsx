@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Search, Filter, Plus, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
 import CreateCampaignModal from '../modal/CreateCampaign';
-import { useCampaignStore } from '../../../hooks/UseCampaign';
+import { useCampaignStore } from '../../../hooks/useCampaign';
+import { Button } from '../../common/Button';
 
 export default function SearchBar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,13 +61,15 @@ export default function SearchBar() {
           </div>
         </div>
 
-        <button
+        <Button 
+         variant="primary"
+          icon={<Plus className="h-5 w-5" />}
           onClick={() => setIsModalOpen(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 transition-transform duration-200"
         >
-          <Plus className="h-4 w-4 mr-2" />
-          New Campaign
-        </button>
+          New Campaign 
+        </Button>
+        
       </div>
 
       {showFilters && (

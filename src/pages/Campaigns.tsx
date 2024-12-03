@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import BoardColumn from '../components/campaigns/board/BoardColumn';
-import { useCampaignStore } from '../hooks/UseCampaign';
+import { useCampaignStore } from '../hooks/useCampaign';
 import SearchBar from '../components/campaigns/visuals/SearchBar';
 import CampaignOverview from '../components/campaigns/visuals/CampaignOverview';
 import { Layout } from '../components/layout/Layout';

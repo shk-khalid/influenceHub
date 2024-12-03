@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Bell, Sun, Moon, User, Settings as SettingsIcon, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useThemeToggler } from '../../hooks/UseTheme';
+import { useThemeToggler } from '../../context/ThemeContext';
 import MobileLightLogo from '../../assets/logo/LightLogoOnly.png';
 import MobileDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 

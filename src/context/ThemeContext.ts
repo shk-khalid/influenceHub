@@ -1,4 +1,3 @@
-// src/hooks/useThemeToggler.ts
 import { useState, useEffect } from 'react';
 
 export function useThemeToggler() {

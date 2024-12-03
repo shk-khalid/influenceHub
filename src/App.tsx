@@ -13,54 +13,57 @@ import { LoginForm } from './components/auth/LoginForm';
 import { UserDetailsForm } from './components/auth/UserDetails';
 import { Insights } from './pages/Insights';
 import { AuthProvider } from './context/AuthContext';
+import { CompetitorProvider } from './context/CompetitorContext';
 
 function App() {
   return (
     <Router>
       <Toaster position="top-right" /> {/* Toast notifications for the app */}
-      <AuthProvider>
-        <Routes>
-          {/* Protected Routes */}
-          {/* Dashboard Route */}
-          <Route
-            path="/dashboard"
-            element={
-              <Layout> {/* Layout wraps the Dashboard page */}
-                <Dashboard />
-              </Layout>
-            }
-          />
+      <CompetitorProvider>
+        <AuthProvider>
+          <Routes>
+            {/* Protected Routes */}
+            {/* Dashboard Route */}
+            <Route
+              path="/dashboard"
+              element={
+                <Layout> {/* Layout wraps the Dashboard page */}
+                  <Dashboard />
+                </Layout>
+              }
+            />
 
-          {/* Profile Route */}
-          <Route path="/profile" element={<Profile />} />
+            {/* Profile Route */}
+            <Route path="/profile" element={<Profile />} />
 
-          {/* Campaigns Route */}
-          <Route path="/campaigns" element={<Campaign />} />
+            {/* Campaigns Route */}
+            <Route path="/campaigns" element={<Campaign />} />
 
-          {/* Brand Matching Route */}
-          <Route path="/match" element={<BrandMatchingDashboard />} />
+            {/* Brand Matching Route */}
+            <Route path="/match" element={<BrandMatchingDashboard />} />
 
-          {/* Analytics Route */}
-          <Route path="/analytics" element={<Analytics />} />
+            {/* Analytics Route */}
+            <Route path="/analytics" element={<Analytics />} />
 
-          {/* Insights Route */}
-          <Route path="/insights" element={<Insights />} />
+            {/* Insights Route */}
+            <Route path="/insights" element={<Insights />} />
 
-          {/* Authentication Routes */}
-          {/* Login Page */}
-          <Route path="/login" element={<LoginForm />} />
+            {/* Authentication Routes */}
+            {/* Login Page */}
+            <Route path="/login" element={<LoginForm />} />
 
-          {/* Signup Page */}
-          <Route path="/signup" element={<SignupForm />} />
+            {/* Signup Page */}
+            <Route path="/signup" element={<SignupForm />} />
 
-          {/* Complete Profile Page */}
-          <Route path="/complete-profile" element={<UserDetailsForm />} />
+            {/* Complete Profile Page */}
+            <Route path="/complete-profile" element={<UserDetailsForm />} />
 
-          {/* Default Fallback Route */}
-          {/* Redirects unmatched routes to the dashboard */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </AuthProvider>
+            {/* Default Fallback Route */}
+            {/* Redirects unmatched routes to the dashboard */}
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </AuthProvider>
+      </CompetitorProvider>
     </Router>
   );
 }

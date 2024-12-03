@@ -84,14 +84,14 @@ export const BrandCard = ({ brand, onAccept, onDecline }: BrandCardProps) => {
       <div className="flex gap-4">
         <Button
           variant="outline"
-          className="flex-1 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          className="flex-1 border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400"
           onClick={() => onDecline(brand)}
         >
           Skip
         </Button>
         <Button
-          variant="gradient"
-          className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-lg transition"
+          variant="primary"
+          className="flex-1 bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 transition-transform duration-200"
           onClick={() => onAccept(brand)}
         >
           Connect

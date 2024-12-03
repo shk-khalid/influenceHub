@@ -103,7 +103,7 @@ export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignM
                 variant="outline"
                 icon={<X className="w-5 h-5" />}
                 onClick={onClose}
-                className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400"
+                className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400 transition-transform duration-200"
               >
                 Cancel
               </Button>
@@ -111,7 +111,7 @@ export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignM
                 variant="primary"
                 icon={<Save className="w-5 h-5" />}
                 type="submit"
-                className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400"
+                className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
               >
                 Create Campaign
               </Button>

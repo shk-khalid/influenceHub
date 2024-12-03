@@ -25,7 +25,7 @@ export default function TrendingTopics() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold gradient-text flex items-center gap-2 mb-2">
-            <TrendingUp className="text-indigo-600 dark:text-indigo-400" />
+            <TrendingUp className="w-5 h-5 text-indigo-600 dark:text-yellow-400" />
             Trending Topics
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
@@ -66,7 +66,7 @@ export default function TrendingTopics() {
             <Card
               key={trend.id}
               gradient
-              className="hover:scale-105 transition-transform"
+              className="hover:scale-105 transition-transform bg-gray-200 dark:bg-gray-700"
             >
               <div className="flex justify-between items-start mb-4">
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 group-hover:gradient-text">
@@ -103,11 +103,11 @@ export default function TrendingTopics() {
               <Button
                 variant="secondary"
                 fullWidth
-                className="mt-4"
+                className="mt-4 bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
                 onClick={() => console.log(`Viewing details for ${trend.keyword}`)}
+                icon={<ExternalLink className='h-5 w-5' />}
               >
                 View Details
-                <ExternalLink className="w-4 h-4" />
               </Button>
             </Card>
           ))}

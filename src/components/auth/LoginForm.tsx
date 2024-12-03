@@ -60,7 +60,7 @@ export function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               icon={<Mail className="h-5 w-5 text-gray-400" />}
-              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
 
             <Input
@@ -70,7 +70,7 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               icon={<Lock className="h-5 w-5 text-gray-400" />}
-              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
 
             <div className="flex items-center justify-between">
@@ -86,7 +86,7 @@ export function LoginForm() {
               type="submit"
               isLoading={isLoading}
               icon={<ArrowRight className="h-5 w-5" />}
-              className="w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 transition-transform duration-200"
+              className="w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
             >
               Sign in
             </Button>
@@ -116,7 +116,7 @@ export function LoginForm() {
               <Link to="/signup">
                 <Button
                   variant="outline"
-                  className="w-full border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400"
+                  className="w-full border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400 transition-transform duration-200"
                 >
                   Create new account
                 </Button>

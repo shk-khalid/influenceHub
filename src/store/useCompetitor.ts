@@ -6,6 +6,7 @@ const mockCompetitors: Competitor[] = [
     id: '1',
     name: 'TechInfluencer',
     handle: '@techinfluencer',
+    platform: 'twitter',
     followers: 125000,
     engagement: 4.8,
     category: 'Technology',
@@ -30,6 +31,7 @@ const mockCompetitors: Competitor[] = [
     id: '2',
     name: 'FashionForward',
     handle: '@fashionforward',
+    platform: 'instagram',
     followers: 250000,
     engagement: 5.2,
     category: 'Fashion',
@@ -47,30 +49,6 @@ const mockCompetitors: Competitor[] = [
         likes: 6700,
         comments: 892,
         date: '2024-03-06'
-      }
-    ]
-  },
-  {
-    id: '3',
-    name: 'FoodieFinds',
-    handle: '@foodiefinds',
-    followers: 180000,
-    engagement: 6.1,
-    category: 'Food',
-    recentPosts: [
-      {
-        id: 'p5',
-        content: 'Quick and easy 15-minute recipes! 🍳',
-        likes: 5600,
-        comments: 634,
-        date: '2024-03-03'
-      },
-      {
-        id: 'p6',
-        content: 'Best brunch spots in the city 🥐',
-        likes: 4800,
-        comments: 521,
-        date: '2024-03-07'
       }
     ]
   }

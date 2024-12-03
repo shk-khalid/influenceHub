@@ -1,4 +1,4 @@
-import { Calendar, Target, Award, TrendingUp, ArrowRight } from 'lucide-react'; 
+import { Calendar, Target, Award, TrendingUp, ArrowRight } from 'lucide-react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { StatCard } from '../common/StatCard';
@@ -11,7 +11,7 @@ export default function SeasonalInsights() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 mb-8">
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold gradient-text flex items-center gap-2 mb-2">
-            <Calendar className="text-indigo-600 dark:text-indigo-400" />
+            <Calendar className="w-5 h-5 text-indigo-600 dark:text-yellow-400" />
             Seasonal Campaigns
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
@@ -25,7 +25,7 @@ export default function SeasonalInsights() {
         {mockCampaigns.map((campaign) => (
           <Card
             key={campaign.id}
-            className="hover:shadow-lg transition-shadow bg-white dark:bg-gray-800 rounded-lg overflow-hidden"
+            className="hover:shadow-lg transition-shadow bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden"
           >
             {/* Campaign Details */}
             <div className="p-4 flex flex-col gap-4">
@@ -38,7 +38,8 @@ export default function SeasonalInsights() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
+                {/* First Row */}
                 <StatCard
                   icon={Target}
                   title="Engagement"
@@ -51,13 +52,17 @@ export default function SeasonalInsights() {
                   value={campaign.metrics?.reach.toLocaleString()}
                   iconColor="text-green-600 dark:text-green-400"
                 />
-                <StatCard
-                  icon={TrendingUp}
-                  title="Conversion"
-                  value={`${campaign.metrics?.conversion}%`}
-                  iconColor="text-purple-600 dark:text-purple-400"
-                />
+                {/* Second Row */}
+                <div className="md:col-span-2">
+                  <StatCard
+                    icon={TrendingUp}
+                    title="Conversion"
+                    value={`${campaign.metrics?.conversion}%`}
+                    iconColor="text-purple-600 dark:text-purple-400"
+                  />
+                </div>
               </div>
+
 
               <div className="flex flex-col gap-2">
                 <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
@@ -74,10 +79,11 @@ export default function SeasonalInsights() {
               <Button
                 variant="primary"
                 fullWidth
-                className="w-full sm:w-auto flex items-center gap-2"
+                className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
+                icon={<ArrowRight className="w-4 h-4" />}
               >
                 Campaign Details
-                <ArrowRight className="w-4 h-4" />
+
               </Button>
             </div>
           </Card>

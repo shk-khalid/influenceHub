@@ -106,7 +106,7 @@ export const Dashboard: React.FC = () => {
               variant="primary"
               icon={<Download className='w-5 h-5'/>}
               onClick={handleDownloadReport}
-              className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 transition-transform duration-200"
+              className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
             >
               Download Report
             </Button>

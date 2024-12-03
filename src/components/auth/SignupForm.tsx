@@ -77,7 +77,7 @@ export function SignupForm() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               icon={<User className="h-5 w-5 text-gray-400" />}
-              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
 
             <Input
@@ -87,7 +87,7 @@ export function SignupForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               icon={<Mail className="h-5 w-5 text-gray-400" />}
-              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
 
             <div>
@@ -98,7 +98,7 @@ export function SignupForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 icon={<Lock className="h-5 w-5 text-gray-400" />}
-                className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+                className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
               />
               <PasswordStrengthMeter password={password} />
             </div>
@@ -111,7 +111,7 @@ export function SignupForm() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               error={error}
               icon={<Lock className="h-5 w-5 text-gray-400" />}
-              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
 
             {error && (
@@ -122,7 +122,7 @@ export function SignupForm() {
               type="submit"
               isLoading={isLoading}
               icon={<ArrowRight className="h-5 w-5" />}
-              className=" w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 transition-transform duration-200"
+              className=" w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
             >
               Create Account
             </Button>

@@ -110,20 +110,32 @@ export interface Trend {
 
 // Trend Analysis
 
-export interface Competitor {
+export interface CompetitorPost {
   id: string;
+  content: string;
+  likes: number;
+  comments: number;
+  date: string;
+}
+
+export interface Competitor {
+  id?: string;
   name: string;
   handle: string;
+  platform: string;
   followers: number;
   engagement: number;
   category: string;
-  recentPosts: Array<{
-    id: string;
-    content: string;
-    likes: number;
-    comments: number;
-    date: string;
-  }>;
+  recentPosts: CompetitorPost[];
+}
+
+export type CompetitorFormData = Pick<Competitor, 'name' | 'handle' | 'category' | 'platform'>;
+
+export interface CompetitorMetrics {
+  totalCompetitors: number;
+  averageEngagement: string;
+  topPerformer: Competitor | undefined;
+  platformDistribution: Record<string, number>;
 }
 
 export interface Tab {

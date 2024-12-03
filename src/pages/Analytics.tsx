@@ -53,6 +53,10 @@ const Analytic: React.FC = () => {
                 variant={activeTab === tab.id ? 'primary' : 'outline'}
                 onClick={() => setActiveTab(tab.id)}
                 icon={<tab.icon className='w-5 h-5'/>}
+                className={activeTab === tab.id 
+                  ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200' 
+                  : 'border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400 transition-transform duration-200'
+                }
               >
                 {tab.name}
               </Button>

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Search, Building2, X } from 'lucide-react';
+import { Input } from '../common/Input';
+import { Button } from '../common/Button';
 
 interface FilterSectionProps {
   searchTerm: string;
@@ -22,25 +24,21 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
                     border border-gray-200/50 dark:border-gray-700/50">
       {/* Search Input */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 
-                         text-gray-400 dark:text-gray-500 w-5 h-5" />
-        <input
-          type="text"
-          placeholder="Search brands by name or location..."
+        <Input
+          type='text'
+          placeholder='Search Brand by name or location...'
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50
-                   bg-white/50 dark:bg-gray-900/50 text-gray-900 dark:text-white
-                   focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800/25
-                   transition-all duration-300 text-sm sm:text-base backdrop-blur-sm
-                   placeholder-gray-500 dark:placeholder-gray-400"
-        />
+          icon={<Search className="h-5 w-5 text-gray-400" />}
+          className='focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200'
+        >
+        </Input>
+
         {searchTerm && (
           <button
             onClick={() => setSearchTerm('')}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 
-                     text-gray-400 hover:text-gray-600 dark:text-gray-500 
-                     dark:hover:text-gray-300 transition-colors"
+                     text-gray-400 hover:text-gray-600 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -54,28 +52,32 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
           <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Sectors</span>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button
+          <Button
+            variant={!selectedSector ? 'primary' : 'outline'}
             onClick={() => setSelectedSector(null)}
-            className={`px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300
-              ${!selectedSector 
-                ? 'bg-blue-500 dark:bg-blue-600 text-white shadow-md dark:shadow-blue-500/20' 
-                : 'bg-gray-100/80 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600/70'}`}
+            className={`transition-transform duration-200 ${!selectedSector
+                ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400'
+                : 'border-teal-500 hover:bg-teal-400  dark:border-rose-400 dark:hover:bg-rose-500 focus:ring-teal-500 dark:focus:ring-rose-400'
+              }`}
           >
             All
-          </button>
-          {sectors.map(sector => (
-            <button
+          </Button>
+
+          {sectors.map((sector) => (
+            <Button
               key={sector}
+              variant={selectedSector === sector ? 'primary' : 'outline'}
               onClick={() => setSelectedSector(sector)}
-              className={`px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300
-                ${selectedSector === sector 
-                  ? 'bg-blue-500 dark:bg-blue-600 text-white shadow-md dark:shadow-blue-500/20' 
-                  : 'bg-gray-100/80 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600/70'}`}
+              className={`transition-transform duration-200 ${selectedSector === sector
+                  ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400'
+                  : 'border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400'
+                }`}
             >
               {sector}
-            </button>
+            </Button>
           ))}
         </div>
+
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import { UserDetailsForm } from './components/auth/UserDetails';
 import { Insights } from './pages/Insights';
 import { AuthProvider } from './context/AuthContext';
 import { CompetitorProvider } from './context/CompetitorContext';
+import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
 
 function App() {
   return (
@@ -54,6 +55,8 @@ function App() {
 
             {/* Signup Page */}
             <Route path="/signup" element={<SignupForm />} />
+
+            <Route path="/forgot" element={<ForgotPasswordForm />} />
 
             {/* Complete Profile Page */}
             <Route path="/complete-profile" element={<UserDetailsForm />} />

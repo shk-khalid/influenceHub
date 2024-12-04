@@ -8,6 +8,8 @@ import { Input } from '../common/Input';
 import { Card } from '../common/Card';
 import { PasswordStrengthMeter } from './PasswordStrength';
 import { calculatePasswordStrength } from '../../lib/PasswordStrength';
+import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
+import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
 export function SignupForm() {
   const [email, setEmail] = useState('');
@@ -19,6 +21,8 @@ export function SignupForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { signup } = useAuth();
   const navigate = useNavigate();
+  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,9 +59,20 @@ export function SignupForm() {
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20"
-    >
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
+      
+      {/* Logo Section */}
+      <div className="flex items-center justify-center mb-8 space-x-4">
+        <img
+          src={isDarkMode ? DesktopDarkLogo : DesktopLightLogo}
+          alt="Logo"
+          className="h-12"
+        />
+        <span className="hidden lg:block text-2xl font-bold text-gray-900 dark:text-white">
+          CollabWise
+        </span>
+      </div>
+      
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
           Join Collabwise

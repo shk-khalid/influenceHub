@@ -2,7 +2,7 @@ import React from 'react';
 import { Loader2 } from 'lucide-react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'social' | 'gradient' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline';
   icon?: React.ReactNode;
   isLoading?: boolean;
   fullWidth?: boolean;
@@ -25,8 +25,6 @@ export function Button({
     primary: 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md hover:shadow-lg',
     secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500',
     outline: 'border-2 border-gray-300 text-gray-900 dark:text-gray-100 hover:bg-gray-50',
-    gradient: 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 focus:ring-indigo-500 transform hover:scale-105',
-    social: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50',
   };
 
   return (

@@ -60,7 +60,7 @@ export function ForgotPasswordForm() {
                     className="h-12"
                 />
                 <span className="block text-2xl font-bold text-gray-900 dark:text-white">
-                    CollabWise
+                    influenceHub
                 </span>
             </div>
             

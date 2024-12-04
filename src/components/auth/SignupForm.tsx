@@ -60,7 +60,7 @@ export function SignupForm() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
-      
+
       {/* Logo Section */}
       <div className="flex items-center justify-center mb-8 space-x-4">
         <img
@@ -69,13 +69,13 @@ export function SignupForm() {
           className="h-12"
         />
         <span className="hidden lg:block text-2xl font-bold text-gray-900 dark:text-white">
-          CollabWise
+          influenceHub
         </span>
       </div>
-      
+
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-          Join Collabwise
+          Join influenceHub
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-300">
           Create your account to get started

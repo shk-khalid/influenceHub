@@ -15,6 +15,7 @@ import { Insights } from './pages/Insights';
 import { AuthProvider } from './context/AuthContext';
 import { CompetitorProvider } from './context/CompetitorContext';
 import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
+import Landing from './pages/Landing';
 
 function App() {
   return (
@@ -24,6 +25,9 @@ function App() {
         <AuthProvider>
           <Routes>
             {/* Protected Routes */}
+            {/* Landing Route */}
+            <Route path="/landing" element={<Landing />} />
+
             {/* Dashboard Route */}
             <Route
               path="/dashboard"

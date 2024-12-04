@@ -52,7 +52,7 @@ export function LoginForm() {
           className="h-12"
         />
         <span className="block text-2xl font-bold text-gray-900 dark:text-white">
-          CollabWise
+          influenceHub
         </span>
       </div>
 
@@ -122,7 +122,7 @@ export function LoginForm() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 text-gray-500 dark:text-gray-400">
-                  New to Collabwise?
+                  New to influenceHub?
                 </span>
               </div>
             </div>

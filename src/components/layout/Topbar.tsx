@@ -42,7 +42,7 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
           {!isDesktop && (
             <img
               src={darkMode ? MobileDarkLogo : MobileLightLogo}
-              alt="Collabwise Logo"
+              alt="influenceHub Logo"
               className="h-12"
             />
           )}

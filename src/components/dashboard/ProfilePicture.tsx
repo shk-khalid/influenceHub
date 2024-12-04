@@ -2,9 +2,9 @@ import React from 'react';
 import { Camera, Upload } from 'lucide-react';
 
 interface ProfilePictureProps {
-  image: string;
+  image: string | null;
   onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  isEditing: boolean;
+  isEditing?: boolean;
 }
 
 export default function ProfilePicture({ image, onImageUpload }: ProfilePictureProps) {
@@ -21,8 +21,8 @@ export default function ProfilePicture({ image, onImageUpload }: ProfilePictureP
           </div>
         )}
       </div>
-      <label className="absolute bottom-0 right-0 bg-indigo-600 rounded-full p-2 cursor-pointer
-        hover:bg-indigo-700 transition-colors shadow-lg transform hover:scale-110">
+      <label className="absolute bottom-0 right-0 bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 rounded-full p-2 cursor-pointer
+        transition-colors shadow-lg transform hover:scale-110">
         <Upload className="w-4 h-4 text-white" />
         <input
           type="file"

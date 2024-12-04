@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { MapPin, Save, User, Plus } from 'lucide-react';
+import { MapPin, Save } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Card } from '../common/Card';
 import { TextArea } from '../common/TextArea';
+import ProfilePicture from '../dashboard/ProfilePicture';
 import SocialLinkInput from '../common/SocialLinks';
 import { isValidSocialUrl } from '../../lib/SocialValidation';
 
@@ -79,49 +80,33 @@ export function UserDetailsForm() {
         <Card className="p-8 shadow-lg rounded-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-md border border-gray-300/40 dark:border-gray-700/40">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Profile Picture Upload */}
-            <div className="flex justify-center">
-              <div className="relative">
-                <div className="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
-                  {profileImage ? (
-                    <img
-                      src={profileImage}
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <User className="w-16 h-16 text-gray-400" />
-                  )}
-                </div>
-                <label className="absolute bottom-0 right-0 bg-teal-500 dark:bg-rose-500 p-2 rounded-full cursor-pointer hover:bg-teal-400 dark:hover:bg-rose-400 transition-colors">
-                  <Plus className="w-4 h-4 text-white dark:text-gray-900" />
-                  <input
-                    type="file"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                    accept="image/*"
-                  />
-                </label>
-              </div>
+            <div className="flex flex-col items-center space-y-4">
+              <ProfilePicture
+                image={profileImage || ""}
+                onImageUpload={handleImageUpload}
+
+              />
             </div>
 
             {/* Personal Details */}
             <Input
               label="Location"
-              placeholder="e.g., San Francisco, CA"
+              type='text'
+              placeholder="City, Country"
               value={formData.location}
               onChange={(e) =>
                 setFormData({ ...formData, location: e.target.value })
               }
-              icon={<MapPin className="h-5 w-5 text-gray-400" />}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
 
             {/* Bio */}
             <TextArea
+              rows={4}
               label="Bio"
               value={formData.bio}
               onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-              placeholder="Tell us about yourself..."
+              placeholder="Tell us your story..."
               maxLength={150}
               helperText={`${formData.bio.length}/150 characters`}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"

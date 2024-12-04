@@ -1,6 +1,10 @@
+import { Button } from '../common/Button';
 import { Card } from '../common/Card';
+import { Input } from '../common/Input';
+import { Select } from '../common/Select';
+import { TextArea } from '../common/TextArea';
 import Toggle from '../common/Toggle';
-import LanguageSection from './LanguangeSection';
+import LanguageSection from './LanguageSection';
 
 interface Language {
   id: string;
@@ -62,15 +66,16 @@ export default function PersonalDetails({
         <div>
           {isEditing ? (
             <>
-              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">Full Name</label>
-              <input
-                type="text"
-                className="mt-1 block w-full p-2 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 shadow-sm 
-                  focus:border-purple-500 focus:ring-purple-500 transition-colors"
-                placeholder="Your Name"
+              <Input
+                label='Full Name'
+                type='text'
+                placeholder='Your Name'
                 value={personalInfo.fullName}
-                onChange={(e) => onUpdatePersonalInfo('fullName', e.target.value)}
-              />
+                onChange={(e) =>
+                  onUpdatePersonalInfo('fullName', e.target.value)}
+                className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
+              >
+              </Input>
             </>
           ) : (
             <div>
@@ -83,15 +88,15 @@ export default function PersonalDetails({
         <div>
           {isEditing ? (
             <>
-              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">Location</label>
-              <input
-                type="text"
-                className="mt-1 block w-full p-2 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 shadow-sm 
-                  focus:border-purple-500 focus:ring-purple-500 transition-colors"
-                placeholder="City, Country"
+              <Input
+                label='Location'
+                type='text'
+                placeholder='City, Country'
                 value={personalInfo.location}
                 onChange={(e) => onUpdatePersonalInfo('location', e.target.value)}
-              />
+                className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
+              >
+              </Input>
             </>
           ) : (
             <div>
@@ -104,15 +109,17 @@ export default function PersonalDetails({
         <div className="md:col-span-2">
           {isEditing ? (
             <>
-              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">Bio</label>
-              <textarea
+              <TextArea
                 rows={4}
-                className="mt-1 block w-full p-2 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 shadow-sm 
-                  focus:border-purple-500 focus:ring-purple-500 transition-colors"
-                placeholder="Tell your story..."
+                label='Bio'
+                placeholder='Tell us your story...'
+                maxLength={150}
+                helperText={`${personalInfo.bio.length}/150 characters`}
                 value={personalInfo.bio}
                 onChange={(e) => onUpdatePersonalInfo('bio', e.target.value)}
-              />
+                className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
+              >
+              </TextArea>
             </>
           ) : (
             <div className="prose prose-sm max-w-none dark:prose-invert">
@@ -125,23 +132,24 @@ export default function PersonalDetails({
         <div>
           {isEditing ? (
             <>
-              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">Primary Niche</label>
-              <select
-                className="mt-1 block w-full p-2 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 shadow-sm 
-                  focus:border-purple-500 focus:ring-purple-500 transition-colors"
+              <Select
+                label='Primary Niche'
                 value={personalInfo.niche}
                 onChange={(e) => onUpdatePersonalInfo('niche', e.target.value)}
+                className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
+                options={[
+                  { value: "", label: "Select your niche" },
+                  { value: "lifestyle", label: "Lifestyle" },
+                  { value: "tech", label: "Technology" },
+                  { value: "fashion", label: "Fashion & Beauty" },
+                  { value: "fitness", label: "Fitness & Health" },
+                  { value: "food", label: "Food & Cooking" },
+                  { value: "travel", label: "Travel" },
+                  { value: "gaming", label: "Gaming" },
+                  { value: "education", label: "Education" }
+                ]}
               >
-                <option value="">Select your niche</option>
-                <option value="lifestyle">Lifestyle</option>
-                <option value="tech">Technology</option>
-                <option value="fashion">Fashion & Beauty</option>
-                <option value="fitness">Fitness & Health</option>
-                <option value="food">Food & Cooking</option>
-                <option value="travel">Travel</option>
-                <option value="gaming">Gaming</option>
-                <option value="education">Education</option>
-              </select>
+              </Select>
             </>
           ) : (
             <div>
@@ -165,19 +173,19 @@ export default function PersonalDetails({
         <div className="md:col-span-2">
           {isEditing ? (
             <>
-              <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">Custom URL</label>
+              <label className="block text-base font-medium text-gray-700 dark:text-gray-300">Custom URL</label>
               <div className="mt-1 flex rounded-lg shadow-sm">
-                <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 sm:text-sm">
+                <span className="inline-flex items-center px-3 rounded-l-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 sm:text-sm">
                   portfoliohub.com/
                 </span>
-                <input
-                  type="text"
+                <Input
+                  type='text'
+                  placeholder='your-unique-url'
                   value={customUrl}
                   onChange={(e) => setCustomUrl(e.target.value)}
-                  className="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 
-                    focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                  placeholder="your-unique-handle"
-                />
+                  className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
+                >
+                </Input>
               </div>
             </>
           ) : (
@@ -217,22 +225,21 @@ export default function PersonalDetails({
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Preferred Campaign Types</h3>
             <div className="flex flex-wrap gap-3">
               {campaignTypes.map((campaign) => (
-                <button
+                <Button
                   key={campaign}
-                  className={`px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 
-                    ${
-                      selectedCampaigns.includes(campaign)
-                        ? 'text-purple-800 dark:text-purple-200 bg-purple-100 dark:bg-purple-700'
-                        : 'text-gray-700 dark:text-gray-400'
-                    } hover:border-purple-500 transition`}
+                  variant={selectedCampaigns.includes(campaign) ? 'primary' : 'outline'}
                   onClick={() =>
                     selectedCampaigns.includes(campaign)
                       ? setSelectedCampaigns(selectedCampaigns.filter((item) => item !== campaign))
                       : setSelectedCampaigns([...selectedCampaigns, campaign])
                   }
+                  className={`${selectedCampaigns.includes(campaign) 
+                    ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400' 
+                    : 'border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400'
+                    } transition-transform duration-200`}
                 >
                   {campaign}
-                </button>
+                </Button>
               ))}
             </div>
           </div>

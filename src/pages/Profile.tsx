@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import InfluencerStats from '../components/profile/ProfileStats';
-import ProfilePicture from '../components/profile/ProfilePicture';
+import ProfilePicture from '../components/dashboard/ProfilePicture';
 import PersonalDetails from '../components/profile/PersonalDetails';
 import SocialLinkInput from '../components/common/SocialLinks';
 import { Card } from '../components/common/Card';
@@ -98,17 +98,18 @@ export default function ProfileSetup() {
             {isEditing ? (
               <>
                 <Button
-                  variant="secondary"
+                  variant="outline"
                   icon={<X className='w-5 h-5'/>}
-                  className="w-full sm:w-auto"
+                  className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400 transition-transform duration-200"
                   onClick={() => setIsEditing(false)}
+                  
                 >
                   Cancel
                 </Button>
                 <Button
-                  variant="primary"
+                  variant="primary"                
                   icon={<Save className='w-5 h-5'/>}
-                  className="w-full sm:w-auto"
+                  className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
                   onClick={handleSave}
                 >
                   Save Changes
@@ -116,9 +117,9 @@ export default function ProfileSetup() {
               </>
             ) : (
               <Button
-                variant="secondary"
+                variant="primary"
                 icon={<Edit2 className='w-5 h-5'/>}
-                className="w-full sm:w-auto"
+                className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
                 onClick={() => setIsEditing(true)}
               >
                 Edit Profile

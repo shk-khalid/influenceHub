@@ -116,7 +116,7 @@ export function LoginForm() {
               <Link to="/signup">
                 <Button
                   variant="outline"
-                  className="w-full border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400 transition-transform duration-200"
+                  className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400 transition-transform duration-200"
                 >
                   Create new account
                 </Button>

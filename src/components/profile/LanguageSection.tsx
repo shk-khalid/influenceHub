@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Badge from '../common/Badge';
 import { Plus, X } from 'lucide-react';
 import { Button } from '../common/Button';
+import { Select } from '../common/Select';
 
 interface Language {
   id: string;
@@ -59,10 +60,10 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
         </label>
         {isEditing && (
           <Button
-            variant="secondary"
+            variant="primary"
             icon={<Plus className='w-5 h-5' />}
             onClick={() => setIsModalOpen(true)}
-            className="text-sm py-1.5 px-3"
+            className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400"
           >
             Add Language
           </Button>
@@ -118,22 +119,17 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
 
             <div className="space-y-4">
               <div>
-                <label className="block text-lg font-medium text-gray-800 dark:text-gray-100 mb-3">
-                  Language
-                </label>
-                <select
+                
+                <Select
+                  label='Language'
                   value={selectedLanguage}
                   onChange={(e) => setSelectedLanguage(e.target.value)}
-                  className="w-full p-2 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm 
-                    focus:border-purple-500 focus:ring-purple-500 transition-colors"
+                  options={[
+                    {value: "", label: "Select a language"},
+                    ...LANGUAGE_OPTIONS.map((lang) => ({value: lang, label: lang}))
+                  ]}
                 >
-                  <option value="">Select a language</option>
-                  {LANGUAGE_OPTIONS.map((lang) => (
-                    <option key={lang} value={lang}>
-                      {lang}
-                    </option>
-                  ))}
-                </select>
+                </Select>
               </div>
 
               <div>
@@ -168,8 +164,9 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
 
             <div className="mt-6 flex justify-end gap-3">
               <Button
-                variant="secondary"
+                variant="outline"
                 onClick={() => setIsModalOpen(false)}
+                className='border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400'
               >
                 Cancel
               </Button>
@@ -177,6 +174,7 @@ export default function LanguageSection({ languages, onAddLanguage, onRemoveLang
                 variant="primary"
                 onClick={handleAddLanguage}
                 disabled={!selectedLanguage}
+                className='bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400'
               >
                 Add Language
               </Button>

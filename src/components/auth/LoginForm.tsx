@@ -106,13 +106,13 @@ export function LoginForm() {
               Sign in
             </Button>
 
-            <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
+            {/* <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
               <p>Demo accounts:</p>
               <ul className="mt-1 list-disc list-inside">
                 <li>john@example.com / password123</li>
                 <li>jane@example.com / password123</li>
               </ul>
-            </div>
+            </div> */}
           </form>
 
           <div className="mt-6">
@@ -131,6 +131,7 @@ export function LoginForm() {
               <Link to="/signup">
                 <Button
                   variant="outline"
+                  fullWidth
                   className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400 transition-transform duration-200"
                 >
                   Create new account

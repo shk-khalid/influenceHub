@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { TwoFactorAuth } from './TwoFactorAuth';
 import { useAuth } from '../../hooks/useAuth';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
@@ -10,13 +9,14 @@ import { PasswordStrengthMeter } from './PasswordStrength';
 import { calculatePasswordStrength } from '../../lib/PasswordStrength';
 import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
 import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
+import { EmailVerification } from './EmailVerification';
 
 export function SignupForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [showTwoFactor, setShowTwoFactor] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { signup } = useAuth();
@@ -39,23 +39,20 @@ export function SignupForm() {
 
     setError('');
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowTwoFactor(true);
-    }, 1000);
-  };
-
-  const handleTwoFactorVerify = async (code: string) => {
-    setIsLoading(true);
     try {
-      await signup(email, password, fullName);
+      await signup(email, password, userName);
       setIsLoading(false);
-      setShowTwoFactor(false);
-      navigate('/complete-profile');
+      setShowEmailVerification(true);
     } catch (error) {
       console.error('Signup failed:', error);
+      setError('An error occurred. Please try again');
       setIsLoading(false);
     }
+  };
+
+  const handleEmailVerification = async () => {
+    setShowEmailVerification(false);
+    navigate('/login');
   };
 
   return (
@@ -86,11 +83,11 @@ export function SignupForm() {
         <Card className="p-8 shadow-lg rounded-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-md border border-gray-300/40 dark:border-gray-700/40">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <Input
-              label="Full Name"
+              label="User Name"
               type="text"
               required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               icon={<User className="h-5 w-5 text-gray-400" />}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
@@ -169,10 +166,9 @@ export function SignupForm() {
         </Card>
       </div>
 
-      <TwoFactorAuth
-        isOpen={showTwoFactor}
-        onClose={() => setShowTwoFactor(false)}
-        onVerify={handleTwoFactorVerify}
+      <EmailVerification 
+        isOpen={showEmailVerification} 
+        onClose={handleEmailVerification} 
         email={email}
       />
     </div>

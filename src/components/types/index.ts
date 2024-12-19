@@ -1,7 +1,14 @@
 // Authorization
+export interface Language {
+  id: string;
+  name: string;
+  level: 'Native' | 'Fluent' | 'Advanced' | 'Intermediate' | 'Basic';
+}
+
 export interface User {
   email: string;
-  fullName: string;
+  userName: string;
+  fullName?: string;
   location?: string;
   bio?: string;
   socialLinks?: {
@@ -9,6 +16,11 @@ export interface User {
     twitter?: string;
     youtube?: string;
   };
+  primaryNiche?: string;
+  isAvailableForCollabs?: boolean;
+  languages?: { id: string; name: string; level: string }[];
+  profileImage?: string;
+  is_admin_verfied?: boolean;
 }
 
 export interface AuthState {

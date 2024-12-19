@@ -112,15 +112,16 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify, email }: TwoFactorAut
           </Button>
 
           <p className="text-center text-sm mt-4">
+            Didn’t receive the email?{' '}
             <button
               type="button"
               onClick={() => {
                 setCode(['', '', '', '', '', '']);
                 setError('');
               }}
-              className="text-[#2563eb] hover:text-[#1e3a8a] dark:text-[#facc15] dark:hover:text-[#f59e0b] transition duration-150 ease-in-out"
+              className="text-teal-600 hover:text-teal-800 dark:text-rose-500 dark:hover:text-rose-700 transition duration-150 ease-in-out"
             >
-              Didn't receive the code? Resend
+              Resend
             </button>
           </p>
         </form>

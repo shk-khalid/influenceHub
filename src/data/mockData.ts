@@ -1,8 +1,9 @@
-import { Campaign, DemographicData, Brand, User } from '../components/types';
+import { Campaign, DemographicData, Brand, User, Language } from '../components/types';
 
 export const mockUsers: User[] = [
   {
     email: 'john@example.com',
+    userName: 'johndoe123',
     fullName: 'John Doe',
     location: 'San Francisco, CA',
     bio: 'Senior Software Engineer passionate about building great products',
@@ -10,17 +11,34 @@ export const mockUsers: User[] = [
       instagram: 'johndoe',
       twitter: 'johndoe',
       youtube: 'johndoecodes'
-    }
+    },
+    primaryNiche: 'food',
+    isAvailableForCollabs: true,
+    languages: [
+      { id: '1', name: 'English', level: 'Native' },
+      { id: '2', name: 'Spanish', level: 'Fluent' }
+    ] as Language[],
+    profileImage: 'https://via.placeholder.com/150',
+    is_admin_verfied: true,
   },
   {
     email: 'jane@example.com',
+    userName: 'janesmith89',
     fullName: 'Jane Smith',
     location: 'New York, NY',
     bio: 'UX Designer with 5+ years of experience',
     socialLinks: {
       instagram: 'janesmith',
       twitter: 'janesdesigns'
-    }
+    },
+    primaryNiche: 'design',
+    isAvailableForCollabs: false,
+    languages: [
+      { id: '1', name: 'English', level: 'Native' },
+      { id: '3', name: 'French', level: 'Fluent' }
+    ],
+    profileImage: 'https://via.placeholder.com/150',
+    is_admin_verfied: false,
   }
 ];
 

@@ -1,4 +1,3 @@
-import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { Input } from '../common/Input';
 import { Select } from '../common/Select';
@@ -33,22 +32,11 @@ interface PersonalDetailsProps {
   onUpdatePersonalInfo: (field: "fullName" | "location" | "bio" | "niche", value: string) => void;
 }
 
-const campaignTypes = [
-  'Product Reviews',
-  'Brand Ambassadorship',
-  'Sponsored Content',
-  'Event Coverage',
-  'Social Media Takeover',
-  'Tutorial/How-to Content',
-];
+
 
 export default function PersonalDetails({
   isAvailableForCollabs,
   setIsAvailableForCollabs,
-  customUrl,
-  setCustomUrl,
-  selectedCampaigns,
-  setSelectedCampaigns,
   languages,
   onAddLanguage,
   onRemoveLanguage,
@@ -169,39 +157,6 @@ export default function PersonalDetails({
             isEditing={isEditing}
           />
         </div>
-        {/* Custom URL */}
-        <div className="md:col-span-2">
-          {isEditing ? (
-            <>
-              <label className="block text-base font-medium text-gray-700 dark:text-gray-300">Custom URL</label>
-              <div className="mt-1 flex rounded-lg shadow-sm">
-                <span className="inline-flex items-center px-3 rounded-l-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 sm:text-sm">
-                  portfoliohub.com/
-                </span>
-                <Input
-                  type='text'
-                  placeholder='your-unique-url'
-                  value={customUrl}
-                  onChange={(e) => setCustomUrl(e.target.value)}
-                  className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
-                >
-                </Input>
-              </div>
-            </>
-          ) : (
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Profile URL</h3>
-              <a
-                href={`https://influencehub.com/${customUrl}`}
-                className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                influencehub.com/{customUrl}
-              </a>
-            </div>
-          )}
-        </div>
         {/* Collaboration Toggle */}
         <div className="md:col-span-2">
           <div className="flex items-center justify-between">
@@ -219,31 +174,6 @@ export default function PersonalDetails({
             />
           </div>
         </div>
-        {/* Campaign Preferences */}
-        {isEditing && (
-          <div className="md:col-span-2">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Preferred Campaign Types</h3>
-            <div className="flex flex-wrap gap-3">
-              {campaignTypes.map((campaign) => (
-                <Button
-                  key={campaign}
-                  variant={selectedCampaigns.includes(campaign) ? 'primary' : 'outline'}
-                  onClick={() =>
-                    selectedCampaigns.includes(campaign)
-                      ? setSelectedCampaigns(selectedCampaigns.filter((item) => item !== campaign))
-                      : setSelectedCampaigns([...selectedCampaigns, campaign])
-                  }
-                  className={`${selectedCampaigns.includes(campaign) 
-                    ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400' 
-                    : 'border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400'
-                    } transition-transform duration-200`}
-                >
-                  {campaign}
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </Card>
   );

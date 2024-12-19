@@ -1,6 +1,7 @@
 import React, { createContext, useReducer } from 'react';
+import axios from 'axios';
 import type { AuthState, User, AuthContextType } from '../components/types';
-import { mockUsers, mockCredentials } from '../data/mockData';
+import axiosInstance from '../api/axiosInstance';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -54,57 +55,38 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = async (email: string, password: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await axiosInstance.post('/auth/login/', { email, password });
+      const { user, token } = response.data;
 
-      // Check credentials
-      const validPassword = mockCredentials[email as keyof typeof mockCredentials];
-      if (!validPassword || validPassword !== password) {
-        throw new Error('Invalid credentials');
-      }
-
-      // Find user
-      const user = mockUsers.find(u => u.email === email);
-      if (!user) {
-        throw new Error('User not found');
-      }
+      // Store token locally
+      localStorage.setItem('authToken', token);
 
       dispatch({ type: 'LOGIN_SUCCESS', payload: user });
-    } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: (error as Error).message });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Login failed."
+      dispatch({ type: 'SET_ERROR', payload: message})
     }
   };
 
   const signup = async (email: string, password: string, fullName: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await axiosInstance.post('/auth/register/', { email, password, fullName });
+      const { user, token } = response.data;
 
-      // Check if email already exists
-      if (mockUsers.some(u => u.email === email)) {
-        throw new Error('Email already exists');
-      }
+      // Store token locally
+      localStorage.setItem('authToken', token);
 
-      const newUser: User = {
-        email,
-        fullName,
-        location: '',
-        bio: '',
-        socialLinks: {}
-      };
-
-      // In a real app, we would save this to a database
-      mockUsers.push(newUser);
-      (mockCredentials as any)[email] = password;
-
-      dispatch({ type: 'LOGIN_SUCCESS', payload: newUser });
-    } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: (error as Error).message });
+      dispatch({ type: 'LOGIN_SUCCESS', payload: user });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Signup failed.';
+      dispatch({ type: 'SET_ERROR', payload: message });
     }
   };
 
   const logout = () => {
+    // Remove token from localStorage or cookie
+    localStorage.removeItem('authToken');
     dispatch({ type: 'LOGOUT' });
   };
 

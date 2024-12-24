@@ -112,12 +112,25 @@ export interface CampaignMetrics {
 }
 
 export interface Trend {
-  id: string;
-  keyword: string;
+  id: number;
+  name: string;
   volume: number;
-  growth: number;
   category: string;
   region: string;
+  growth: number;
+  sentiment: number;
+  last_updated: string;
+}
+
+export type TrendCategory = 'all' | 'tech' | 'fashion' | 'fitness' | 'travel' | 'food' | 'gaming';
+
+export interface TrendState {
+  trends: Trend[];
+  page: number;
+  hasMore: boolean;
+  isLoading: boolean;
+  searchTerm: string;
+  selectedCategory: TrendCategory;
 }
 
 // Trend Analysis

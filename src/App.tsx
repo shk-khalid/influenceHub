@@ -10,7 +10,6 @@ import { BrandMatchingDashboard } from './pages/Matching';
 import Analytics from './pages/Analytics';
 import { SignupForm } from './components/auth/SignupForm';
 import { LoginForm } from './components/auth/LoginForm';
-import { UserDetailsForm } from './components/auth/UserDetails';
 import { Insights } from './pages/Insights';
 import { AuthProvider } from './context/AuthContext';
 import { CompetitorProvider } from './context/CompetitorContext';
@@ -59,11 +58,9 @@ function App() {
 
             {/* Signup Page */}
             <Route path="/signup" element={<SignupForm />} />
-
+              
+            {/* Forgot Password Page */}
             <Route path="/forgot" element={<ForgotPasswordForm />} />
-
-            {/* Complete Profile Page */}
-            <Route path="/complete-profile" element={<UserDetailsForm />} />
 
             {/* Default Fallback Route */}
             {/* Redirects unmatched routes to the dashboard */}

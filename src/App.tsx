@@ -15,6 +15,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CompetitorProvider } from './context/CompetitorContext';
 import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
 import Landing from './pages/Landing';
+import TrendingTopics from './components/analytics/TrendingTopic';
 
 function App() {
   return (
@@ -47,7 +48,7 @@ function App() {
             <Route path="/match" element={<BrandMatchingDashboard />} />
 
             {/* Analytics Route */}
-            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/analytics" element={<TrendingTopics />} />
 
             {/* Insights Route */}
             <Route path="/insights" element={<Insights />} />

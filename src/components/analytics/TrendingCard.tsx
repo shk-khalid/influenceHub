@@ -112,7 +112,7 @@ export function TrendCard({ trend }: TrendCardProps) {
 
         {/* Metrics */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <TrendMetric
+        <TrendMetric
             label="Volume"
             value={trend.volume.toLocaleString()}
             icon={BarChart2}

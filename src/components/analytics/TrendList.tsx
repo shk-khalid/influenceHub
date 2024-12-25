@@ -30,8 +30,9 @@ export function TrendList({ trends, hasMore, isLoading, onLoadMore }: TrendListP
           <Button
             onClick={onLoadMore}
             disabled={isLoading}
-            variant="secondary"
-            className="w-full sm:w-auto"
+            variant="primary"
+            fullWidth
+            className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
           >
             {isLoading ? (
               <>

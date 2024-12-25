@@ -123,6 +123,7 @@ export interface Trend {
 }
 
 export type TrendCategory = 'all' | 'tech' | 'fashion' | 'fitness' | 'travel' | 'food' | 'gaming';
+export type SortOption = 'latest' | 'growth' | 'volume';
 
 export interface TrendState {
   trends: Trend[];

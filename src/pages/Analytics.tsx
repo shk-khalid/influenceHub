@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { BarChart2, Calendar, Users } from 'lucide-react';
+import { BarChart2, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Layout } from '../components/layout/Layout';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import TrendingTopics from '../components/analytics/TrendingTopic';
 import CompetitorMonitoring from '../components/analytics/CompetitorMonitoring';
-import SeasonalInsights from '../components/analytics/SeasonalInsights';
 
 const tabs = [
   { id: 'trends', name: 'Trending Topics', icon: BarChart2 },
-  { id: 'seasonal', name: 'Seasonal Insights', icon: Calendar},
   { id: 'competitors', name: 'Competitor Monitoring', icon: Users },
 ];
 
@@ -65,7 +63,6 @@ const Analytic: React.FC = () => {
 
           <div className="space-y-8" >
             {activeTab === 'trends' && <TrendingTopics />}
-            {activeTab === 'seasonal' && <SeasonalInsights />}
             {activeTab === 'competitors' && <CompetitorMonitoring />}
           </div>
         </main>

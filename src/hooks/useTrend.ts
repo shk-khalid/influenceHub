@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Trend, TrendCategory, TrendState } from '../components/types';
+import { Trend, TrendCategory, SortOption, TrendState } from '../components/types';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -69,8 +69,11 @@ const mockTrends: Trend[] = [
 interface TrendStore extends TrendState {
   setSearchTerm: (term: string) => void;
   setSelectedCategory: (category: TrendCategory) => void;
-  loadMore: () => void;
+  setSortBy: (sort: SortOption) => void;
+  loadMore: () => Promise<void>;
+  refresh: () => Promise<void>;
   filteredTrends: () => Trend[];
+  sortBy: SortOption;
 }
 
 export const useTrendStore = create<TrendStore>((set, get) => ({
@@ -80,25 +83,49 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
   isLoading: false,
   searchTerm: '',
   selectedCategory: 'all',
+  sortBy: 'latest',
 
   setSearchTerm: (term) => set({ searchTerm: term, page: 1 }),
   setSelectedCategory: (category) => set({ selectedCategory: category, page: 1 }),
+  setSortBy: (sort) => set({ sortBy: sort, page: 1 }),
+
+  refresh: async () => {
+    const state = get();
+    if (state.isLoading) return;
+
+    set({ isLoading: true });
+    try {
+      // Simulate API refresh - replace with actual API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Simulate new data - replace with actual API response
+      const newTrends = mockTrends.map(trend => ({
+        ...trend,
+        growth: trend.growth + (Math.random() * 2 - 1), // Random growth change
+        volume: trend.volume + Math.floor(Math.random() * 10), // Random volume change
+        last_updated: new Date().toISOString()
+      }));
+
+      set({ 
+        trends: newTrends,
+        isLoading: false,
+        page: 1,
+        hasMore: true
+      });
+    } catch (error) {
+      console.error('Error refreshing trends:', error);
+      set({ isLoading: false });
+    }
+  },
 
   loadMore: async () => {
     const { page, isLoading } = get();
-    
     if (isLoading) return;
 
     set({ isLoading: true });
-
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In a real app, you would fetch new data here
-      // For now, we'll simulate reaching the end after 3 pages
       const hasMore = page < 3;
-      
       set(state => ({
         page: state.page + 1,
         hasMore,
@@ -111,11 +138,23 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
   },
 
   filteredTrends: () => {
-    const { trends, searchTerm, selectedCategory, page } = get();
-    const filtered = trends.filter((trend) => {
+    const { trends, searchTerm, selectedCategory, sortBy, page } = get();
+    let filtered = trends.filter((trend) => {
       const matchesSearch = trend.name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'all' || trend.category === selectedCategory;
       return matchesSearch && matchesCategory;
+    });
+
+    // Sort trends
+    filtered = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'growth':
+          return b.growth - a.growth;
+        case 'volume':
+          return b.volume - a.volume;
+        default: // 'latest'
+          return new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime();
+      }
     });
 
     return filtered.slice(0, page * ITEMS_PER_PAGE);

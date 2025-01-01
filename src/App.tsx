@@ -7,7 +7,6 @@ import { Dashboard } from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Campaign from './pages/Campaigns';
 import { BrandMatchingDashboard } from './pages/Matching';
-import Analytics from './pages/Analytics';
 import { SignupForm } from './components/auth/SignupForm';
 import { LoginForm } from './components/auth/LoginForm';
 import { Insights } from './pages/Insights';
@@ -16,6 +15,7 @@ import { CompetitorProvider } from './context/CompetitorContext';
 import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
 import Landing from './pages/Landing';
 import TrendingTopics from './components/analytics/TrendingTopic';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 function App() {
   return (

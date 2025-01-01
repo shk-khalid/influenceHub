@@ -2,7 +2,7 @@ import React from 'react';
 import { Search, Filter, RefreshCcw, ArrowUpDown, X } from 'lucide-react';
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
-import { TrendCategory, SortOption } from '../types';
+import { TrendCategory, SortOption } from '../types/trend';
 
 interface TrendFiltersProps {
   searchTerm: string;
@@ -45,25 +45,39 @@ export const TrendFilters: React.FC<TrendFiltersProps> = ({
     <div className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg rounded-2xl 
                     shadow-lg dark:shadow-gray-900/30 p-4 sm:p-6 space-y-4
                     border border-gray-200/50 dark:border-gray-700/50">
-      {/* Search Input */}
-      <div className="relative">
-        <Input
-          type="text"
-          placeholder="Search trends..."
-          value={searchTerm}
-          onChange={(e) => onSearchChange(e.target.value)}
-          icon={<Search className="h-5 w-5 text-gray-400" />}
-          className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
-        />
-        {searchTerm && (
-          <button
-            onClick={() => onSearchChange('')}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 
+
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Search Input */}
+        <div className="relative flex-1">
+          <Input
+            type="text"
+            placeholder="Search trends..."
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+            icon={<Search className="h-5 w-5 text-gray-400" />}
+            className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
+          />
+          {searchTerm && (
+            <button
+              onClick={() => onSearchChange('')}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 
                        text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+        {/* Refresh Button */}
+        <div className="flex gap-2">
+          <Button
+            onClick={onRefresh}
+            disabled={isLoading}
+            variant="secondary"
+            className="flex items-center gap-2 px-4 py-2 text-sm"
           >
-            <X className="w-4 h-4" />
-          </button>
-        )}
+            <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+          </Button>
+        </div>
       </div>
 
       {/* Category Filter */}
@@ -79,8 +93,8 @@ export const TrendFilters: React.FC<TrendFiltersProps> = ({
               variant={selectedCategory === category ? 'primary' : 'outline'}
               onClick={() => onCategoryChange(category as TrendCategory)}
               className={`transition-transform duration-200 ${selectedCategory === category
-                  ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400'
-                  : 'border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400'
+                ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400'
+                : 'border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400'
                 }`}
             >
               {category}
@@ -102,27 +116,14 @@ export const TrendFilters: React.FC<TrendFiltersProps> = ({
               variant={sortBy === value ? 'primary' : 'outline'}
               onClick={() => onSortChange(value as SortOption)}
               className={`transition-transform duration-200 ${sortBy === value
-                  ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400'
-                  : 'border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400'
+                ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400'
+                : 'border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400'
                 }`}
             >
               {label}
             </Button>
           ))}
         </div>
-      </div>
-
-      {/* Refresh Button */}
-      <div className="flex justify-end">
-        <Button
-          onClick={onRefresh}
-          disabled={isLoading}
-          variant="secondary"
-          className="flex items-center gap-2 px-4 py-2 text-sm"
-        >
-          <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-          {isLoading ? 'Refreshing...' : 'Refresh'}
-        </Button>
       </div>
     </div>
   );

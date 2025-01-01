@@ -1,14 +1,14 @@
-import React, { createContext, useReducer } from 'react';
-import axios from 'axios';
-import type { AuthState, User, AuthContextType } from '../components/types';
-import axiosInstance from '../api/axiosInstance';
+import React, { createContext, useReducer, useEffect } from 'react';
+import type { AuthState, User, AuthContextType } from '../components/types/auth';
+import { authService } from '../services/authService';
+import { userService } from '../services/userService';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
-  isLoading: false,
+  isLoading: true,
   error: null,
 };
 
@@ -30,7 +30,10 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
         error: null,
       };
     case 'LOGOUT':
-      return initialState;
+      return {
+        ...initialState,
+        isLoading: false,
+      };
     case 'SET_LOADING':
       return { ...state, isLoading: action.payload };
     case 'SET_ERROR':
@@ -52,46 +55,67 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  // Check auth status on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const user = await userService.getProfile();
+          dispatch({ type: 'LOGIN_SUCCESS', payload: user });
+        } catch (error) {
+          localStorage.removeItem('token');
+          dispatch({ type: 'LOGOUT' });
+        }
+      } else {
+        dispatch({ type: 'SET_LOADING', payload: false });
+      }
+    };
+    checkAuth();
+  }, []);
+
   const login = async (email: string, password: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await axiosInstance.post('/auth/login/', { email, password });
-      const { user, token } = response.data;
-
-      // Store token locally
-      localStorage.setItem('authToken', token);
-
-      dispatch({ type: 'LOGIN_SUCCESS', payload: user });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Login failed."
-      dispatch({ type: 'SET_ERROR', payload: message})
+      await authService.login(email, password);
+      return { success: true };
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: 'Invalid credentials' });
+      return { success: false, error: 'Invalid credentials' };
     }
   };
 
-  const signup = async (email: string, password: string, fullName: string) => {
+  const verifyOTP = async (email: string, otp: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await axiosInstance.post('/auth/register/', { email, password, fullName });
-      const { user, token } = response.data;
-
-      // Store token locally
-      localStorage.setItem('authToken', token);
-
-      dispatch({ type: 'LOGIN_SUCCESS', payload: user });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Signup failed.';
-      dispatch({ type: 'SET_ERROR', payload: message });
+      const response = await authService.verifyOTP(email, otp);
+      if (response.token) {
+        const user = await userService.getProfile();
+        dispatch({ type: 'LOGIN_SUCCESS', payload: user });
+        return { success: true };
+      }
+      return { success: false, error: 'Invalid OTP' };
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: 'Invalid OTP' });
+      return { success: false, error: 'Invalid OTP' };
     }
   };
 
-  const logout = () => {
-    // Remove token from localStorage or cookie
-    localStorage.removeItem('authToken');
-    dispatch({ type: 'LOGOUT' });
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } finally {
+      dispatch({ type: 'LOGOUT' });
+    }
   };
 
-  const updateUserDetails = (details: Partial<User>) => {
-    dispatch({ type: 'UPDATE_USER', payload: details });
+  const updateUserDetails = async (details: Partial<User>) => {
+    try {
+      const updatedUser = await userService.updateProfile(details);
+      dispatch({ type: 'UPDATE_USER', payload: updatedUser });
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: 'Failed to update profile' });
+    }
   };
 
   return (
@@ -99,7 +123,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       value={{
         ...state,
         login,
-        signup,
+        verifyOTP,
         logout,
         updateUserDetails,
       }}

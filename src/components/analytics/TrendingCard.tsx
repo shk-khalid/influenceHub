@@ -3,7 +3,7 @@ import {
   BarChart2, Globe, Hash, Clock, TrendingUp, TrendingDown,
   ThumbsUp, ThumbsDown, Minus, LucideIcon
 } from 'lucide-react';
-import { Trend } from '../types';
+import { Trend } from '../types/trend';
 import { Card } from '../common/Card';
 import { cn } from '../../lib/Utils';
 

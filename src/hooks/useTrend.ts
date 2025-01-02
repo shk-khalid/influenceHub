@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Trend, TrendCategory, SortOption, TrendState } from '../components/types';
+import { Trend, TrendCategory, SortOption, TrendState } from '../components/types/trend';
 import { trendService } from '../services/trendService';
 
 interface TrendStore extends TrendState {
@@ -10,7 +10,6 @@ interface TrendStore extends TrendState {
   refresh: () => Promise<void>;
   fetchTrends: () => Promise<void>;
   filteredTrends: () => Trend[];
-  totalPages: number;
 }
 
 export const useTrendStore = create<TrendStore>((set, get) => ({
@@ -56,7 +55,7 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
 
       set({
         trends: response.results,
-        totalPages: Math.ceil(response.count / 10), // Assuming 10 items per page
+        totalPages: Math.ceil(response.count / 10),
         isLoading: false
       });
     } catch (error) {

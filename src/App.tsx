@@ -14,7 +14,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CompetitorProvider } from './context/CompetitorContext';
 import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
 import Landing from './pages/Landing';
-import TrendingTopics from './components/analytics/TrendingTopic';
+import TrendingTopics from './pages/TrendingTopic';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 function App() {

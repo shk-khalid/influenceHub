@@ -1,8 +1,8 @@
-import React from 'react';
-import { Search, Filter, RefreshCcw, ArrowUpDown, X } from 'lucide-react';
+import { Search, Filter, RefreshCcw, X } from 'lucide-react';
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
-import { TrendCategory, SortOption } from '../types/trend';
+import { cn } from '../../lib/Utils';
+import { TrendCategory, SortOption } from '../../components/types/trend';
 
 interface TrendFiltersProps {
   searchTerm: string;
@@ -15,23 +15,23 @@ interface TrendFiltersProps {
   isLoading: boolean;
 }
 
-const categories = [
-  'All Categories',
-  'Technology',
-  'Fashion',
-  'Fitness',
-  'Travel',
-  'Food',
-  'Gaming',
+const categories: { value: TrendCategory; label: string }[] = [
+  { value: 'all', label: 'All Categories' },
+  { value: 'technology', label: 'Technology' },
+  { value: 'food', label: 'Food' },
+  { value: 'fashion', label: 'Fashion' },
+  { value: 'fitness', label: 'Fitness' },
+  { value: 'travel', label: 'Travel' },
+  { value: 'gaming', label: 'Gaming' }
 ];
 
 const sortOptions = [
   { value: 'latest', label: 'Latest First' },
   { value: 'growth', label: 'Highest Growth' },
-  { value: 'volume', label: 'Highest Volume' },
+  { value: 'volume', label: 'Highest Volume' }
 ];
 
-export const TrendFilters: React.FC<TrendFiltersProps> = ({
+export function TrendFilters({
   searchTerm,
   selectedCategory,
   sortBy,
@@ -39,15 +39,14 @@ export const TrendFilters: React.FC<TrendFiltersProps> = ({
   onCategoryChange,
   onSortChange,
   onRefresh,
-  isLoading,
-}) => {
+  isLoading
+}: TrendFiltersProps) {
   return (
     <div className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg rounded-2xl 
                     shadow-lg dark:shadow-gray-900/30 p-4 sm:p-6 space-y-4
                     border border-gray-200/50 dark:border-gray-700/50">
-
+      {/* Search and Sort Section */}
       <div className="flex flex-col sm:flex-row gap-4">
-        {/* Search Input */}
         <div className="relative flex-1">
           <Input
             type="text"
@@ -55,7 +54,7 @@ export const TrendFilters: React.FC<TrendFiltersProps> = ({
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             icon={<Search className="h-5 w-5 text-gray-400" />}
-            className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
+            className="focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-transform duration-200"
           />
           {searchTerm && (
             <button
@@ -67,7 +66,7 @@ export const TrendFilters: React.FC<TrendFiltersProps> = ({
             </button>
           )}
         </div>
-        {/* Refresh Button */}
+
         <div className="flex gap-2">
           <Button
             onClick={onRefresh}
@@ -89,15 +88,17 @@ export const TrendFilters: React.FC<TrendFiltersProps> = ({
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => (
             <Button
-              key={category}
-              variant={selectedCategory === category ? 'primary' : 'outline'}
-              onClick={() => onCategoryChange(category as TrendCategory)}
-              className={`transition-transform duration-200 ${selectedCategory === category
-                ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400'
-                : 'border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400'
-                }`}
+              key={category.value}
+              variant={selectedCategory === category.value ? 'primary' : 'outline'}
+              onClick={() => onCategoryChange(category.value)}
+              className={cn(
+                "transition-transform duration-200",
+                selectedCategory === category.value
+                  ? "bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400"
+                  : "border-teal-500 hover:bg-teal-400 dark:border-rose-400 dark:hover:bg-rose-500"
+              )}
             >
-              {category}
+              {category.label}
             </Button>
           ))}
         </div>
@@ -106,25 +107,27 @@ export const TrendFilters: React.FC<TrendFiltersProps> = ({
       {/* Sort Options */}
       <div>
         <div className="flex items-center gap-2 mb-2 px-1">
-          <ArrowUpDown className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+          <Filter className="w-4 h-4 text-gray-600 dark:text-gray-400" />
           <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Sort By</span>
         </div>
         <div className="flex flex-wrap gap-2">
-          {sortOptions.map(({ value, label }) => (
+          {sortOptions.map((option) => (
             <Button
-              key={value}
-              variant={sortBy === value ? 'primary' : 'outline'}
-              onClick={() => onSortChange(value as SortOption)}
-              className={`transition-transform duration-200 ${sortBy === value
-                ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400'
-                : 'border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400'
-                }`}
+              key={option.value}
+              variant={sortBy === option.value ? 'primary' : 'outline'}
+              onClick={() => onSortChange(option.value as SortOption)}
+              className={cn(
+                "transition-transform duration-200",
+                sortBy === option.value
+                  ? "bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400"
+                  : "border-teal-500 hover:bg-teal-400 dark:border-rose-400 dark:hover:bg-rose-500"
+              )}
             >
-              {label}
+              {option.label}
             </Button>
           ))}
         </div>
       </div>
     </div>
   );
-};
+}

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Layout } from '../components/layout/Layout';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
-import TrendingTopics from '../components/analytics/TrendingTopic';
+import TrendingTopics from './TrendingTopic';
 import CompetitorMonitoring from '../components/analytics/CompetitorMonitoring';
 
 const tabs = [

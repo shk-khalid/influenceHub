@@ -2,8 +2,8 @@ import api from './api';
 
 export interface LoginResponse {
   message: string;
-  redirect?: string;
   token?: string;
+  error?: string;
 }
 
 export interface AuthError {
@@ -13,13 +13,20 @@ export interface AuthError {
 export const authService = {
   // Login flow
   async login(email: string, password: string): Promise<LoginResponse> {
-    const response = await api.post('/auth/login/', { email, password });
+    const response = await api.post('/auth/login/', {
+      email_or_username: email,
+      password
+    });
     return response.data;
   },
 
+
   // Verify OTP
-  async verifyOTP(email: string, otp: string): Promise<LoginResponse> {
-    const response = await api.post('/auth/verify-otp/', { email, otp });
+  async verifyToken(email: string, otp: string): Promise<LoginResponse> {
+    const response = await api.post('/auth/verify-otp/', {
+      email,
+      otp
+    });
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
     }

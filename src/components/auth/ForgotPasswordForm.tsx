@@ -6,8 +6,7 @@ import { Input } from '../common/Input';
 import { Card } from '../common/Card';
 import { TwoFactorAuth } from './TwoFactorAuth';
 import { PasswordStrengthMeter } from './PasswordStrength';
-import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
-import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
+import { useAuth } from '../../hooks/useAuth';
 
 export function ForgotPasswordForm() {
     const [email, setEmail] = useState('');
@@ -17,16 +16,23 @@ export function ForgotPasswordForm() {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
+    const [otpCode, setOtpCode] = useState('');
     const navigate = useNavigate();
-    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const { forgotPassword, resetPassword } = useAuth();
 
     const handleEmailSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => {
+        try {
+            const result = await forgotPassword(email);
+            if (result.success) {
+                setShowTwoFactor(true);
+            }
+        } catch (error) {
+            console.error('Failed to send reset code:', error);
+        } finally {
             setIsLoading(false);
-            setShowTwoFactor(true);
-        }, 1000);
+        }
     };
 
     const handlePasswordReset = async (e: React.FormEvent) => {
@@ -36,34 +42,35 @@ export function ForgotPasswordForm() {
             return;
         }
         setIsLoading(true);
-        setTimeout(() => {
+        try {
+            const result = await resetPassword(email, otpCode, newPassword);
+            if (result.success) {
+                navigate('/login', {
+                    state: { message: 'Password reset successful. Please login with your new password.' },
+                });
+            }
+        } catch (error) {
+            console.error('Password reset failed:', error);
+        } finally {
             setIsLoading(false);
-            navigate('/login', {
-                state: { message: 'Password reset successful. Please login with your new password.' },
-            });
-        }, 1000);
+        }
     };
 
     const handleTwoFactorVerify = async (code: string) => {
+        setOtpCode(code); // Store OTP code for password reset
         setShowTwoFactor(false);
         setStep('reset');
     };
 
     return (
         <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
-            
             {/* Logo Section */}
             <div className="flex items-center justify-center mb-8 space-x-4">
-                <img
-                    src={isDarkMode ? DesktopDarkLogo : DesktopLightLogo}
-                    alt="Logo"
-                    className="h-12"
-                />
                 <span className="block text-2xl font-bold text-gray-900 dark:text-white">
                     influenceHub
                 </span>
             </div>
-            
+
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h2 className="mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                     {step === 'email' ? 'Reset your password' : 'Create new password'}
@@ -150,6 +157,7 @@ export function ForgotPasswordForm() {
                 onClose={() => setShowTwoFactor(false)}
                 onVerify={handleTwoFactorVerify}
                 email={email}
+                onResend={handleTwoFactorVerify}
             />
         </div>
     );

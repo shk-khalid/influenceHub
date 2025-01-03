@@ -35,7 +35,7 @@ export function TrendCard({ trend }: TrendCardProps) {
       : 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-400';
 
   return (
-    <Card className="group hover:shadow-2xl transition-transform transform hover:scale-105 duration-300 overflow-hidden">
+    <Card className="group shadow-md rounded-lg transition-transform transform duration-300 overflow-hidden">
       <div className="relative">
         {/* Growth Indicator */}
         <div
@@ -137,7 +137,7 @@ interface MetricCardProps {
 function MetricCard({ icon: Icon, label, value, iconColor, bgColor }: MetricCardProps) {
   return (
     <div className="flex flex-col p-4 rounded-lg bg-white dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 shadow-md group">
-      <div className={cn('p-2 rounded-md w-fit transition-transform group-hover:scale-110', bgColor)}>
+      <div className={cn('p-2 rounded-md w-fit transition-transform', bgColor)}>
         <Icon className={cn('w-4 h-4', iconColor)} />
       </div>
       <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">{label}</p>

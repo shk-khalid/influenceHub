@@ -1,6 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './Button';
-import { cn } from '../../lib/Utils';
 
 interface PaginationProps {
   currentPage: number;
@@ -9,82 +8,100 @@ interface PaginationProps {
 }
 
 export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-  
-  // Show max 5 page numbers
   const getVisiblePages = () => {
-    if (totalPages <= 5) return pages;
+    if (window.innerWidth < 640) { // Small screens
+      if (totalPages <= 3) return Array.from({ length: totalPages }, (_, i) => i + 1);
+      if (currentPage === 1) return [1, 2];
+      if (currentPage === totalPages) return [totalPages - 1, totalPages];
+      return [currentPage - 1, currentPage, currentPage + 1];
+    }
     
-    if (currentPage <= 3) return pages.slice(0, 5);
-    if (currentPage >= totalPages - 2) return pages.slice(totalPages - 5);
-    
-    return pages.slice(currentPage - 3, currentPage + 2);
+    // Medium screens and up
+    if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    if (currentPage <= 3) return [1, 2, 3, 4, 5];
+    if (currentPage >= totalPages - 2) return [totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    return [currentPage - 2, currentPage - 1, currentPage, currentPage + 1, currentPage + 2];
   };
 
   const visiblePages = getVisiblePages();
 
   return (
-    <div className="flex justify-center items-center gap-2">
+    <nav
+      className="flex flex-wrap items-center justify-center gap-2"
+      role="navigation"
+      aria-label="Pagination"
+    >
+      {/* Previous Button */}
       <Button
         variant="outline"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2"
+        className="h-8 w-8 p-0 sm:h-10 sm:w-10"
+        aria-label="Previous page"
       >
-        <ChevronLeft className="w-4 h-4" />
+        <ChevronLeft className="h-4 w-4" />
       </Button>
 
-      {currentPage > 3 && totalPages > 5 && (
+      {/* Mobile: Current Page Info */}
+      {window.innerWidth < 640 && (
+        <span className="text-sm text-gray-700 dark:text-gray-300">
+          Page {currentPage} of {totalPages}
+        </span>
+      )}
+
+      {/* First Page */}
+      {currentPage > 3 && totalPages > 5 && window.innerWidth >= 640 && (
         <>
           <Button
-            variant="outline"
+            variant={currentPage === 1 ? "primary" : "outline"}
             onClick={() => onPageChange(1)}
-            className={cn(
-              "min-w-[40px] h-10",
-              currentPage === 1 && "bg-indigo-600 text-white hover:bg-indigo-700"
-            )}
+            className="h-8 w-8 p-0 sm:h-10 sm:w-10"
           >
             1
           </Button>
-          <span className="px-2">...</span>
+          <span className="px-2 text-gray-500 dark:text-gray-400">...</span>
         </>
       )}
 
+      {/* Visible Pages */}
       {visiblePages.map((page) => (
         <Button
           key={page}
           variant={currentPage === page ? "primary" : "outline"}
           onClick={() => onPageChange(page)}
-          className="min-w-[40px] h-10"
+          className={`h-8 w-8 p-0 ${
+            window.innerWidth >= 640 ? "inline-flex" : "hidden"
+          } sm:h-10 sm:w-10`}
+          aria-current={currentPage === page ? "page" : undefined}
         >
           {page}
         </Button>
       ))}
 
-      {currentPage < totalPages - 2 && totalPages > 5 && (
+      {/* Last Page */}
+      {currentPage < totalPages - 2 && totalPages > 5 && window.innerWidth >= 640 && (
         <>
-          <span className="px-2">...</span>
+          <span className="px-2 text-gray-500 dark:text-gray-400">...</span>
           <Button
-            variant="outline"
+            variant={currentPage === totalPages ? "primary" : "outline"}
             onClick={() => onPageChange(totalPages)}
-            className={cn(
-              "min-w-[40px] h-10",
-              currentPage === totalPages && "bg-indigo-600 text-white hover:bg-indigo-700"
-            )}
+            className="h-8 w-8 p-0 sm:h-10 sm:w-10"
           >
             {totalPages}
           </Button>
         </>
       )}
 
+      {/* Next Button */}
       <Button
         variant="outline"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2"
+        className="h-8 w-8 p-0 sm:h-10 sm:w-10"
+        aria-label="Next page"
       >
-        <ChevronRight className="w-4 h-4" />
+        <ChevronRight className="h-4 w-4" />
       </Button>
-    </div>
+    </nav>
   );
 }

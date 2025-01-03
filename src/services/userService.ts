@@ -4,7 +4,7 @@ import type { User } from '../components/types/auth';
 export const userService = {
   // Get user profile
   async getProfile(): Promise<User> {
-    const response = await api.get('/auth/profile/');
+    const response = await api.get('/auth/view-profile/');
     return response.data;
   },
 

@@ -88,7 +88,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const verifyOTP = async (email: string, otp: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await authService.verifyOTP(email, otp);
+      const response = await authService.verifyToken(email, otp);
       if (response.token) {
         const user = await userService.getProfile();
         dispatch({ type: 'LOGIN_SUCCESS', payload: user });

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { Trend, TrendCategory, SortOption, TrendState } from '../components/types/trend';
 import { trendService } from '../services/trendService';
+import toast from 'react-hot-toast';
 
 interface TrendStore extends TrendState {
   setSearchTerm: (term: string) => void;
@@ -72,8 +73,11 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
     try {
       await trendService.refreshTrends();
       await get().fetchTrends();
+      toast.success('Trends successfully refreshed!');
     } catch (error) {
       console.error('Error refreshing trends:', error);
+      toast.error('Failed to refresh trends. Please try again later.');
+    } finally {
       set({ isLoading: false });
     }
   },

@@ -8,6 +8,11 @@ interface TrendResponse {
   results: Trend[];
 }
 
+interface RefreshResponse {
+  message: string;
+  status: string;
+}
+
 interface TrendParams {
   search?: string;
   category?: TrendCategory;
@@ -26,7 +31,8 @@ export const trendService = {
     return response.data;
   },
 
-  async refreshTrends(): Promise<void> {
-    await api.get('/trend/trending/refresh/');
+  async refreshTrends(): Promise<RefreshResponse> {
+    const response = await api.get<RefreshResponse>('/trend/trending/refresh/');
+    return response.data;
   }
 };

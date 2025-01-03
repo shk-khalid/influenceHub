@@ -17,6 +17,7 @@ import Landing from './pages/Landing';
 import TrendingTopics from './pages/TrendingTopic';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
+
 function App() {
   return (
     <Router>

@@ -6,51 +6,50 @@ import { useAuth } from '../../hooks/useAuth';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Card } from '../common/Card';
-import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
-import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
 export function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showTwoFactor, setShowTwoFactor] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showTwoFactor, setShowTwoFactor] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const { login, verifyOTP } = useAuth();
+    const navigate = useNavigate();
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        
+        try {
+            const result = await login(email, password);
+            if (result.success) {
+                setShowTwoFactor(true);
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowTwoFactor(true);
-    }, 1000);
-  };
-
-  const handleTwoFactorVerify = async (code: string) => {
-    setIsLoading(true);
-    try {
-      await login(email, password);
-      setIsLoading(false);
-      setShowTwoFactor(false);
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('Login failed:', error);
-      setIsLoading(false);
-    }
-  };
+    const handleTwoFactorVerify = async (code: string) => {
+        setIsLoading(true);
+        try {
+            const result = await verifyOTP(email, code);
+            if (result.success) {
+                setShowTwoFactor(false);
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            console.error('2FA verification failed:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
-
       {/* Logo Section */}
       <div className="flex items-center justify-center mb-8 space-x-4">
-        <img
-          src={isDarkMode ? DesktopDarkLogo : DesktopLightLogo}
-          alt="Logo"
-          className="h-12"
-        />
         <span className="block text-2xl font-bold text-gray-900 dark:text-white">
           influenceHub
         </span>
@@ -90,7 +89,7 @@ export function LoginForm() {
 
             <div className="flex items-center justify-between">
               <Link
-                to="/forgot-password"
+                to="/forgot"
                 className="text-sm font-medium text-[#2563eb] hover:text-[#1e3a8a] dark:text-[#facc15] dark:hover:text-[#f59e0b] transition duration-150 ease-in-out"
               >
                 Forgot your password?
@@ -105,14 +104,6 @@ export function LoginForm() {
             >
               Sign in
             </Button>
-
-            {/* <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
-              <p>Demo accounts:</p>
-              <ul className="mt-1 list-disc list-inside">
-                <li>john@example.com / password123</li>
-                <li>jane@example.com / password123</li>
-              </ul>
-            </div> */}
           </form>
 
           <div className="mt-6">

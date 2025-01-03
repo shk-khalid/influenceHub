@@ -1,19 +1,39 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Mail } from 'lucide-react';
-import type { TwoFactorAuthProps } from '../types';
+import type { TwoFactorAuthProps } from '../types/auth';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 
 export function TwoFactorAuth({ isOpen, onClose, onVerify, email }: TwoFactorAuthProps) {
   const [code, setCode] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
+  const [timeLeft, setTimeLeft] = useState(180); // Timer starts at 180 seconds (3 minutes)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (isOpen) {
       inputRefs.current[0]?.focus();
+      startTimer();
     }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (timeLeft <= 0 && timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+  }, [timeLeft]);
+
+  const startTimer = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    setTimeLeft(180); // Reset timer
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+  };
 
   if (!isOpen) return null;
 
@@ -49,14 +69,27 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify, email }: TwoFactorAut
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const fullCode = code.join('');
-    if (fullCode === '123456') {
-      onVerify(fullCode);
+    const fullCode = code.join(''); // Concatenate OTP digits
+
+    if (fullCode.length === 6) {
+      onVerify(fullCode); // Call the onVerify function passed as prop (handleTwoFactorVerify in LoginForm)
     } else {
-      setError('Invalid verification code. Please try again.');
-      setCode(['', '', '', '', '', '']);
-      inputRefs.current[0]?.focus();
+      setError('Please enter a valid 6-digit code.');
+      setCode(['', '', '', '', '', '']); 
+      inputRefs.current[0]?.focus(); 
     }
+  };
+
+  const handleResend = () => {
+    setCode(['', '', '', '', '', '']);
+    setError('');
+    startTimer();
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   return (
@@ -103,6 +136,10 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify, email }: TwoFactorAut
             ))}
           </div>
 
+          <p className="text-center text-sm text-gray-600 dark:text-gray-300 mt-4">
+            Code expires in: <span className="font-semibold">{formatTime(timeLeft)}</span>
+          </p>
+
           {error && (
             <p className="text-red-500 text-sm text-center mt-4">{error}</p>
           )}
@@ -115,10 +152,7 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify, email }: TwoFactorAut
             Didn’t receive the email?{' '}
             <button
               type="button"
-              onClick={() => {
-                setCode(['', '', '', '', '', '']);
-                setError('');
-              }}
+              onClick={handleResend}
               className="text-teal-600 hover:text-teal-800 dark:text-rose-500 dark:hover:text-rose-700 transition duration-150 ease-in-out"
             >
               Resend

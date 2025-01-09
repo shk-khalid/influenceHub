@@ -3,8 +3,9 @@ import { X, Mail } from 'lucide-react';
 import type { TwoFactorAuthProps } from '../types/auth';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
+import toast from 'react-hot-toast';
 
-export function TwoFactorAuth({ isOpen, onClose, onVerify, email }: TwoFactorAuthProps) {
+export function TwoFactorAuth({ isOpen, onClose, onVerify,onResend, email }: TwoFactorAuthProps) {
   const [code, setCode] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
   const [timeLeft, setTimeLeft] = useState(180); // Timer starts at 180 seconds (3 minutes)
@@ -81,9 +82,14 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify, email }: TwoFactorAut
   };
 
   const handleResend = () => {
-    setCode(['', '', '', '', '', '']);
-    setError('');
-    startTimer();
+    if (timeLeft <= 180) {
+      setCode(['', '', '', '', '', '']);
+      setError('');
+      startTimer();
+      onResend();
+    } else {
+      toast.error('Please wait until the timer expires before resending the code.');
+    }
   };
 
   const formatTime = (seconds: number) => {

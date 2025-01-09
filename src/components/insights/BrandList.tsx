@@ -2,46 +2,72 @@ import React, { useState, useMemo } from 'react';
 import { Star, MapPin, Users, TrendingUp } from 'lucide-react';
 import { Brand } from '../types';
 import { FilterSection } from './FilterSection';
-import { motion } from 'framer-motion';
 
 interface BrandListProps {
   brands: Brand[];
   onSelectBrand: (brand: Brand) => void;
+  loading?: boolean;
 }
 
-export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) => {
+export const BrandList: React.FC<BrandListProps> = ({ 
+  brands, 
+  onSelectBrand,
+  loading = false 
+}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
 
-  const sectors = useMemo(() =>
+  const sectors = useMemo(() => 
     Array.from(new Set(brands.map(brand => brand.sector))),
     [brands]
   );
-
-  const filteredBrands = useMemo(() =>
+  
+  const filteredBrands = useMemo(() => 
     brands.filter(brand => {
       const matchesSearch = brand.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        brand.location.toLowerCase().includes(searchTerm.toLowerCase());
+                          brand.location.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesSector = !selectedSector || brand.sector === selectedSector;
       return matchesSearch && matchesSector;
     }),
     [brands, searchTerm, selectedSector]
   );
 
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-12" >
-      {/* Header Section */}
-      <header className="relative mb-20 text-center">
-        <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="absolute -top-4 left-1/2 -translate-x-1/2 w-48 h-48 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl" />
-        <motion.h1 className="text-6xl font-bold gradient-text mb-4 relative" initial={{ y: 20 }} animate={{ y: 0 }}>
-          Brand Insights
-        </motion.h1>
-        <motion.p className="text-gray-600 dark:text-gray-400 text-lg relative max-w-2xl mx-auto" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
-          Explore detailed insights about various brands and discover their market performance.
-        </motion.p>
-      </header>
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg rounded-xl 
+                     shadow-lg dark:shadow-gray-900/30 overflow-hidden 
+                     border border-gray-200/50 dark:border-gray-700/50
+                     animate-pulse"
+          >
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-gray-200 dark:bg-gray-700" />
+                <div className="flex-1">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2" />
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+                </div>
+              </div>
+              <div className="space-y-2 mb-4">
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3" />
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+                <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
-      {/* Filter Section */}
+  return (
+    <div className="space-y-6">
       <FilterSection
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -50,20 +76,17 @@ export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) =
         sectors={sectors}
       />
 
-      <div className="my-8"></div>
-
-      {/* Brand Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {filteredBrands.map((brand) => (
           <div
             key={brand.id}
             onClick={() => onSelectBrand(brand)}
             className="group bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg rounded-xl 
-                       shadow-lg dark:shadow-gray-900/30 overflow-hidden 
-                       hover:shadow-xl dark:hover:shadow-gray-900/50 
-                       transform hover:-translate-y-1 transition-all duration-300 
-                       cursor-pointer animate-fadeIn
-                       border border-gray-200/50 dark:border-gray-700/50"
+                     shadow-lg dark:shadow-gray-900/30 overflow-hidden 
+                     hover:shadow-xl dark:hover:shadow-gray-900/50 
+                     transform hover:-translate-y-1 transition-all duration-300 
+                     cursor-pointer animate-fadeIn
+                     border border-gray-200/50 dark:border-gray-700/50"
           >
             <div className="p-4 sm:p-6">
               <div className="flex items-center gap-3 mb-4">
@@ -74,14 +97,14 @@ export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) =
                 />
                 <div>
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-white 
-                                 group-hover:text-blue-600 dark:group-hover:text-blue-400 
-                                 transition-colors duration-300">
+                               group-hover:text-blue-600 dark:group-hover:text-blue-400 
+                               transition-colors duration-300">
                     {brand.name}
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">{brand.sector}</p>
                 </div>
               </div>
-
+              
               <div className="space-y-2 mb-4">
                 <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                   <MapPin className="w-4 h-4" />
@@ -92,7 +115,7 @@ export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) =
                   <span className="text-xs sm:text-sm">{brand.rating} Rating</span>
                 </div>
               </div>
-
+              
               <div className="grid grid-cols-2 gap-3">
                 <div className="text-center p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30">
                   <Users className="w-4 h-4 text-blue-500 dark:text-blue-400 mx-auto mb-1" />
@@ -110,17 +133,15 @@ export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) =
             </div>
           </div>
         ))}
-      </div>
 
-      {
-        filteredBrands.length === 0 && (
-          <div className="text-center py-12 bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg 
+        {filteredBrands.length === 0 && (
+          <div className="col-span-full text-center py-12 bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg 
                          rounded-xl shadow-lg dark:shadow-gray-900/30
                          border border-gray-200/50 dark:border-gray-700/50">
             <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base mb-4">
               No brands found matching your criteria
             </p>
-            <button
+            <button 
               onClick={() => {
                 setSearchTerm('');
                 setSelectedSector(null);
@@ -132,8 +153,8 @@ export const BrandList: React.FC<BrandListProps> = ({ brands, onSelectBrand }) =
               Clear filters
             </button>
           </div>
-        )
-      }
-    </motion.div>
+        )}
+      </div>
+    </div>
   );
 };

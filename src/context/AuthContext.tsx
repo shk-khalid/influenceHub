@@ -101,6 +101,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  const resendOTP = async (email: string) => {
+    dispatch({type: "SET_LOADING", payload: true });
+    try {
+      await authService.resendOTP(email);
+      return { success: true };
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload : 'Failed to resend OTP' });
+      return { success: false, error: 'Failed to resend OTP'}
+    }
+  }
+
   const logout = async () => {
     try {
       await authService.logout();
@@ -124,6 +135,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         ...state,
         login,
         verifyOTP,
+        resendOTP,
         logout,
         updateUserDetails,
       }}

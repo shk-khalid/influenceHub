@@ -12,7 +12,7 @@ export function LoginForm() {
     const [password, setPassword] = useState('');
     const [showTwoFactor, setShowTwoFactor] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const { login, verifyOTP } = useAuth();
+    const { login, verifyOTP, resendOTP } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -45,6 +45,18 @@ export function LoginForm() {
             setIsLoading(false);
         }
     };
+
+    const handleOTPReset = async() => {
+      setIsLoading(true);
+      try {
+        await resendOTP(email);
+        console.log("OTP resent successfully");
+        } catch (error) {
+            console.error("Failed to resend OTP", error);
+        } finally {
+            setIsLoading(false);
+      }
+    }
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
@@ -137,6 +149,7 @@ export function LoginForm() {
         isOpen={showTwoFactor}
         onClose={() => setShowTwoFactor(false)}
         onVerify={handleTwoFactorVerify}
+        onResend={handleOTPReset}
         email={email}
       />
     </div>

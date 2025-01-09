@@ -10,20 +10,20 @@ export function useAuth() {
     throw new Error('useAuth must be used within an AuthProvider');
   }
 
-  const { login, verifyOTP, logout, updateUserDetails, ...state } = context;
+  const { login, verifyOTP, resendOTP, logout, updateUserDetails, ...state } = context;
 
   // Enhanced login with toast
   const handleLogin = async (email: string, password: string) => {
     try {
       const result = await login(email, password);
       if (result.success) {
-        toast.success('OTP sent to your email');
+        toast.success('A one-time password (OTP) has been sent to your email address.');
       } else {
-        toast.error(result.error || 'Login failed');
+        toast.error(result.error || 'Login failed. Please try again.');
       }
       return result;
     } catch (error) {
-      toast.error('An error occurred during login');
+      toast.error('There was an issue while logging you in. Please try again later.');
       return { success: false, error: 'Login failed' };
     }
   };
@@ -33,14 +33,30 @@ export function useAuth() {
     try {
       const result = await verifyOTP(email, otp);
       if (result.success) {
-        toast.success('Login successful!');
+        toast.success('You are successfully logged in! Welcome back!');
       } else {
-        toast.error(result.error || 'Invalid OTP');
+        toast.error(result.error || 'The OTP you entered is incorrect. Please try again.');
       }
       return result;
     } catch (error) {
-      toast.error('Failed to verify OTP');
+      toast.error('Unable to verify the OTP at this time. Please try again later.');
       return { success: false, error: 'OTP verification failed' };
+    }
+  };
+
+  // Resend OTP with toast
+  const handleResendOTP = async (email: string) => {
+    try {
+      const result = await resendOTP(email);
+      if (result.success) {
+        toast.success('We have sent a new OTP to your email. Please check your inbox!');
+      } else {
+        toast.error(result.error || 'There was an issue resending the OTP. Please try again.');
+      }
+      return result;
+    } catch (error) {
+      toast.error('Something went wrong while resending the OTP. Please try again later.');
+      return { success: false, error: 'Failed to resend OTP' };
     }
   };
 
@@ -48,9 +64,9 @@ export function useAuth() {
   const handleLogout = async () => {
     try {
       await logout();
-      toast.success('Logged out successfully');
+      toast.success('You have successfully logged out. See you soon!');
     } catch (error) {
-      toast.error('Failed to logout');
+      toast.error('We encountered an issue while logging you out. Please try again.');
     }
   };
 
@@ -58,9 +74,9 @@ export function useAuth() {
   const handleUpdateUserDetails = async (details: Parameters<typeof updateUserDetails>[0]) => {
     try {
       await updateUserDetails(details);
-      toast.success('Profile updated successfully');
+      toast.success('Your profile has been successfully updated!');
     } catch (error) {
-      toast.error('Failed to update profile');
+      toast.error('There was an issue updating your profile. Please try again.');
     }
   };
 
@@ -68,10 +84,10 @@ export function useAuth() {
   const handleForgotPassword = async (email: string) => {
     try {
       const response = await authService.forgotPassword(email);
-      toast.success(response.message || 'Reset code sent to your email');
+      toast.success(response.message || 'A reset code has been sent to your email address.');
       return { success: true };
     } catch (error) {
-      toast.error('Failed to send reset code');
+      toast.error('Unable to send the reset code. Please try again later.');
       return { success: false, error: 'Failed to send reset code' };
     }
   };
@@ -80,10 +96,10 @@ export function useAuth() {
   const handleResetPassword = async (email: string, otp: string, newPassword: string) => {
     try {
       const response = await authService.resetPassword(email, otp, newPassword);
-      toast.success(response.message || 'Password reset successful');
+      toast.success(response.message || 'Your password has been successfully reset.');
       return { success: true };
     } catch (error) {
-      toast.error('Failed to reset password');
+      toast.error('There was an issue resetting your password. Please try again.');
       return { success: false, error: 'Failed to reset password' };
     }
   };
@@ -92,6 +108,7 @@ export function useAuth() {
     ...state,
     login: handleLogin,
     verifyOTP: handleVerifyOTP,
+    resendOTP: handleResendOTP,
     logout: handleLogout,
     updateUserDetails: handleUpdateUserDetails,
     forgotPassword: handleForgotPassword,

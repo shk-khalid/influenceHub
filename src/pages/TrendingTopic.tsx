@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useTrendStore } from '../hooks/useTrend';
+import { motion } from 'framer-motion';
 import { TrendFilters } from '../components/analytics/TrendFilters';
 import { TrendCard } from '../components/analytics/TrendingCard';
-import { Pagination } from '../components/common/pagination';
+import { Pagination } from '../components/common/Pagination';
 import { Layout } from '../components/layout/Layout';
 
 export default function TrendingTopics() {
@@ -30,12 +31,28 @@ export default function TrendingTopics() {
 
   return (
     <Layout>
-      <div className="space-y-6">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold gradient-text mb-2">Trend Analysis Dashboard</h1>
-          <p className="text-gray-600 dark:text-gray-400">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-12"
+      >
+        <header className="relative mb-20 text-center">
+          <motion.div
+            initial={{ scale: 0.9, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            className="absolute -top-4 left-1/2 -translate-x-1/2 w-48 h-48 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl"
+          />
+          <motion.h1 className="text-6xl font-bold gradient-text mb-4 relative" initial={{ y: 20 }} animate={{ y: 0 }}>
+            Trend Analysis Dashboard
+          </motion.h1>
+          <motion.p
+            className="text-gray-600 dark:text-gray-400 text-lg relative max-w-2xl mx-auto"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.1 }}
+          >
             Track and analyze real-time trending topics across different categories
-          </p>
+          </motion.p>
         </header>
 
         <TrendFilters
@@ -76,7 +93,7 @@ export default function TrendingTopics() {
             </>
           )}
         </div>
-      </div>
+      </motion.div>
     </Layout>
   );
 }

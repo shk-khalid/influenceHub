@@ -25,13 +25,14 @@ export interface User {
     isOpen: boolean;
     onClose: () => void;
     onVerify: (code: string) => void;
-    onResend?: (code: string) => void;
+    onResend: () => void;
     email: string;
   }
   
   export interface AuthContextType extends AuthState {
     login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
     verifyOTP: (email: string, otp: string) => Promise<{ success: boolean; error?: string }>;
+    resendOTP: (email: string) => Promise<{ success: boolean; error?: string }>;
     logout: () => Promise<void>;
     updateUserDetails: (details: Partial<User>) => Promise<void>;
   }

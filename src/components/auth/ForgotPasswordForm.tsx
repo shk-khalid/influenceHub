@@ -18,7 +18,7 @@ export function ForgotPasswordForm() {
     const [error, setError] = useState('');
     const [otpCode, setOtpCode] = useState('');
     const navigate = useNavigate();
-    const { forgotPassword, resetPassword } = useAuth();
+    const { forgotPassword, resetPassword, verifyOTP, resendOTP } = useAuth();
 
     const handleEmailSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -57,10 +57,31 @@ export function ForgotPasswordForm() {
     };
 
     const handleTwoFactorVerify = async (code: string) => {
-        setOtpCode(code); // Store OTP code for password reset
-        setShowTwoFactor(false);
-        setStep('reset');
+        setIsLoading(true);
+        try {
+            const result = await verifyOTP(email, code);
+            if (result.success) {
+                setShowTwoFactor(false);
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            console.error('2FA verification failed:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
+
+    const handleOTPReset = async() => {
+        setIsLoading(true);
+        try {
+          await resendOTP(email);
+          console.log("OTP resent successfully");
+          } catch (error) {
+              console.error("Failed to resend OTP", error);
+          } finally {
+              setIsLoading(false);
+        }
+      }
 
     return (
         <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
@@ -157,7 +178,7 @@ export function ForgotPasswordForm() {
                 onClose={() => setShowTwoFactor(false)}
                 onVerify={handleTwoFactorVerify}
                 email={email}
-                onResend={handleTwoFactorVerify}
+                onResend={handleOTPReset}
             />
         </div>
     );

@@ -33,6 +33,14 @@ export const authService = {
     return response.data;
   },
 
+  // Resend OTP
+  async resendOTP(email: string): Promise<LoginResponse> {
+    const response = await api.post('/auth/resend-otp/', {
+      email,
+    });
+    return response.data;
+  },
+
   // Register
   async register(data: { email: string; password: string; fullName: string }) {
     const response = await api.post('/auth/register/', data);

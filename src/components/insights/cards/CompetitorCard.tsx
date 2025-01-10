@@ -1,9 +1,9 @@
 import React from 'react';
 import { Users } from 'lucide-react';
-import { Brand } from '../../types';
+import { BrandDetail } from '../../types/brand';
 
 interface CompetitorsCardProps {
-  brand: Brand;
+  brand: BrandDetail;
 }
 
 export const CompetitorsCard: React.FC<CompetitorsCardProps> = ({ brand }) => {
@@ -16,13 +16,13 @@ export const CompetitorsCard: React.FC<CompetitorsCardProps> = ({ brand }) => {
       </div>
       
       <div className="grid grid-cols-1 gap-3">
-        {brand.competitors.map((competitor) => (
+        {brand.competitors.map((competitor, index) => (
           <div 
-            key={competitor}
+            key={index}
             className="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/30 
                      transform hover:scale-105 transition-transform duration-300"
           >
-            <p className="text-purple-600 dark:text-purple-400 font-medium">{competitor}</p>
+            <p className="text-purple-600 dark:text-purple-400 font-medium">{competitor.competitor_name}</p>
           </div>
         ))}
       </div>

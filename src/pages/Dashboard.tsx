@@ -9,6 +9,7 @@ import { generateCSVReport, downloadReport } from '../lib/ReportGenerator';
 import { Button } from '../components/common/Button';
 import { Card } from '../components/common/Card';
 import { motion } from 'framer-motion';
+import { Layout } from '../components/layout/Layout';
 
 export const Dashboard: React.FC = () => {
   const handleDownloadReport = () => {
@@ -17,6 +18,7 @@ export const Dashboard: React.FC = () => {
   };
 
   return (
+    <Layout>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -130,5 +132,6 @@ export const Dashboard: React.FC = () => {
         <DemographicsPanel data={demographicData} />
       </motion.div>
     </motion.div>
+    </Layout>
   );
 };

@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { toast } from 'react-hot-toast';
 import { AuthContext } from '../context/AuthContext';
-import { authService } from '../services/authService';
 
 export function useAuth() {
   const context = useContext(AuthContext);
@@ -10,7 +9,23 @@ export function useAuth() {
     throw new Error('useAuth must be used within an AuthProvider');
   }
 
-  const { login, verifyOTP, resendOTP, logout, updateUserDetails, ...state } = context;
+  const { register, login, verifyOTP, resendOTP, forgotPassword, resetPassword, logout, updateUserDetails, ...state } = context;
+
+  // Enhanced registration with toast
+  const handleRegister = async (email: string, password: string, fullName: string) => {
+    try{
+      const result = await register(email, password, fullName);
+      if (result.success) {
+        toast.success('Registration successful! Please verify your email.');
+      } else {
+        toast.error(result.error || 'Registration failed.');
+      }
+      return result;
+    } catch (error) {
+      toast.error('An error occured during registration');
+      return { success: false, error: 'Registration failed' };
+    }
+  }
 
   // Enhanced login with toast
   const handleLogin = async (email: string, password: string) => {
@@ -60,6 +75,37 @@ export function useAuth() {
     }
   };
 
+  const handleForgotPassword = async (email: string) => {
+    try {
+      const result = await forgotPassword(email);
+      if (result.success) {
+        toast.success('An OTP has been sent to your email. Please check your inbox.');
+      } else {
+        toast.error(result.error || 'Failed to send OTP.');
+      }
+      return result;
+    } catch (error) {
+      toast.error('An error occurred while sending the OTP. Please try again.');
+      return { success: false, error: 'Failed to send OTP' };
+    }
+  };
+
+  // Enhanced reset password with toast
+  const handleResetPassword = async (email: string, otp: string, newPassword: string) => {
+    try {
+      const result = await resetPassword(email, otp, newPassword);
+      if (result.success) {
+        toast.success('Your password has been successfully reset!');
+      } else {
+        toast.error(result.error || 'Failed to reset password.');
+      }
+      return result;
+    } catch (error) {
+      toast.error('An error occurred while resetting the password. Please try again.');
+      return { success: false, error: 'Failed to reset password' };
+    }
+  };
+
   // Enhanced logout with toast
   const handleLogout = async () => {
     try {
@@ -80,32 +126,10 @@ export function useAuth() {
     }
   };
 
-  // Password reset request with toast
-  const handleForgotPassword = async (email: string) => {
-    try {
-      const response = await authService.forgotPassword(email);
-      toast.success(response.message || 'A reset code has been sent to your email address.');
-      return { success: true };
-    } catch (error) {
-      toast.error('Unable to send the reset code. Please try again later.');
-      return { success: false, error: 'Failed to send reset code' };
-    }
-  };
-
-  // Reset password with OTP and toast
-  const handleResetPassword = async (email: string, otp: string, newPassword: string) => {
-    try {
-      const response = await authService.resetPassword(email, otp, newPassword);
-      toast.success(response.message || 'Your password has been successfully reset.');
-      return { success: true };
-    } catch (error) {
-      toast.error('There was an issue resetting your password. Please try again.');
-      return { success: false, error: 'Failed to reset password' };
-    }
-  };
 
   return {
     ...state,
+    register: handleRegister,
     login: handleLogin,
     verifyOTP: handleVerifyOTP,
     resendOTP: handleResendOTP,

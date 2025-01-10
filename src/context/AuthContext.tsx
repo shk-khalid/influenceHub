@@ -14,6 +14,7 @@ const initialState: AuthState = {
 
 type AuthAction =
   | { type: 'LOGIN_SUCCESS'; payload: User }
+  | { type: "REGISTER_SUCCESS"; payload: string }
   | { type: 'LOGOUT' }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string }
@@ -26,6 +27,12 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
         ...state,
         user: action.payload,
         isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      };
+    case 'REGISTER_SUCCESS':
+      return {
+        ...state,
         isLoading: false,
         error: null,
       };
@@ -74,6 +81,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
     checkAuth();
   }, []);
 
+  const register = async (email: string, password: string, fullName: string) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await authService.register({ email, password, fullName });
+      if (response.success) {
+        dispatch({ type: 'REGISTER_SUCCESS', payload: response.message });
+        return { success: true, message: response.message };
+      } else {
+        dispatch({ type: 'SET_ERROR', payload: 'Registration failed' });
+        return { success: false, error: 'Registration failed' };
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Registration failed';
+      dispatch({ type: 'SET_ERROR', payload: errorMessage });
+      return { success: false, error: errorMessage };
+    }
+  };
+
   const login = async (email: string, password: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
@@ -102,13 +127,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const resendOTP = async (email: string) => {
-    dispatch({type: "SET_LOADING", payload: true });
+    dispatch({ type: "SET_LOADING", payload: true });
     try {
       await authService.resendOTP(email);
       return { success: true };
     } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload : 'Failed to resend OTP' });
-      return { success: false, error: 'Failed to resend OTP'}
+      dispatch({ type: 'SET_ERROR', payload: 'Failed to resend OTP' });
+      return { success: false, error: 'Failed to resend OTP' }
     }
   }
 
@@ -129,13 +154,50 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  const forgotPassword = async (email: string) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await authService.forgotPassword(email);
+      if ('message' in response) {
+        return { success: true, message: response.message };
+      } else {
+        dispatch({ type: 'SET_ERROR', payload: response.error });
+        return { success: false, error: response.error };
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send OTP';
+      dispatch({ type: 'SET_ERROR', payload: errorMessage });
+      return { success: false, error: errorMessage };
+    }
+  };
+
+  const resetPassword = async (email: string, otp: string, newPassword: string) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const response = await authService.resetPassword(email, otp, newPassword);
+      if ('message' in response) {
+        return { success: true, message: response.message };
+      } else {
+        dispatch({ type: 'SET_ERROR', payload: response.error });
+        return { success: false, error: response.error };
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to reset password';
+      dispatch({ type: 'SET_ERROR', payload: errorMessage });
+      return { success: false, error: errorMessage };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
         ...state,
+        register,
         login,
         verifyOTP,
         resendOTP,
+        forgotPassword,
+        resetPassword,
         logout,
         updateUserDetails,
       }}

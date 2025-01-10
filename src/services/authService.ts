@@ -6,6 +6,12 @@ export interface LoginResponse {
   error?: string;
 }
 
+export interface RegisterResponse {
+  message: string;
+  success: boolean;
+  error?: string;
+}
+
 export interface AuthError {
   error: string;
 }
@@ -42,8 +48,8 @@ export const authService = {
   },
 
   // Register
-  async register(data: { email: string; password: string; fullName: string }) {
-    const response = await api.post('/auth/register/', data);
+  async register(data: {email: string, password: string, fullName: string}):Promise<RegisterResponse> {
+    const response = await api.post('/auth/register/',data);
     return response.data;
   },
 

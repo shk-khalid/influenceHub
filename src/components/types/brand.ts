@@ -1,48 +1,31 @@
 export interface Brand {
     id: string;
-    logo?: string;
     name: string;
     sector: string;
     location: string;
-    rating: number;
-    value: {
-        year: number;
-        amount: number;
-    }[];
-    marketShare: number;
-    growthRate: number;
-}
-
-export interface Competitor {
-    competitor_name: string;
-}
-
-export interface GenderDemographics {
-    male_percentage: number;
-    female_percentage: number;
-}
-
-export interface ValuationHistory {
-    year: number;
-    valuation: number;
-}
-
-export interface BrandDetails {
-    id: string;
-    logo?: string;
-    name: string;
-    sector: string;
-    location: string;
-    rating: number;
-    value: number;
-    share: number;
-    growth: number;
+    overall_rating: string;
+    market_share: string;
+    growth_percentage: string;
+  }
+  
+  export interface BrandDetail extends Brand {
+    recent_valuation: string;
     performance_metrics: {
-        share: number;
-        rate: number;
+      market_share: string;
+      growth_rate: string;
     };
-    competitors: Competitor[];
-    gender_demographics: GenderDemographics;
-    valuation_history: ValuationHistory[];
-    sentiment: string | null;
-}
+    competitors: {
+      competitor_name: string;
+    }[];
+    gender_demographics: {
+      male_percentage: string;
+      female_percentage: string;
+    };
+    valuation_history: {
+      year: number;
+      valuation: string;
+    }[];
+    sentiment: null | {
+      // Add sentiment fields if they become available
+    };
+  }

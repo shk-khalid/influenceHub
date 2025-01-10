@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-
 // Components and Pages
-import { Layout } from './components/layout/Layout';
 import { Dashboard } from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Campaign from './pages/Campaigns';
@@ -11,12 +9,21 @@ import { SignupForm } from './components/auth/SignupForm';
 import { LoginForm } from './components/auth/LoginForm';
 import { Insights } from './pages/Insights';
 import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './hooks/useAuth';
 import { CompetitorProvider } from './context/CompetitorContext';
 import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
-import Landing from './pages/Landing';
 import TrendingTopics from './pages/TrendingTopic';
-import { ProtectedRoute } from './components/auth/ProtectedRoute';
+//import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
+function ProtectedRouteWrapper({ children }: { children: JSX.Element }) {
+  const { isAuthenticated } = useAuth(); // Use your authentication context to check user status
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+}
 
 function App() {
   return (
@@ -26,46 +33,61 @@ function App() {
         <AuthProvider>
           <Routes>
             {/* Protected Routes */}
-            {/* Landing Route */}
-            <Route path="/landing" element={<Landing />} />
-
-            {/* Dashboard Route */}
             <Route
               path="/dashboard"
               element={
-                <Layout> {/* Layout wraps the Dashboard page */}
+                <ProtectedRouteWrapper>
                   <Dashboard />
-                </Layout>
+                </ProtectedRouteWrapper>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRouteWrapper>
+                  <Profile />
+                </ProtectedRouteWrapper>
+              }
+            />
+            <Route
+              path="/campaigns"
+              element={
+                <ProtectedRouteWrapper>
+                  <Campaign />
+                </ProtectedRouteWrapper>
+              }
+            />
+            <Route
+              path="/match"
+              element={
+                <ProtectedRouteWrapper>
+                  <BrandMatchingDashboard />
+                </ProtectedRouteWrapper>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRouteWrapper>
+                  <TrendingTopics />
+                </ProtectedRouteWrapper>
+              }
+            />
+            <Route
+              path="/insights"
+              element={
+                <ProtectedRouteWrapper>
+                  <Insights />
+                </ProtectedRouteWrapper>
               }
             />
 
-            {/* Profile Route */}
-            <Route path="/profile" element={<Profile />} />
-
-            {/* Campaigns Route */}
-            <Route path="/campaigns" element={<Campaign />} />
-
-            {/* Brand Matching Route */}
-            <Route path="/match" element={<BrandMatchingDashboard />} />
-
-            {/* Analytics Route */}
-            <Route path="/analytics" element={<TrendingTopics />} />
-
-            {/* Insights Route */}
-            <Route path="/insights" element={<Insights />} />
-
             {/* Authentication Routes */}
-            {/* Login Page */}
             <Route path="/login" element={<LoginForm />} />
-
-            {/* Signup Page */}
             <Route path="/signup" element={<SignupForm />} />
-              
-            {/* Forgot Password Page */}
             <Route path="/forgot" element={<ForgotPasswordForm />} />
 
             {/* Default Fallback Route */}
-            {/* Redirects unmatched routes to the dashboard */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </AuthProvider>

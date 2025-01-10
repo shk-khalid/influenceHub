@@ -1,20 +1,19 @@
 import React from 'react';
 import { Users } from 'lucide-react';
-import { Brand } from '../../types';
+import { BrandDetail } from '../../types/brand';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 interface DemographicsCardProps {
-  brand: Brand;
+  brand: BrandDetail;
 }
 
 export const DemographicsCard: React.FC<DemographicsCardProps> = ({ brand }) => {
   const data = [
-    { name: 'Male', value: brand.demographics.gender.male },
-    { name: 'Female', value: brand.demographics.gender.female },
-    { name: 'Other', value: brand.demographics.gender.other }
+    { name: 'Male', value: parseFloat(brand.gender_demographics.male_percentage) },
+    { name: 'Female', value: parseFloat(brand.gender_demographics.female_percentage) }
   ];
 
-  const COLORS = ['#3B82F6', '#EC4899', '#8B5CF6'];
+  const COLORS = ['#3B82F6', '#EC4899'];
 
   return (
     <div className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-6 
@@ -40,7 +39,7 @@ export const DemographicsCard: React.FC<DemographicsCardProps> = ({ brand }) => 
                 <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip formatter={(value) => `${value.toFixed(1)}%`} />
             <Legend />
           </PieChart>
         </ResponsiveContainer>

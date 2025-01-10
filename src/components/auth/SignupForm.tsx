@@ -19,7 +19,7 @@ export function SignupForm() {
   const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { signup } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
   const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -40,24 +40,26 @@ export function SignupForm() {
     setError('');
     setIsLoading(true);
     try {
-      await signup(email, password, userName);
-      setIsLoading(false);
-      setShowEmailVerification(true);
+      const result = await register(email, password, userName);
+      if (result.success) {
+        setShowEmailVerification(true);
+      } else {
+        setError(result.error || 'Registration failed');
+      }
     } catch (error) {
-      console.error('Signup failed:', error);
       setError('An error occurred. Please try again');
+    } finally {
       setIsLoading(false);
     }
   };
 
-  const handleEmailVerification = async () => {
+  const handleEmailVerification = () => {
     setShowEmailVerification(false);
     navigate('/login');
   };
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
-
       {/* Logo Section */}
       <div className="flex items-center justify-center mb-8 space-x-4">
         <img
@@ -134,7 +136,7 @@ export function SignupForm() {
               type="submit"
               isLoading={isLoading}
               icon={<ArrowRight className="h-5 w-5" />}
-              className=" w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
+              className="w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
             >
               Create Account
             </Button>
@@ -167,8 +169,8 @@ export function SignupForm() {
       </div>
 
       <EmailVerification 
-        isOpen={showEmailVerification} 
-        onClose={handleEmailVerification} 
+        isOpen={showEmailVerification}
+        onClose={handleEmailVerification}
         email={email}
       />
     </div>

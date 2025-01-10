@@ -1,13 +1,19 @@
 import React from 'react';
 import { DollarSign } from 'lucide-react';
-import { Brand } from '../../types';
+import { BrandDetail } from '../../types/brand';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface ValueHistoryCardProps {
-  brand: Brand;
+  brand: BrandDetail;
 }
 
 export const ValueHistoryCard: React.FC<ValueHistoryCardProps> = ({ brand }) => {
+
+  const data = brand.valuation_history.map(item => ({
+    year: item.year,
+    amount: parseFloat(item.valuation) / 1000000000 // Convert to billions
+  }));
+
   return (
     <div className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-lg p-6 
                     border border-gray-200/50 dark:border-gray-700/50">
@@ -18,7 +24,7 @@ export const ValueHistoryCard: React.FC<ValueHistoryCardProps> = ({ brand }) => 
       
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={brand.value}>
+          <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" />
             <YAxis />

@@ -7,6 +7,8 @@ import { Card } from '../common/Card';
 import { TwoFactorAuth } from './TwoFactorAuth';
 import { PasswordStrengthMeter } from './PasswordStrength';
 import { useAuth } from '../../hooks/useAuth';
+import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
+import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
 export function ForgotPasswordForm() {
     const [email, setEmail] = useState('');
@@ -19,6 +21,8 @@ export function ForgotPasswordForm() {
     const [otpCode, setOtpCode] = useState('');
     const navigate = useNavigate();
     const { forgotPassword, resetPassword, verifyOTP, resendOTP } = useAuth();
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
 
     const handleEmailSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -87,10 +91,15 @@ export function ForgotPasswordForm() {
         <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
             {/* Logo Section */}
             <div className="flex items-center justify-center mb-8 space-x-4">
-                <span className="block text-2xl font-bold text-gray-900 dark:text-white">
-                    influenceHub
-                </span>
-            </div>
+        <img
+          src={isDarkMode ? DesktopDarkLogo : DesktopLightLogo}
+          alt="Logo"
+          className="h-12"
+        />
+        <span className="hidden lg:block text-2xl font-bold text-gray-900 dark:text-white">
+          influenceHub
+        </span>
+      </div>
 
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h2 className="mt-6 text-center text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">

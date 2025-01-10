@@ -1,14 +1,13 @@
 import React from 'react';
-import { Brand } from '../types';
+import { BrandDetail } from '../types/brand';
 import { BrandOverview } from './BrandOverview';
 import { MetricsCard } from './cards/MetricsCard';
 import { CompetitorsCard } from './cards/CompetitorCard';
 import { DemographicsCard } from './cards/DemographicsCard';
 import { ValueHistoryCard } from './cards/ValueHistoryCard';
-import { SentimentCard } from './cards/SentimentsCard';
 
 interface BrandDetailsProps {
-  brand: Brand;
+  brand: BrandDetail;
   loading?: boolean;
 }
 
@@ -43,7 +42,6 @@ export const BrandDetails: React.FC<BrandDetailsProps> = ({ brand, loading = fal
         <CompetitorsCard brand={brand} />
         <DemographicsCard brand={brand} />
         <ValueHistoryCard brand={brand} />
-        <SentimentCard brand={brand} />
       </div>
     </div>
   );

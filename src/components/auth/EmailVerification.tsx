@@ -31,30 +31,33 @@ export function EmailVerification({ isOpen, onClose, email }: EmailVerificationM
         </div>
 
         <p className="text-gray-600 dark:text-gray-300 mb-8 text-center">
-          We’ve sent a verification link to{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">{email}</span>. Check your inbox and click the link to verify your email address.
+          We've sent a verification link to{' '}
+          <span className="font-semibold text-gray-900 dark:text-white">{email}</span>. 
+          Please check your inbox and click the link to verify your email address.
         </p>
 
-        <form className="space-y-6">
-          <div className="grid grid-cols-1 gap-4">
-            <Button
-              onClick={onClose}
-              className="w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
-            >
-              Close
-            </Button>
-          </div>
+        <div className="space-y-6">
+          <Button
+            onClick={onClose}
+            className="w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
+          >
+            Got it, thanks!
+          </Button>
 
-          <p className="text-center text-sm mt-4">
-            Didn’t receive the email?{' '}
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+            Didn't receive the email?{' '}
             <button
               type="button"
               className="text-teal-600 hover:text-teal-800 dark:text-rose-500 dark:hover:text-rose-700 transition duration-150 ease-in-out"
+              onClick={() => {
+                // Re-trigger registration for the same email
+                window.location.reload();
+              }}
             >
-              Resend
+              Click here to resend
             </button>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );

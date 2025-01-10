@@ -1,9 +1,9 @@
 import React from 'react';
 import { MapPin, Building2, Star, Calendar } from 'lucide-react';
-import { Brand } from '../types';
+import { BrandDetail } from '../types/brand';
 
 interface BrandOverviewProps {
-  brand: Brand;
+  brand: BrandDetail;
 }
 
 export const BrandOverview: React.FC<BrandOverviewProps> = ({ brand }) => {
@@ -14,7 +14,7 @@ export const BrandOverview: React.FC<BrandOverviewProps> = ({ brand }) => {
         <div className="relative">
           <div className="absolute inset-0 bg-blue-400 dark:bg-blue-500 blur-md opacity-20 dark:opacity-30 rounded-xl"></div>
           <img
-            src={brand.logo}
+            src={`https://cdn.brandfetch.io/${brand.name.toLowerCase()}.com?c=1idce-XmvJbQiBHXyMA`}
             alt={`${brand.name} logo`}
             className="w-20 h-20 rounded-xl object-cover relative z-10"
           />
@@ -23,7 +23,9 @@ export const BrandOverview: React.FC<BrandOverviewProps> = ({ brand }) => {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{brand.name}</h1>
           <div className="flex items-center gap-2 mt-1">
             <Star className="w-4 h-4 text-yellow-500" />
-            <span className="text-gray-600 dark:text-gray-300">{brand.rating} Rating</span>
+            <span className="text-gray-600 dark:text-gray-300">
+              {parseFloat(brand.overall_rating).toFixed(1)} Rating
+            </span>
           </div>
         </div>
       </div>
@@ -48,9 +50,9 @@ export const BrandOverview: React.FC<BrandOverviewProps> = ({ brand }) => {
         <div className="flex items-center gap-2">
           <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Value (2024)</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Recent Valuation</p>
             <p className="font-medium text-gray-900 dark:text-white">
-              ${brand.value[brand.value.length - 1].amount.toFixed(1)}B
+              ${(parseFloat(brand.recent_valuation) / 1000000000).toFixed(1)}B
             </p>
           </div>
         </div>

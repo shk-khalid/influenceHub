@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
-import { Brand } from '../components/types';
+import { Brand, BrandDetail } from '../components/types/brand';
 import { brandService } from '../services/brandService';
 
 interface UseBrandServiceReturn {
   brands: Brand[];
-  selectedBrand: Brand | null;
+  selectedBrand: BrandDetail | null;
   loading: boolean;
   error: Error | null;
   fetchBrands: () => Promise<void>;
@@ -14,7 +14,7 @@ interface UseBrandServiceReturn {
 
 export const useBrandService = (): UseBrandServiceReturn => {
   const [brands, setBrands] = useState<Brand[]>([]);
-  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<BrandDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -26,6 +26,7 @@ export const useBrandService = (): UseBrandServiceReturn => {
     try {
       setLoading(true);
       setError(null);
+      setSelectedBrand(null); // Clear selected brand when fetching list
       const data = await brandService.fetchBrandList();
       setBrands(data);
     } catch (err) {

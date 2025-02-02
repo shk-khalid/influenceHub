@@ -1,7 +1,7 @@
 import { create } from 'zustand';
+import { toast } from 'react-hot-toast';
 import { Trend, TrendCategory, SortOption, TrendState } from '../components/types/trend';
 import { trendService } from '../services/trendService';
-import toast from 'react-hot-toast';
 
 interface TrendStore extends TrendState {
   setSearchTerm: (term: string) => void;
@@ -61,6 +61,7 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
       });
     } catch (error) {
       console.error('Error fetching trends:', error);
+      toast.error('Failed to fetch trends');
       set({ isLoading: false });
     }
   },
@@ -69,17 +70,43 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
     const state = get();
     if (state.isLoading) return;
 
-    set({ isLoading: true });
-    try {
-      await trendService.refreshTrends();
-      await get().fetchTrends();
-      toast.success('Trends successfully refreshed!');
-    } catch (error) {
-      console.error('Error refreshing trends:', error);
-      toast.error('Failed to refresh trends. Please try again later.');
-    } finally {
-      set({ isLoading: false });
-    }
+    const refreshPromise = new Promise<void>(async (resolve, reject) => {
+      set({ isLoading: true });
+      try {
+        // First, trigger the refresh endpoint
+        const refreshResponse = await trendService.refreshTrends();
+        
+        // Then immediately fetch the updated trends
+        const trendsResponse = await trendService.getTrends({
+          search: state.searchTerm,
+          category: state.selectedCategory,
+          page: state.page
+        });
+
+        // Update the store with new data
+        set({
+          trends: trendsResponse.results,
+          totalPages: Math.ceil(trendsResponse.count / 10),
+          isLoading: false
+        });
+
+        toast.success(refreshResponse.message || 'Trends refreshed successfully');
+        resolve();
+      } catch (error) {
+        console.error('Error refreshing trends:', error);
+        toast.error('Failed to refresh trends');
+        set({ isLoading: false });
+        reject(error);
+      }
+    });
+
+    toast.promise(refreshPromise, {
+      loading: 'Refreshing trends...',
+      success: null,
+      error: null,
+    });
+
+    return refreshPromise;
   },
 
   filteredTrends: () => {

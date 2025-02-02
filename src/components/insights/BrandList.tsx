@@ -3,6 +3,7 @@ import { Star, MapPin, Users, TrendingUp } from 'lucide-react';
 import { Brand } from '../types/brand';
 import { FilterSection } from './FilterSection';
 import { motion } from 'framer-motion';
+import { Button } from '../common/Button';
 
 interface BrandListProps {
   brands: Brand[];
@@ -151,24 +152,23 @@ export const BrandList: React.FC<BrandListProps> = ({
 
           {filteredBrands.length === 0 && (
             <div className="col-span-full text-center py-12 bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg 
-                         rounded-xl shadow-lg dark:shadow-gray-900/30
-                         border border-gray-200/50 dark:border-gray-700/50">
+                  rounded-xl shadow-lg dark:shadow-gray-900/30
+                  border border-gray-200/50 dark:border-gray-700/50 flex flex-col items-center">
               <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base mb-4">
                 No brands found matching your criteria
               </p>
-              <button
+              <Button
                 onClick={() => {
                   setSearchTerm('');
                   setSelectedSector(null);
                 }}
-                className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm rounded-lg
-                       hover:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300
-                       shadow-md hover:shadow-lg dark:shadow-blue-500/20"
+                className='bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200'
               >
                 Clear filters
-              </button>
+              </Button>
             </div>
           )}
+
         </div>
       </div>
     </motion.div>

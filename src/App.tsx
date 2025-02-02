@@ -10,7 +10,6 @@ import { LoginForm } from './components/auth/LoginForm';
 import { Insights } from './pages/Insights';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
-import { CompetitorProvider } from './context/CompetitorContext';
 import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
 import TrendingTopics from './pages/TrendingTopic';
 //import { ProtectedRoute } from './components/auth/ProtectedRoute';
@@ -29,7 +28,6 @@ function App() {
   return (
     <Router>
       <Toaster position="top-right" /> {/* Toast notifications for the app */}
-      <CompetitorProvider>
         <AuthProvider>
           <Routes>
             {/* Protected Routes */}
@@ -91,7 +89,6 @@ function App() {
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </AuthProvider>
-      </CompetitorProvider>
     </Router>
   );
 }

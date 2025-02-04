@@ -1,77 +1,83 @@
 import api from './api';
 
-export interface LoginResponse {
+interface RegisterPayload {
+  username: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+}
+
+interface LoginPayload {
+  email_or_username: string;
+  password: string;
+}
+
+interface VerifyOTPPayload {
+  email: string;
+  otp: string;
+  action: 'login' | 'forgot_password';
+}
+
+interface ResendOTPPayload {
+  email: string;
+}
+
+interface ResetPasswordPayload {
+  email: string;
+  new_password: string;
+}
+
+interface AuthResponse {
   message: string;
+  redirect?: string;
   token?: string;
-  error?: string;
-}
-
-export interface RegisterResponse {
-  message: string;
-  success: boolean;
-  error?: string;
-}
-
-export interface AuthError {
-  error: string;
 }
 
 export const authService = {
-  // Login flow
-  async login(email: string, password: string): Promise<LoginResponse> {
-    const response = await api.post('/auth/login/', {
-      email_or_username: email,
-      password
-    });
+  // Register new user
+  async register(data: RegisterPayload): Promise<AuthResponse> {
+    const response = await api.post('auth/register/', data);
     return response.data;
   },
 
+  // Login user
+  async login(data: LoginPayload): Promise<AuthResponse> {
+    const response = await api.post('auth/login/', data);
+    return response.data;
+  },
 
   // Verify OTP
-  async verifyToken(email: string, otp: string): Promise<LoginResponse> {
-    const response = await api.post('/auth/verify-otp/', {
-      email,
-      otp
-    });
-    if (response.data.token) {
+  async verifyOTP(data: VerifyOTPPayload): Promise<AuthResponse> {
+    const response = await api.post('auth/verify-otp/', data);
+    
+    // Store token if login is successful
+    if (response.data.token && data.action === 'login') {
       localStorage.setItem('token', response.data.token);
     }
+    
     return response.data;
   },
 
-  // Resend OTP
-  async resendOTP(email: string): Promise<LoginResponse> {
-    const response = await api.post('/auth/resend-otp/', {
-      email,
-    });
+  async resendOTP(data: ResendOTPPayload): Promise<AuthResponse> {
+    const response = await api.post('/auth/resend-otp/', data);
     return response.data;
   },
 
-  // Register
-  async register(data: {email: string, password: string, fullName: string}):Promise<RegisterResponse> {
-    const response = await api.post('/auth/register/',data);
+  // Request password reset
+  async forgotPassword(email: string): Promise<AuthResponse> {
+    const response = await api.post('auth/forgot-password/', { email });
     return response.data;
   },
 
-  // Forgot password
-  async forgotPassword(email: string) {
-    const response = await api.post('/auth/forgot-password/', { email });
-    return response.data;
-  },
-
-  // Reset password
-  async resetPassword(email: string, otp: string, newPassword: string) {
-    const response = await api.post('/auth/reset-password/', {
-      email,
-      otp,
-      new_password: newPassword,
-    });
+  // Reset password with new password
+  async resetPassword(data: ResetPasswordPayload): Promise<AuthResponse> {
+    const response = await api.post('auth/reset-password/', data);
     return response.data;
   },
 
   // Logout
   async logout() {
     localStorage.removeItem('token');
-    await api.get('/auth/logout/');
-  },
+    await api.get('auth/logout/')
+  }
 };

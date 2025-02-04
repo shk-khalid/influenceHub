@@ -1,47 +1,47 @@
 import { z } from 'zod';
 
 export interface User {
-    email: string;
-    fullName: string;
-    location?: string;
-    bio?: string;
-    socialLinks?: {
-      instagram?: string;
-      twitter?: string;
-      youtube?: string;
-    };
-    isEmailVerified?: boolean;
-    isAdminVerified?: boolean;
-  }
-  
-  export interface AuthState {
-    user: User | null;
-    isAuthenticated: boolean;
-    isLoading: boolean;
-    error: string | null;
-  }
-  
-  export interface TwoFactorAuthProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onVerify: (code: string) => void;
-    onResend: () => void;
-    email: string;
-  }
-  
-  export interface AuthContextType extends AuthState {
-    register: (email: string, password: string, fullName: string) => Promise<{ success: boolean; error?: string }>;
-    login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-    verifyOTP: (email: string, otp: string) => Promise<{ success: boolean; error?: string }>;
-    resendOTP: (email: string) => Promise<{ success: boolean; error?: string }>;
-    forgotPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
-    resetPassword: (email: string, otp: string, password: string) => Promise<{ success: boolean; error?: string }>;
-    logout: () => Promise<void>;
-    updateUserDetails: (details: Partial<User>) => Promise<void>;
-  }
+  email: string;
+  fullName: string;
+  location?: string;
+  bio?: string;
+  profilePicture?: string;
+  socialLinks?: {
+    instagram?: string;
+    twitter?: string;
+    youtube?: string;
+  };
+  isEmailVerified?: boolean;
+  isAdminVerified?: boolean;
+}
 
+export interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+}
 
-// schema>auth.ts
+export interface TwoFactorAuthProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onVerify: (code: string) => void;
+  email: string;
+  onResend: (code: string) => void;
+}
+
+export interface AuthContextType extends AuthState {
+  register: (email: string, password: string, fullName: string) => Promise<{ success: boolean; error?: string }>;
+  verifyEmail: (token: string) => Promise<{ success: boolean; message?: string; error?: string }>;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  verifyOTP: (email: string, otp: string) => Promise<{ success: boolean; error?: string }>;
+  resendOTP: (email: string) => Promise<{ success: boolean; message?: string; error?: string }>;
+  logout: () => Promise<void>;
+  updateUserDetails: (details: Partial<User>) => Promise<void>;
+  forgotPassword: (email: string) => Promise<{ success: boolean; message?: string; error?: string }>;
+  resetPassword: (email: string, otp: string, newPassword: string) => Promise<{ success: boolean; message?: string; error?: string }>;
+}
+
 export const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),

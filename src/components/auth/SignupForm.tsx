@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
@@ -6,67 +5,46 @@ import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Card } from '../common/Card';
 import { PasswordStrengthMeter } from './PasswordStrength';
-import { calculatePasswordStrength } from '../../lib/PasswordStrength';
-import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
-import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
-import { EmailVerification } from './EmailVerification';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signupSchema, type SignupFormData } from '../types/auth';
+import toast from 'react-hot-toast';
 
 export function SignupForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [userName, setUserName] = useState('');
-  const [showEmailVerification, setShowEmailVerification] = useState(false);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { register } = useAuth();
+  const { register: registerUser } = useAuth();
   const navigate = useNavigate();
-  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      fullName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
+  const password = watch('password');
 
-    const { score } = calculatePasswordStrength(password);
-    if (score < 3) {
-      setError('Please choose a stronger password');
-      return;
-    }
-
-    setError('');
-    setIsLoading(true);
+  const onSubmit = async (data: SignupFormData) => {
     try {
-      const result = await register(email, password, userName);
-      if (result.success) {
-        setShowEmailVerification(true);
-      } else {
-        setError(result.error || 'Registration failed');
-      }
+      await registerUser(data.fullName, data.email, data.password, data.confirmPassword);
+      toast.success('Registration successful! Please check your email.');
+      navigate('/login');
     } catch (error) {
-      setError('An error occurred. Please try again');
-    } finally {
-      setIsLoading(false);
+      toast.error('Registration failed. Please try again.');
     }
-  };
-
-  const handleEmailVerification = () => {
-    setShowEmailVerification(false);
-    navigate('/login');
   };
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
       {/* Logo Section */}
       <div className="flex items-center justify-center mb-8 space-x-4">
-        <img
-          src={isDarkMode ? DesktopDarkLogo : DesktopLightLogo}
-          alt="Logo"
-          className="h-12"
-        />
         <span className="hidden lg:block text-2xl font-bold text-gray-900 dark:text-white">
           influenceHub
         </span>
@@ -83,24 +61,22 @@ export function SignupForm() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <Card className="p-8 shadow-lg rounded-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-md border border-gray-300/40 dark:border-gray-700/40">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <Input
-              label="User Name"
-              type="text"
-              required
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              icon={<User className="h-5 w-5 text-gray-400" />}
+              label="Email address"
+              type="email"
+              {...register('email')}
+              error={errors.email?.message}
+              icon={<Mail className="h-5 w-5 text-gray-400" />}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
 
             <Input
-              label="Email address"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              icon={<Mail className="h-5 w-5 text-gray-400" />}
+              label="Full Name"
+              type="text"
+              {...register('fullName')}
+              error={errors.fullName?.message}
+              icon={<User className="h-5 w-5 text-gray-400" />}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
 
@@ -108,9 +84,8 @@ export function SignupForm() {
               <Input
                 label="Password"
                 type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register('password')}
+                error={errors.password?.message}
                 icon={<Lock className="h-5 w-5 text-gray-400" />}
                 className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
               />
@@ -120,21 +95,15 @@ export function SignupForm() {
             <Input
               label="Confirm Password"
               type="password"
-              required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              error={error}
+              {...register('confirmPassword')}
+              error={errors.confirmPassword?.message}
               icon={<Lock className="h-5 w-5 text-gray-400" />}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
 
-            {error && (
-              <p className="text-sm text-red-500 dark:text-red-400">{error}</p>
-            )}
-
             <Button
               type="submit"
-              isLoading={isLoading}
+              isLoading={isSubmitting}
               icon={<ArrowRight className="h-5 w-5" />}
               className="w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
             >
@@ -167,12 +136,6 @@ export function SignupForm() {
           </div>
         </Card>
       </div>
-
-      <EmailVerification 
-        isOpen={showEmailVerification}
-        onClose={handleEmailVerification}
-        email={email}
-      />
     </div>
   );
 }

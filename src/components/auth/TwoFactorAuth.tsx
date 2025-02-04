@@ -5,7 +5,7 @@ import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import toast from 'react-hot-toast';
 
-export function TwoFactorAuth({ isOpen, onClose, onVerify,onResend, email }: TwoFactorAuthProps) {
+export function TwoFactorAuth({ isOpen, onClose, onVerify, onResend, email }: TwoFactorAuthProps) {
   const [code, setCode] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
   const [timeLeft, setTimeLeft] = useState(180); // Timer starts at 180 seconds (3 minutes)
@@ -27,6 +27,12 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify,onResend, email }: Two
       clearInterval(timerRef.current);
     }
   }, [timeLeft]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   const startTimer = () => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -76,8 +82,8 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify,onResend, email }: Two
       onVerify(fullCode); // Call the onVerify function passed as prop (handleTwoFactorVerify in LoginForm)
     } else {
       setError('Please enter a valid 6-digit code.');
-      setCode(['', '', '', '', '', '']); 
-      inputRefs.current[0]?.focus(); 
+      setCode(['', '', '', '', '', '']);
+      inputRefs.current[0]?.focus();
     }
   };
 
@@ -145,10 +151,6 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify,onResend, email }: Two
           <p className="text-center text-sm text-gray-600 dark:text-gray-300 mt-4">
             Code expires in: <span className="font-semibold">{formatTime(timeLeft)}</span>
           </p>
-
-          {error && (
-            <p className="text-red-500 text-sm text-center mt-4">{error}</p>
-          )}
 
           <Button type="submit" className="w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200">
             Verify Code

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sidebar } from './SideNav';
 import { Topbar } from './Topbar';
+import ChatBot from '../common/ChatBot';
 import { BottomNav } from './BottomNav';
 
 interface LayoutProps {

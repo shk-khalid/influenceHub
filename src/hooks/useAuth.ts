@@ -1,141 +1,99 @@
 import { useContext } from 'react';
-import { toast } from 'react-hot-toast';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  
+  const navigate = useNavigate();
+
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
 
-  const { register, login, verifyOTP, resendOTP, forgotPassword, resetPassword, logout, updateUserDetails, ...state } = context;
-
-  // Enhanced registration with toast
-  const handleRegister = async (email: string, password: string, fullName: string) => {
-    try{
-      const result = await register(email, password, fullName);
-      if (result.success) {
-        toast.success('Registration successful! Please verify your email.');
-      } else {
-        toast.error(result.error || 'Registration failed.');
-      }
-      return result;
+  const handleRegister = async (username: string, email: string, password: string, confirmPassword: string) => {
+    try {
+      await context.register(username, email, password, confirmPassword);
+      toast.success('Registration successful! Please check your email.');
+      navigate('/login');
     } catch (error) {
-      toast.error('An error occured during registration');
-      return { success: false, error: 'Registration failed' };
+      toast.error('Registration failed. Please try again.');
+    }
+  };
+
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      await context.login(email, password);
+      toast.success('OTP sent to your email.');
+      return true;
+    } catch (error) {
+      toast.error('Login failed. Please check your credentials.');
+      return false;
+    }
+  };
+
+  const handleVerifyOTP = async (email: string, otp: string, action: 'login' | 'forgot_password') => {
+    try {
+      await context.verifyOTP(email, otp, action);
+      if (action === 'login') {
+        toast.success('Login successful!');
+        navigate('/dashboard');
+      } else {
+        toast.success('OTP verified. Please set your new password.');
+      }
+    } catch (error) {
+      toast.error('Invalid OTP. Please try again.');
+    }
+  };
+
+  const handleResendOTP = async (email: string) => {
+    try {
+      await context.resendOTP(email);
+      toast.success("OTP resent");
+    } catch (error) {
+      toast.error('Failed to resend otp. Please try again.')
     }
   }
 
-  // Enhanced login with toast
-  const handleLogin = async (email: string, password: string) => {
-    try {
-      const result = await login(email, password);
-      if (result.success) {
-        toast.success('A one-time password (OTP) has been sent to your email address.');
-      } else {
-        toast.error(result.error || 'Login failed. Please try again.');
-      }
-      return result;
-    } catch (error) {
-      toast.error('There was an issue while logging you in. Please try again later.');
-      return { success: false, error: 'Login failed' };
-    }
-  };
-
-  // Enhanced OTP verification with toast
-  const handleVerifyOTP = async (email: string, otp: string) => {
-    try {
-      const result = await verifyOTP(email, otp);
-      if (result.success) {
-        toast.success('You are successfully logged in! Welcome back!');
-      } else {
-        toast.error(result.error || 'The OTP you entered is incorrect. Please try again.');
-      }
-      return result;
-    } catch (error) {
-      toast.error('Unable to verify the OTP at this time. Please try again later.');
-      return { success: false, error: 'OTP verification failed' };
-    }
-  };
-
-  // Resend OTP with toast
-  const handleResendOTP = async (email: string) => {
-    try {
-      const result = await resendOTP(email);
-      if (result.success) {
-        toast.success('We have sent a new OTP to your email. Please check your inbox!');
-      } else {
-        toast.error(result.error || 'There was an issue resending the OTP. Please try again.');
-      }
-      return result;
-    } catch (error) {
-      toast.error('Something went wrong while resending the OTP. Please try again later.');
-      return { success: false, error: 'Failed to resend OTP' };
-    }
-  };
-
   const handleForgotPassword = async (email: string) => {
     try {
-      const result = await forgotPassword(email);
-      if (result.success) {
-        toast.success('An OTP has been sent to your email. Please check your inbox.');
-      } else {
-        toast.error(result.error || 'Failed to send OTP.');
-      }
-      return result;
+      await context.forgotPassword(email);
+      toast.success('Reset instructions sent to your email.');
+      return true;
     } catch (error) {
-      toast.error('An error occurred while sending the OTP. Please try again.');
-      return { success: false, error: 'Failed to send OTP' };
+      toast.error('Failed to send reset instructions. Please try again.');
+      return false;
     }
   };
 
-  // Enhanced reset password with toast
-  const handleResetPassword = async (email: string, otp: string, newPassword: string) => {
+  const handleResetPassword = async (email: string, newPassword: string) => {
     try {
-      const result = await resetPassword(email, otp, newPassword);
-      if (result.success) {
-        toast.success('Your password has been successfully reset!');
-      } else {
-        toast.error(result.error || 'Failed to reset password.');
-      }
-      return result;
+      await context.resetPassword(email, newPassword);
+      toast.success('Password reset successful! Please login with your new password.');
+      navigate('/login');
     } catch (error) {
-      toast.error('An error occurred while resetting the password. Please try again.');
-      return { success: false, error: 'Failed to reset password' };
+      toast.error('Failed to reset password. Please try again.');
     }
   };
 
-  // Enhanced logout with toast
   const handleLogout = async () => {
     try {
-      await logout();
-      toast.success('You have successfully logged out. See you soon!');
+      await context.logout();
+      toast.success('Logged out successfully');
+      navigate('/login');
     } catch (error) {
-      toast.error('We encountered an issue while logging you out. Please try again.');
+      toast.error('Logout failed');
     }
   };
-
-  // Enhanced profile update with toast
-  const handleUpdateUserDetails = async (details: Parameters<typeof updateUserDetails>[0]) => {
-    try {
-      await updateUserDetails(details);
-      toast.success('Your profile has been successfully updated!');
-    } catch (error) {
-      toast.error('There was an issue updating your profile. Please try again.');
-    }
-  };
-
 
   return {
-    ...state,
+    ...context,
     register: handleRegister,
     login: handleLogin,
     verifyOTP: handleVerifyOTP,
     resendOTP: handleResendOTP,
-    logout: handleLogout,
-    updateUserDetails: handleUpdateUserDetails,
     forgotPassword: handleForgotPassword,
     resetPassword: handleResetPassword,
+    logout: handleLogout,
   };
 }

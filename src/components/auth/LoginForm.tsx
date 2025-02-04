@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { TwoFactorAuth } from './TwoFactorAuth';
@@ -6,71 +6,63 @@ import { useAuth } from '../../hooks/useAuth';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Card } from '../common/Card';
-import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
-import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, type LoginFormData } from '../types/auth';
+import toast from 'react-hot-toast';
 
 export function LoginForm() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [showTwoFactor, setShowTwoFactor] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const { login, verifyOTP, resendOTP } = useAuth();
-    const navigate = useNavigate();
-    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
+  const { login, verifyOTP, resendOTP } = useAuth();
+  const navigate = useNavigate();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    getValues,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
-        
-        try {
-            const result = await login(email, password);
-            if (result.success) {
-                setShowTwoFactor(true);
-            }
-        } catch (error) {
-            console.error('Login failed:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleTwoFactorVerify = async (code: string) => {
-        setIsLoading(true);
-        try {
-            const result = await verifyOTP(email, code);
-            if (result.success) {
-                setShowTwoFactor(false);
-                navigate('/dashboard');
-            }
-        } catch (error) {
-            console.error('2FA verification failed:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleOTPReset = async() => {
-      setIsLoading(true);
-      try {
-        await resendOTP(email);
-        console.log("OTP resent successfully");
-        } catch (error) {
-            console.error("Failed to resend OTP", error);
-        } finally {
-            setIsLoading(false);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const result = await login(data.email, data.password);
+      if (result) {
+        setShowTwoFactor(true);
       }
+    } catch (error) {
+      toast.error('Login failed. Please check your credentials.');
     }
+  };
+
+  const handleTwoFactorVerify = async (code: string) => {
+    try {
+      await verifyOTP(getValues('email'), code, 'login');
+      setShowTwoFactor(false);
+      navigate('/dashboard');
+    } catch (error) {
+      toast.error('Invalid OTP code. Please try again.');
+    }
+  };
+
+  const handleOTPReset = async () => {
+    try {
+      await resendOTP(getValues('email'));
+      toast.success('OTP code resent successfully');
+    } catch (error) {
+      toast.error('Failed to resend OTP code');
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
       {/* Logo Section */}
       <div className="flex items-center justify-center mb-8 space-x-4">
-        <img
-          src={isDarkMode ? DesktopDarkLogo : DesktopLightLogo}
-          alt="Logo"
-          className="h-12"
-        />
         <span className="hidden lg:block text-2xl font-bold text-gray-900 dark:text-white">
           influenceHub
         </span>
@@ -87,13 +79,12 @@ export function LoginForm() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <Card className="p-8 shadow-lg rounded-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-md border border-gray-300/40 dark:border-gray-700/40">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <Input
               label="Email address"
               type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...register('email')}
+              error={errors.email?.message}
               icon={<Mail className="h-5 w-5 text-gray-400" />}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
@@ -101,9 +92,8 @@ export function LoginForm() {
             <Input
               label="Password"
               type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              {...register('password')}
+              error={errors.password?.message}
               icon={<Lock className="h-5 w-5 text-gray-400" />}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />
@@ -119,7 +109,7 @@ export function LoginForm() {
 
             <Button
               type="submit"
-              isLoading={isLoading}
+              isLoading={isSubmitting}
               icon={<ArrowRight className="h-5 w-5" />}
               className="w-full bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
             >
@@ -159,7 +149,7 @@ export function LoginForm() {
         onClose={() => setShowTwoFactor(false)}
         onVerify={handleTwoFactorVerify}
         onResend={handleOTPReset}
-        email={email}
+        email={getValues('email')}
       />
     </div>
   );

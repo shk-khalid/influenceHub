@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { userService } from '../services/userService';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import InfluencerStats from '../components/profile/ProfileStats';
-import ProfilePicture from '../components/dashboard/ProfilePicture';
 import PersonalDetails from '../components/profile/PersonalDetails';
 import SocialLinkInput from '../components/common/SocialLinks';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Edit2, Save, X } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
+import toast from 'react-hot-toast';
 
 interface SocialLink {
   platform: string;
@@ -20,39 +22,110 @@ interface Language {
   level: 'Native' | 'Fluent' | 'Advanced' | 'Intermediate' | 'Basic';
 }
 
-export default function ProfileSetup() {
+interface UserStats {
+  followers: number;
+  rating: number;
+  campaignsCount: number;
+  countriesCount: number;
+}
+
+export default function Profile() {
+  const { user, updateUserDetails } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [profileImage, setProfileImage] = useState<string>('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400');
+  const [isLoading, setIsLoading] = useState(false);
+  const [stats, setStats] = useState<UserStats | null>(null);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([
-    { platform: 'instagram', url: 'https://instagram.com/johndoe' },
-    { platform: 'twitter', url: 'https://twitter.com/johndoe' },
-    { platform: 'youtube', url: 'https://youtube.com/@johndoe' },
+    { platform: 'instagram', url: user?.socialLinks?.instagram || '' },
+    { platform: 'twitter', url: user?.socialLinks?.twitter || '' },
+    { platform: 'youtube', url: user?.socialLinks?.youtube || '' },
   ]);
   const [isAvailableForCollabs, setIsAvailableForCollabs] = useState(true);
-  const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>(['Product Reviews', 'Brand Ambassadorship']);
-  const [customUrl, setCustomUrl] = useState('johndoe');
-  const [rating] = useState(4.8);
-  const [isVerified] = useState(true);
-  const [languages, setLanguages] = useState<Language[]>([
-    { id: '1', name: 'English', level: 'Native' },
-    { id: '2', name: 'Spanish', level: 'Fluent' },
-  ]);
+  const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
+  const [customUrl, setCustomUrl] = useState('');
+  const [isVerified] = useState(user?.isEmailVerified || false);
+  const [languages, setLanguages] = useState<Language[]>([]);
   const [personalInfo, setPersonalInfo] = useState({
-    fullName: 'John Doe',
-    location: 'New York, USA',
-    bio: 'Creative content creator passionate about storytelling and authentic brand partnerships.',
+    fullName: user?.fullName || '',
+    location: user?.location || '',
+    bio: user?.bio || '',
     niche: 'lifestyle',
   });
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+  // Fetch user stats
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const userStats = await userService.getUserStats();
+        setStats(userStats);
+      } catch (error) {
+        console.error('Failed to fetch user stats:', error);
+        toast.error('Failed to load profile statistics');
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  // Update state when user data changes
+  useEffect(() => {
+    if (user) {
+      setPersonalInfo({
+        fullName: user.fullName,
+        location: user.location || '',
+        bio: user.bio || '',
+        niche: 'lifestyle',
+      });
+
+      setSocialLinks([
+        { platform: 'instagram', url: user.socialLinks?.instagram || '' },
+        { platform: 'twitter', url: user.socialLinks?.twitter || '' },
+        { platform: 'youtube', url: user.socialLinks?.youtube || '' },
+      ]);
     }
+  }, [user]);
+
+  const handleSave = async () => {
+    setIsLoading(true);
+    try {
+      const updatedUserData = {
+        fullName: personalInfo.fullName,
+        location: personalInfo.location,
+        bio: personalInfo.bio,
+        socialLinks: {
+          instagram: socialLinks.find(link => link.platform === 'instagram')?.url,
+          twitter: socialLinks.find(link => link.platform === 'twitter')?.url,
+          youtube: socialLinks.find(link => link.platform === 'youtube')?.url,
+        }
+      };
+
+      await updateUserDetails(updatedUserData);
+      setIsEditing(false);
+      toast.success('Profile updated successfully!');
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+      toast.error('Failed to update profile. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    // Reset to original user data
+    if (user) {
+      setPersonalInfo({
+        fullName: user.fullName,
+        location: user.location || '',
+        bio: user.bio || '',
+        niche: 'lifestyle',
+      });
+
+      setSocialLinks([
+        { platform: 'instagram', url: user.socialLinks?.instagram || '' },
+        { platform: 'twitter', url: user.socialLinks?.twitter || '' },
+        { platform: 'youtube', url: user.socialLinks?.youtube || '' },
+      ]);
+    }
+    setIsEditing(false);
   };
 
   const updateSocialLink = (platform: string, url: string) => {
@@ -84,9 +157,15 @@ export default function ProfileSetup() {
     setPersonalInfo((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
-  };
+  if (!user) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-lg text-gray-600 dark:text-gray-400">Loading profile...</p>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -101,8 +180,8 @@ export default function ProfileSetup() {
                   variant="outline"
                   icon={<X className='w-5 h-5'/>}
                   className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400 transition-transform duration-200"
-                  onClick={() => setIsEditing(false)}
-                  
+                  onClick={handleCancel}
+                  disabled={isLoading}
                 >
                   Cancel
                 </Button>
@@ -111,6 +190,7 @@ export default function ProfileSetup() {
                   icon={<Save className='w-5 h-5'/>}
                   className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
                   onClick={handleSave}
+                  isLoading={isLoading}
                 >
                   Save Changes
                 </Button>
@@ -129,16 +209,12 @@ export default function ProfileSetup() {
         </div>
 
         {/* Influencer Stats */}
-        <InfluencerStats rating={rating} />
-
-        {/* Profile Picture */}
-        <div className="flex flex-col items-center space-y-4">
-          <ProfilePicture
-            image={profileImage}
-            onImageUpload={handleImageUpload}
-            isEditing={isEditing}
-          />
-        </div>
+        <InfluencerStats 
+          rating={stats?.rating || 0}
+          followers={stats?.followers || 0}
+          campaignsCount={stats?.campaignsCount || 0}
+          countriesCount={stats?.countriesCount || 0}
+        />
 
         {/* Personal Details */}
         <PersonalDetails

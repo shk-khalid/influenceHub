@@ -1,11 +1,12 @@
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 export function useAuth() {
   const context = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
@@ -37,7 +38,8 @@ export function useAuth() {
       await context.verifyOTP(email, otp, action);
       if (action === 'login') {
         toast.success('Login successful!');
-        navigate('/dashboard');
+        const from = (location.state as { from?: Location })?.from?.pathname || '/dashboard';
+        navigate(from, { replace: true });
       } else {
         toast.success('OTP verified. Please set your new password.');
       }

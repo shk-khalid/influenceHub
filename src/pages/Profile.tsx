@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
 import { userService } from '../services/userService';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import InfluencerStats from '../components/profile/ProfileStats';
 import PersonalDetails from '../components/profile/PersonalDetails';
+import ProfilePicture from '../components/profile/ProfilePicture';
 import SocialLinkInput from '../components/common/SocialLinks';
+import { Layout } from '../components/layout/Layout';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Edit2, Save, X } from 'lucide-react';
-import { Layout } from '../components/layout/Layout';
 import toast from 'react-hot-toast';
-
-interface SocialLink {
-  platform: string;
-  url: string;
-}
+import { isValidSocialUrl } from '../lib/SocialValidation';
+import { authService } from '../services/authService';
+import { User } from '../components/types/auth';
 
 interface Language {
   id: string;
@@ -22,51 +20,30 @@ interface Language {
   level: 'Native' | 'Fluent' | 'Advanced' | 'Intermediate' | 'Basic';
 }
 
-interface UserStats {
-  followers: number;
-  rating: number;
-  campaignsCount: number;
-  countriesCount: number;
-}
-
 export default function Profile() {
-  const { user, updateUserDetails } = useAuth();
+  const [user, setUser] = useState<User | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [stats, setStats] = useState<UserStats | null>(null);
-  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([
-    { platform: 'instagram', url: user?.socialLinks?.instagram || '' },
-    { platform: 'twitter', url: user?.socialLinks?.twitter || '' },
-    { platform: 'youtube', url: user?.socialLinks?.youtube || '' },
-  ]);
+  const [profileImage, setProfileImage] = useState<string | undefined>(user?.profilePicture);
+  const [socialLinks, setSocialLinks] = useState({
+    instagram: user?.socialLinks?.instagram || '',
+    twitter: user?.socialLinks?.twitter || '',
+    youtube: user?.socialLinks?.youtube || '',
+  });
   const [isAvailableForCollabs, setIsAvailableForCollabs] = useState(true);
-  const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
-  const [customUrl, setCustomUrl] = useState('');
-  const [isVerified] = useState(user?.isEmailVerified || false);
   const [languages, setLanguages] = useState<Language[]>([]);
   const [personalInfo, setPersonalInfo] = useState({
     fullName: user?.fullName || '',
     location: user?.location || '',
     bio: user?.bio || '',
-    niche: 'lifestyle',
+    niche: user?.niche || '',
   });
 
-  // Fetch user stats
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const userStats = await userService.getUserStats();
-        setStats(userStats);
-      } catch (error) {
-        console.error('Failed to fetch user stats:', error);
-        toast.error('Failed to load profile statistics');
-      }
-    };
-
-    fetchStats();
+    const currentUser = authService.getCurrentUser();
+    setUser(currentUser);
   }, []);
 
-  // Update state when user data changes
   useEffect(() => {
     if (user) {
       setPersonalInfo({
@@ -76,29 +53,39 @@ export default function Profile() {
         niche: 'lifestyle',
       });
 
-      setSocialLinks([
-        { platform: 'instagram', url: user.socialLinks?.instagram || '' },
-        { platform: 'twitter', url: user.socialLinks?.twitter || '' },
-        { platform: 'youtube', url: user.socialLinks?.youtube || '' },
-      ]);
+      setSocialLinks({
+        instagram: user.socialLinks?.instagram || '',
+        twitter: user.socialLinks?.twitter || '',
+        youtube: user.socialLinks?.youtube || '',
+      });
+
+      setProfileImage(user.profilePicture);
     }
   }, [user]);
 
   const handleSave = async () => {
     setIsLoading(true);
     try {
+      // Validate social links
+      const socialLinksValid = Object.entries(socialLinks).every(([platform, url]) =>
+        !url || isValidSocialUrl(platform, url)
+      );
+
+      if (!socialLinksValid) {
+        toast.error('Please check your social media URLs');
+        return;
+      }
+
       const updatedUserData = {
         fullName: personalInfo.fullName,
         location: personalInfo.location,
         bio: personalInfo.bio,
-        socialLinks: {
-          instagram: socialLinks.find(link => link.platform === 'instagram')?.url,
-          twitter: socialLinks.find(link => link.platform === 'twitter')?.url,
-          youtube: socialLinks.find(link => link.platform === 'youtube')?.url,
-        }
+        socialLinks,
+        profilePicture: profileImage,
       };
 
-      await updateUserDetails(updatedUserData);
+      const updatedUser = await userService.updateUserProfile(updatedUserData);
+      setUser(updatedUser);
       setIsEditing(false);
       toast.success('Profile updated successfully!');
     } catch (error) {
@@ -110,7 +97,6 @@ export default function Profile() {
   };
 
   const handleCancel = () => {
-    // Reset to original user data
     if (user) {
       setPersonalInfo({
         fullName: user.fullName,
@@ -119,29 +105,34 @@ export default function Profile() {
         niche: 'lifestyle',
       });
 
-      setSocialLinks([
-        { platform: 'instagram', url: user.socialLinks?.instagram || '' },
-        { platform: 'twitter', url: user.socialLinks?.twitter || '' },
-        { platform: 'youtube', url: user.socialLinks?.youtube || '' },
-      ]);
+      setSocialLinks({
+        instagram: user.socialLinks?.instagram || '',
+        twitter: user.socialLinks?.twitter || '',
+        youtube: user.socialLinks?.youtube || '',
+      });
+
+      if (user.profilePicture) {
+        setProfileImage(user.profilePicture);
+      }
     }
     setIsEditing(false);
   };
 
-  const updateSocialLink = (platform: string, url: string) => {
-    setSocialLinks((prev) =>
-      prev.map((link) =>
-        link.platform === platform ? { ...link, url } : link
-      )
-    );
-  };
+  const handleImageUpload = async (file: File) => {
+    if (!user) return;
 
-  const validateUrl = (url: string) => {
     try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
+      const updatedUser = await userService.uploadProfilePicture(user.id, file);
+      if (updatedUser) {
+        setUser(updatedUser);
+        setProfileImage(updatedUser.profilePicture);
+        toast.success('Profile picture updated!');
+      } else {
+        toast.error('Failed to update profile picture');
+      }
+    } catch (error) {
+      console.error('Failed to update profile picture:', error);
+      toast.error('Failed to update profile picture');
     }
   };
 
@@ -155,6 +146,13 @@ export default function Profile() {
 
   const handleUpdatePersonalInfo = (field: keyof typeof personalInfo, value: string) => {
     setPersonalInfo((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const updateSocialLink = (platform: keyof typeof socialLinks, url: string) => {
+    setSocialLinks((prev) => ({
+      ...prev,
+      [platform]: url,
+    }));
   };
 
   if (!user) {
@@ -172,25 +170,25 @@ export default function Profile() {
       <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-6">
-          <ProfileHeader isVerified={isVerified} personalInfo={personalInfo} />
+          <ProfileHeader isVerified={user.isEmailVerified || false} personalInfo={personalInfo} />
           <div className="flex gap-2 sm:gap-4 flex-wrap">
             {isEditing ? (
               <>
                 <Button
                   variant="outline"
-                  icon={<X className='w-5 h-5'/>}
-                  className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400 transition-transform duration-200"
+                  icon={<X className="w-5 h-5" />}
                   onClick={handleCancel}
                   disabled={isLoading}
+                  className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400"
                 >
                   Cancel
                 </Button>
                 <Button
-                  variant="primary"                
-                  icon={<Save className='w-5 h-5'/>}
-                  className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
+                  variant="primary"
+                  icon={<Save className="w-5 h-5" />}
                   onClick={handleSave}
                   isLoading={isLoading}
+                  className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400"
                 >
                   Save Changes
                 </Button>
@@ -198,9 +196,9 @@ export default function Profile() {
             ) : (
               <Button
                 variant="primary"
-                icon={<Edit2 className='w-5 h-5'/>}
-                className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
+                icon={<Edit2 className="w-5 h-5" />}
                 onClick={() => setIsEditing(true)}
+                className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400"
               >
                 Edit Profile
               </Button>
@@ -208,23 +206,25 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Influencer Stats */}
-        <InfluencerStats 
-          rating={stats?.rating || 0}
-          followers={stats?.followers || 0}
-          campaignsCount={stats?.campaignsCount || 0}
-          countriesCount={stats?.countriesCount || 0}
+        {/* Profile Picture */}
+        <ProfilePicture
+          imageUrl={profileImage}
+          onImageUpload={handleImageUpload}
+          isEditing={isEditing}
         />
+
+        {/* Influencer Stats */}
+        <InfluencerStats rating={4.8} />
 
         {/* Personal Details */}
         <PersonalDetails
-          isVerified={isVerified}
+          isVerified={user.isEmailVerified || false}
           isAvailableForCollabs={isAvailableForCollabs}
           setIsAvailableForCollabs={setIsAvailableForCollabs}
-          customUrl={customUrl}
-          setCustomUrl={setCustomUrl}
-          selectedCampaigns={selectedCampaigns}
-          setSelectedCampaigns={setSelectedCampaigns}
+          customUrl={''}
+          setCustomUrl={() => { }}
+          selectedCampaigns={[]}
+          setSelectedCampaigns={() => { }}
           languages={languages}
           onAddLanguage={handleAddLanguage}
           onRemoveLanguage={handleRemoveLanguage}
@@ -235,15 +235,17 @@ export default function Profile() {
 
         {/* Social Links */}
         <Card>
-          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6">Social Links</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
+            Social Links
+          </h2>
           <div className="space-y-4 sm:space-y-6 p-2">
-            {socialLinks.map(({ platform, url }) => (
+            {Object.entries(socialLinks).map(([platform, url]) => (
               <SocialLinkInput
                 key={platform}
                 platform={platform}
                 url={url}
-                onChange={(newUrl) => updateSocialLink(platform, newUrl)}
-                isValid={!url || validateUrl(url)}
+                onChange={(newUrl) => updateSocialLink(platform as keyof typeof socialLinks, newUrl)}
+                isValid={!url || isValidSocialUrl(platform, url)}
                 isEditing={isEditing}
               />
             ))}

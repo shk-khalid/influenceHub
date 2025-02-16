@@ -1,11 +1,7 @@
 import React, { createContext, useReducer, useEffect } from 'react';
 import { authService } from '../services/authService';
-
-interface User {
-  email: string;
-  username: string;
-}
-
+import { User } from '../components/types/auth'
+ 
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
@@ -18,15 +14,15 @@ interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
   verifyOTP: (email: string, otp: string, action: 'login' | 'forgot_password') => Promise<void>;
   resendOTP: (email: string) => Promise<void>;
-  forgotPassword: (email: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<boolean>;
   resetPassword: (email: string, newPassword: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
 const initialState: AuthState = {
-  user: null,
-  isAuthenticated: false,
-  isLoading: true,
+  user: authService.getCurrentUser(),
+  isAuthenticated: authService.isAuthenticated(),
+  isLoading: false,
   error: null,
 };
 
@@ -50,6 +46,8 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
     case 'LOGOUT':
       return {
         ...initialState,
+        user: null,
+        isAuthenticated: false,
         isLoading: false,
       };
     case 'SET_LOADING':
@@ -72,10 +70,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
+    const user = authService.getCurrentUser();
+    if (user) {
+      dispatch({ type: 'SET_USER', payload: user });
+    } else {
       dispatch({ type: 'SET_LOADING', payload: false });
-      return;
     }
   }, []);
 
@@ -95,11 +94,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const login = async (email_or_username: string, password: string) => {
+  const login = async (email: string, password: string) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       await authService.login({
-        email_or_username, 
+        email_or_username: email, 
         password
       });
       dispatch({ type: 'SET_LOADING', payload: false });
@@ -118,8 +117,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         action,
       });
       
-      if (response.token && action === 'login') {
-        dispatch({ type: 'SET_USER', payload: { email, username: email } });
+      if (response.user && action === 'login') {
+        dispatch({ type: 'SET_USER', payload: response.user });
       }
       dispatch({ type: 'SET_LOADING', payload: false });
     } catch (error) {
@@ -144,16 +143,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       dispatch({ type: 'SET_LOADING', payload: true });
       await authService.forgotPassword(email);
       dispatch({ type: 'SET_LOADING', payload: false });
+      return true;
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: 'Failed to send reset email' });
-      throw error;
+      return false;
     }
   };
 
   const resetPassword = async (email: string, newPassword: string) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
-      await authService.resetPassword({ email, new_password: newPassword });
+      const reset_token = authService.getToken();
+      if (!reset_token) {
+        throw new Error("Reset Token not found");
+      }
+      await authService.resetPassword({ email, new_password: newPassword, reset_token });
       dispatch({ type: 'SET_LOADING', payload: false });
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: 'Password reset failed' });

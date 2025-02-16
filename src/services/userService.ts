@@ -1,41 +1,48 @@
 import api from './api';
 import type { User } from '../components/types/auth';
+import { storageService } from './storageService';
 
 export const userService = {
-  // Get user profile
-  async getProfile(): Promise<User> {
-    const response = await api.get('/auth/view-profile/');
-    return response.data;
-  },
-
   // Update user profile
-  async updateProfile(data: Partial<User>): Promise<User> {
-    const response = await api.patch('/auth/update-profile/', data);
-    return response.data;
-  },
+  async updateUserProfile(data: Partial<User>): Promise<User | null> {
+    try {
+      const authToken = localStorage.getItem("authToken");
+      if (!authToken) throw new Error("No authentication token found!");
 
-  // Get user stats
-  async getUserStats(): Promise<{
-    followers: number;
-    rating: number;
-    campaignsCount: number;
-    countriesCount: number;
-  }> {
-    const response = await api.get('/auth/stats/');
-    return response.data;
+      const response = await api.patch('auth/update-profile/', data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${authToken}`,
+        },
+      });
+
+      const updatedUser = response.data;
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      return updatedUser;
+    } catch (error) {
+      console.error("Profile update failed:", error);
+      return null;
+    }
   },
 
   // Upload profile picture
-  async uploadProfilePicture(file: File): Promise<{ imageUrl: string }> {
-    const formData = new FormData();
-    formData.append('image', file);
+  async uploadProfilePicture(userId: string, file: File): Promise<User | null> {
+    try {
+      const imageUrl = await storageService.uploadProfilePicture(userId, file)
 
-    const response = await api.post('/auth/profile/picture/', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+      const response = await api.patch('auth/update-profile/', { profilePicture: imageUrl}, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Token ${localStorage.getItem('token')}`,
+        },
+      });
 
-    return response.data;
+      const updatedUser = response.data;
+      return updatedUser;
+    } catch (error) {
+      console.error("Profile picture updated failed: ", error);
+      return null
+    }
   }
-};
+ 
+}

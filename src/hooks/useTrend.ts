@@ -70,43 +70,34 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
     const state = get();
     if (state.isLoading) return;
 
-    const refreshPromise = new Promise<void>(async (resolve, reject) => {
-      set({ isLoading: true });
-      try {
-        // First, trigger the refresh endpoint
-        const refreshResponse = await trendService.refreshTrends();
-        
-        // Then immediately fetch the updated trends
-        const trendsResponse = await trendService.getTrends({
-          search: state.searchTerm,
-          category: state.selectedCategory,
-          page: state.page
-        });
+    try {
+      toast.loading('Refreshing trends...');
+      
+      // First, trigger the refresh endpoint
+      const refreshResponse = await trendService.refreshTrends();
+      
+      // Then immediately fetch the updated trends
+      const trendsResponse = await trendService.getTrends({
+        search: state.searchTerm,
+        category: state.selectedCategory,
+        page: state.page
+      });
 
-        // Update the store with new data
-        set({
-          trends: trendsResponse.results,
-          totalPages: Math.ceil(trendsResponse.count / 10),
-          isLoading: false
-        });
+      // Update the store with new data
+      set({
+        trends: trendsResponse.results,
+        totalPages: Math.ceil(trendsResponse.count / 10),
+        isLoading: false
+      });
 
-        toast.success(refreshResponse.message || 'Trends refreshed successfully');
-        resolve();
-      } catch (error) {
-        console.error('Error refreshing trends:', error);
-        toast.error('Failed to refresh trends');
-        set({ isLoading: false });
-        reject(error);
-      }
-    });
-
-    toast.promise(refreshPromise, {
-      loading: 'Refreshing trends...',
-      success: null,
-      error: null,
-    });
-
-    return refreshPromise;
+      toast.dismiss(); // Remove the loading toast
+      toast.success(refreshResponse.message || 'Trends refreshed successfully');
+    } catch (error) {
+      console.error('Error refreshing trends:', error);
+      toast.dismiss(); // Remove the loading toast
+      toast.error('Failed to refresh trends');
+      set({ isLoading: false });
+    }
   },
 
   filteredTrends: () => {

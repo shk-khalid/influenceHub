@@ -11,6 +11,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
+import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
+import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -37,6 +39,7 @@ export function ForgotPasswordForm() {
     const [step, setStep] = useState<'email' | 'reset'>('email');
     const navigate = useNavigate();
     const { forgotPassword, resetPassword, verifyOTP, resendOTP } = useAuth();
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     const {
         register: registerEmail,
@@ -107,6 +110,11 @@ export function ForgotPasswordForm() {
     return (
         <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
             <div className="flex items-center justify-center mb-8 space-x-4">
+                <img 
+                    src={isDarkMode? DesktopDarkLogo : DesktopLightLogo} 
+                    alt="Logo"
+                    className="h-12"
+                />
                 <span className="hidden lg:block text-2xl font-bold text-gray-900 dark:text-white">
                     influenceHub
                 </span>

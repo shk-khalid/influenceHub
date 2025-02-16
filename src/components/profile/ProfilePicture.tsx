@@ -2,17 +2,26 @@ import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Camera } from 'lucide-react';
 import { Card } from '../common/Card';
+import { storageService } from '../../services/storageService';
 import toast from 'react-hot-toast';
+import { useAuth } from '../../hooks/useAuth';
 
 interface ProfilePictureProps {
   imageUrl?: string;
-  onImageUpload: (file: File) => Promise<void>;
+  onImageUpload: (url: string) => Promise<void>;
   isEditing: boolean;
 }
 
 export default function ProfilePicture({ imageUrl, onImageUpload, isEditing }: ProfilePictureProps) {
+  const { user } = useAuth();
+  
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
+    if (!user?.email) {
+      toast.error('User not found');
+      return;
+    }
+
     if (file) {
       // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
@@ -27,13 +36,15 @@ export default function ProfilePicture({ imageUrl, onImageUpload, isEditing }: P
       }
 
       try {
-        await onImageUpload(file);
+        const downloadURL = await storageService.uploadProfilePicture(user.email, file);
+        await onImageUpload(downloadURL);
+        toast.success('Profile picture updated successfully');
       } catch (error) {
         console.error('Failed to upload image:', error);
         toast.error('Failed to upload image. Please try again.');
       }
     }
-  }, [onImageUpload]);
+  }, [user, onImageUpload]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

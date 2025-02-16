@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { sessionService } from './services/sessionService';
 // Components and Pages
 import { Dashboard } from './pages/Dashboard';
 import Profile from './pages/Profile';
@@ -12,10 +14,9 @@ import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
 import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
 import TrendingTopics from './pages/TrendingTopic';
-//import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 function ProtectedRouteWrapper({ children }: { children: JSX.Element }) {
-  const { isAuthenticated } = useAuth(); // Use your authentication context to check user status
+  const { isAuthenticated } = useAuth(); 
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
@@ -25,6 +26,16 @@ function ProtectedRouteWrapper({ children }: { children: JSX.Element }) {
 }
 
 function App() {
+  useEffect(() => {
+    // Initialize session monitoring
+    sessionService.init();
+
+    // Cleanup on component unmount
+    return () => {
+      sessionService.cleanup();
+    };
+  }, []);
+
   return (
     <Router>
       <Toaster position="top-right" /> {/* Toast notifications for the app */}

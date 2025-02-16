@@ -1,11 +1,14 @@
 import { z } from 'zod';
 
 export interface User {
+  id: string;
+  userName: string;
   email: string;
   fullName: string;
   location?: string;
   bio?: string;
   profilePicture?: string;
+  niche?: string;
   socialLinks?: {
     instagram?: string;
     twitter?: string;

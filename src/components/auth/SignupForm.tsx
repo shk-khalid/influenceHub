@@ -8,7 +8,6 @@ import { PasswordStrengthMeter } from './PasswordStrength';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema, type SignupFormData } from '../types/auth';
-import toast from 'react-hot-toast';
 import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
 import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
@@ -25,7 +24,7 @@ export function SignupForm() {
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      fullName: '',
+      userName: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -36,11 +35,10 @@ export function SignupForm() {
 
   const onSubmit = async (data: SignupFormData) => {
     try {
-      await registerUser(data.fullName, data.email, data.password, data.confirmPassword);
-      toast.success('Registration successful! Please check your email.');
+      await registerUser(data.userName, data.email, data.password, data.confirmPassword);
       navigate('/login');
     } catch (error) {
-      toast.error('Registration failed. Please try again.');
+      console.error('Registration failed. Please try again.');
     }
   };
 
@@ -80,10 +78,10 @@ export function SignupForm() {
             />
 
             <Input
-              label="Full Name"
+              label="User Name"
               type="text"
-              {...register('fullName')}
-              error={errors.fullName?.message}
+              {...register('userName')}
+              error={errors.userName?.message}
               icon={<User className="h-5 w-5 text-gray-400" />}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
             />

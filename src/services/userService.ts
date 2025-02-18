@@ -1,24 +1,25 @@
 import api from './api';
 import type { User } from '../components/types/auth';
-import { storageService } from './storageService';
+
+interface ProfilePictureUpdate {
+  profilePicture: string;
+}
+
+interface UserResponse {
+  message: string;
+  user: User;
+}
 
 export const userService = {
   // Update user profile
   async updateUserProfile(data: Partial<User>): Promise<User | null> {
     try {
-      const authToken = localStorage.getItem("authToken");
-      if (!authToken) throw new Error("No authentication token found!");
+      const response = await api.patch<UserResponse>('auth/update-profile/', data);
 
-      const response = await api.patch('auth/update-profile/', data, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${authToken}`,
-        },
-      });
-
-      const updatedUser = response.data;
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      return updatedUser;
+      const { user } = response.data;
+      // Update the user in localStorage with the response data
+      localStorage.setItem("user", JSON.stringify(user));
+      return user;
     } catch (error) {
       console.error("Profile update failed:", error);
       return null;
@@ -26,23 +27,17 @@ export const userService = {
   },
 
   // Upload profile picture
-  async uploadProfilePicture(userId: string, file: File): Promise<User | null> {
+  async uploadProfilePicture(data: ProfilePictureUpdate): Promise<User | null> {
     try {
-      const imageUrl = await storageService.uploadProfilePicture(userId, file)
+      const response = await api.patch<UserResponse>('auth/update-profile/', data);
 
-      const response = await api.patch('auth/update-profile/', { profilePicture: imageUrl}, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Token ${localStorage.getItem('token')}`,
-        },
-      });
-
-      const updatedUser = response.data;
-      return updatedUser;
+      const { user } = response.data;
+      // Update the user in localStorage with the response data
+      localStorage.setItem("user", JSON.stringify(user));
+      return user;
     } catch (error) {
-      console.error("Profile picture updated failed: ", error);
-      return null
+      console.error("Profile picture update failed: ", error);
+      return null;
     }
   }
- 
 }

@@ -12,13 +12,9 @@ import { Edit2, Save, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { isValidSocialUrl } from '../lib/SocialValidation';
 import { authService } from '../services/authService';
-import { User } from '../components/types/auth';
+import { User, Language } from '../components/types/auth';
 
-interface Language {
-  id: string;
-  name: string;
-  level: 'Native' | 'Fluent' | 'Advanced' | 'Intermediate' | 'Basic';
-}
+
 
 export default function Profile() {
   const [user, setUser] = useState<User | null>(null);
@@ -30,38 +26,40 @@ export default function Profile() {
     twitter: user?.socialLinks?.twitter || '',
     youtube: user?.socialLinks?.youtube || '',
   });
-  const [isAvailableForCollabs, setIsAvailableForCollabs] = useState(true);
-  const [languages, setLanguages] = useState<Language[]>([]);
+  const [languages, setLanguages] = useState<Language[]>(user?.language || []);
   const [personalInfo, setPersonalInfo] = useState({
+    userName: user?.userName || "Default User",
     fullName: user?.fullName || '',
     location: user?.location || '',
     bio: user?.bio || '',
     niche: user?.niche || '',
   });
 
-  useEffect(() => {
+  // Load user data from localStorage
+  const loadUserData = () => {
     const currentUser = authService.getCurrentUser();
-    setUser(currentUser);
-  }, []);
+    if (currentUser) {
+      setUser(currentUser);
+      setPersonalInfo({
+        userName: currentUser?.userName,
+        fullName: currentUser.fullName,
+        location: currentUser.location || '',
+        bio: currentUser.bio || '',
+        niche: currentUser.niche || 'Lifestyle',
+      });
+      setSocialLinks({
+        instagram: currentUser.socialLinks?.instagram || '',
+        twitter: currentUser.socialLinks?.twitter || '',
+        youtube: currentUser.socialLinks?.youtube || '',
+      });
+      setProfileImage(currentUser.profilePicture);
+      setLanguages(currentUser.language || []);
+    }
+  };
 
   useEffect(() => {
-    if (user) {
-      setPersonalInfo({
-        fullName: user.fullName,
-        location: user.location || '',
-        bio: user.bio || '',
-        niche: 'lifestyle',
-      });
-
-      setSocialLinks({
-        instagram: user.socialLinks?.instagram || '',
-        twitter: user.socialLinks?.twitter || '',
-        youtube: user.socialLinks?.youtube || '',
-      });
-
-      setProfileImage(user.profilePicture);
-    }
-  }, [user]);
+    loadUserData();
+  }, []);
 
   const handleSave = async () => {
     setIsLoading(true);
@@ -77,17 +75,24 @@ export default function Profile() {
       }
 
       const updatedUserData = {
+        userName: personalInfo.userName,
         fullName: personalInfo.fullName,
         location: personalInfo.location,
         bio: personalInfo.bio,
+        niche: personalInfo.niche,
         socialLinks,
         profilePicture: profileImage,
+        languages,
       };
 
       const updatedUser = await userService.updateUserProfile(updatedUserData);
-      setUser(updatedUser);
-      setIsEditing(false);
-      toast.success('Profile updated successfully!');
+      if (updatedUser) {
+        loadUserData(); // Reload user data from localStorage
+        setIsEditing(false);
+        toast.success('Profile updated successfully!');
+      } else {
+        toast.error('Failed to update profile');
+      }
     } catch (error) {
       console.error('Failed to update profile:', error);
       toast.error('Failed to update profile. Please try again.');
@@ -97,36 +102,18 @@ export default function Profile() {
   };
 
   const handleCancel = () => {
-    if (user) {
-      setPersonalInfo({
-        fullName: user.fullName,
-        location: user.location || '',
-        bio: user.bio || '',
-        niche: 'lifestyle',
-      });
-
-      setSocialLinks({
-        instagram: user.socialLinks?.instagram || '',
-        twitter: user.socialLinks?.twitter || '',
-        youtube: user.socialLinks?.youtube || '',
-      });
-
-      if (user.profilePicture) {
-        setProfileImage(user.profilePicture);
-      }
-    }
+    loadUserData(); // Reset to data from localStorage
     setIsEditing(false);
   };
 
-  const handleImageUpload = async (file: File) => {
-    if (!user) return;
-
+  const handleImageUpload = async (url: string) => {
     try {
-      const updatedUser = await userService.uploadProfilePicture(user.id, file);
+      const updatedUser = await userService.uploadProfilePicture({
+        profilePicture: url
+      });
       if (updatedUser) {
-        setUser(updatedUser);
-        setProfileImage(updatedUser.profilePicture);
-        toast.success('Profile picture updated!');
+        loadUserData(); // Reload user data from localStorage
+        toast.success('Profile picture updated successfully');
       } else {
         toast.error('Failed to update profile picture');
       }
@@ -170,7 +157,7 @@ export default function Profile() {
       <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-6">
-          <ProfileHeader isVerified={user.isEmailVerified || false} personalInfo={personalInfo} />
+          <ProfileHeader isVerified={user.isVerified || false} personalInfo={personalInfo} />
           <div className="flex gap-2 sm:gap-4 flex-wrap">
             {isEditing ? (
               <>
@@ -218,13 +205,7 @@ export default function Profile() {
 
         {/* Personal Details */}
         <PersonalDetails
-          isVerified={user.isEmailVerified || false}
-          isAvailableForCollabs={isAvailableForCollabs}
-          setIsAvailableForCollabs={setIsAvailableForCollabs}
-          customUrl={''}
-          setCustomUrl={() => { }}
-          selectedCampaigns={[]}
-          setSelectedCampaigns={() => { }}
+          isVerified={user.isVerified || false}
           languages={languages}
           onAddLanguage={handleAddLanguage}
           onRemoveLanguage={handleRemoveLanguage}

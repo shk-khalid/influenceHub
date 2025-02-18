@@ -10,7 +10,6 @@ import { useAuth } from '../../hooks/useAuth';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import toast from 'react-hot-toast';
 import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
 import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
@@ -66,10 +65,10 @@ export function ForgotPasswordForm() {
             const result = await forgotPassword(data.email);
             if (result) {
                 setShowTwoFactor(true);
-                toast.success('Reset instructions sent to your email');
+                
             }
         } catch (error) {
-            toast.error('Failed to send reset instructions');
+            console.error('Failed to send reset instructions; ', error);
         }
     };
 
@@ -77,10 +76,9 @@ export function ForgotPasswordForm() {
         try {
             const email = getEmailValues('email');
             await resetPassword(email, data.password);
-            toast.success('Password reset successful! Please login with your new password.');
             navigate('/login');
         } catch (error) {
-            toast.error('Failed to reset password');
+            console.error('Failed to reset password: ', error);
         }
     };
 
@@ -88,12 +86,11 @@ export function ForgotPasswordForm() {
         try {
             const email = getEmailValues('email');
             await verifyOTP(email, code, 'forgot_password');
-
             setShowTwoFactor(false);
             setStep('reset');
             
         } catch (error) {
-            toast.error('Invalid OTP code');
+            console.error('Invalid OTP code: ', error);
         }
     };
 
@@ -101,9 +98,8 @@ export function ForgotPasswordForm() {
         try {
             const email = getEmailValues('email');
             await resendOTP(email);
-            toast.success('OTP code resent successfully');
         } catch (error) {
-            toast.error('Failed to resend OTP code');
+            console.error('Failed to resend OTP code: ', error);
         }
     };
 

@@ -1,5 +1,5 @@
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { storage } from '../lib/Firebase';
+import { storage } from './firebase';
 
 export const storageService = {
   /**

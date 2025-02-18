@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+export interface Language {
+  id: string;
+  name: string;
+  level: 'Native' | 'Fluent' | 'Advanced' | 'Intermediate' | 'Basic';
+}
+
 export interface User {
   id: string;
   userName: string;
@@ -14,8 +20,8 @@ export interface User {
     twitter?: string;
     youtube?: string;
   };
-  isEmailVerified?: boolean;
-  isAdminVerified?: boolean;
+  language?: Language[];
+  isVerified?: boolean;
 }
 
 export interface AuthState {
@@ -35,7 +41,6 @@ export interface TwoFactorAuthProps {
 
 export interface AuthContextType extends AuthState {
   register: (email: string, password: string, fullName: string) => Promise<{ success: boolean; error?: string }>;
-  verifyEmail: (token: string) => Promise<{ success: boolean; message?: string; error?: string }>;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   verifyOTP: (email: string, otp: string) => Promise<{ success: boolean; error?: string }>;
   resendOTP: (email: string) => Promise<{ success: boolean; message?: string; error?: string }>;
@@ -51,7 +56,7 @@ export const loginSchema = z.object({
 });
 
 export const signupSchema = z.object({
-  fullName: z.string().min(2, 'Full name must be at least 2 characters'),
+  userName: z.string().min(2, 'Full name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   password: z.string()
     .min(8, 'Password must be at least 8 characters')

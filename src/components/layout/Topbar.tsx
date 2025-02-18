@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Bell, Sun, Moon, User, Settings as SettingsIcon, LogOut } from 'lucide-react';
+import {/*  Bell, */ Sun, Moon, User, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useThemeToggler } from '../../context/ThemeContext';
+import { useAuth } from '../../hooks/useAuth';
 import MobileLightLogo from '../../assets/logo/LightLogoOnly.png';
 import MobileDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
@@ -11,9 +12,10 @@ interface TopbarProps {
 
 export function Topbar({ sidebarCollapsed }: TopbarProps) {
   const { darkMode, toggleDarkMode } = useThemeToggler();
-  const [showNotifications, setShowNotifications] = useState(false);
+  //const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
+  const { logout } = useAuth();
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,11 +32,20 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
     navigate('/profile');
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+
   return (
     <header
-      className={`fixed top-0 right-0 z-30 h-16 glass-effect transition-all duration-300 shadow-glow ${
-        isDesktop ? (sidebarCollapsed ? 'left-20' : 'left-64') : 'left-0'
-      }`}
+      className={`fixed top-0 right-0 z-30 h-16 glass-effect transition-all duration-300 shadow-glow ${isDesktop ? (sidebarCollapsed ? 'left-20' : 'left-64') : 'left-0'
+        }`}
     >
       <div className="h-full px-4 flex items-center justify-between">
         {/* Logo Section */}
@@ -57,7 +68,7 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
 
-          <div className="relative">
+          {/* <div className="relative">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
               className="p-2 text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 rounded-xl hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-105"
@@ -81,7 +92,7 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
 
           <div className="relative">
             <button
@@ -115,11 +126,11 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
                     <User className="w-4 h-4 mr-2" />
                     View Profile
                   </button>
-                  <button className="w-full flex items-center px-3 py-2 text-sm text-gray-600 dark:text-gray-300 rounded-lg hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-200">
-                    <SettingsIcon className="w-4 h-4 mr-2" />
-                    Settings
-                  </button>
-                  <button className="w-full flex items-center px-3 py-2 text-sm text-red-600 dark:text-red-400 rounded-lg hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-200">
+
+                  <button
+                    className="w-full flex items-center px-3 py-2 text-sm text-red-600 dark:text-red-400 rounded-lg hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-200"
+                    onClick={handleLogout}
+                  >
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign out
                   </button>

@@ -9,7 +9,6 @@ import { Card } from '../common/Card';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginFormData } from '../types/auth';
-import toast from 'react-hot-toast';
 import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
 import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
@@ -39,7 +38,7 @@ export function LoginForm() {
         setShowTwoFactor(true);
       }
     } catch (error) {
-      toast.error('Login failed. Please check your credentials.');
+      console.error('Login failed: ', error);
     }
   };
 
@@ -49,16 +48,15 @@ export function LoginForm() {
       setShowTwoFactor(false);
       navigate('/dashboard');
     } catch (error) {
-      toast.error('Invalid OTP code. Please try again.');
+      console.error('Invalid OTP code: ', error);
     }
   };
 
   const handleOTPReset = async () => {
     try {
       await resendOTP(getValues('email'));
-      toast.success('OTP code resent successfully');
     } catch (error) {
-      toast.error('Failed to resend OTP code');
+      console.error("OTP Reset failed: ", error);
     }
   };
 

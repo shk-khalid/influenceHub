@@ -92,7 +92,7 @@ export function TwoFactorAuth({ isOpen, onClose, onVerify, onResend, email }: Tw
       setCode(['', '', '', '', '', '']);
       setError('');
       startTimer();
-      onResend();
+      onResend(email);
     } else {
       toast.error('Please wait until the timer expires before resending the code.');
     }

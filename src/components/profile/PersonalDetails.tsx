@@ -2,7 +2,6 @@ import { Card } from '../common/Card';
 import { Input } from '../common/Input';
 import { Select } from '../common/Select';
 import { TextArea } from '../common/TextArea';
-import Toggle from '../common/Toggle';
 import LanguageSection from './LanguageSection';
 
 interface Language {
@@ -13,12 +12,6 @@ interface Language {
 
 interface PersonalDetailsProps {
   isVerified: boolean;
-  isAvailableForCollabs: boolean;
-  setIsAvailableForCollabs: (value: boolean) => void;
-  customUrl: string;
-  setCustomUrl: (value: string) => void;
-  selectedCampaigns: string[];
-  setSelectedCampaigns: (campaigns: string[]) => void;
   languages: Language[];
   onAddLanguage: (language: Language) => void;
   onRemoveLanguage: (id: string) => void;
@@ -35,8 +28,6 @@ interface PersonalDetailsProps {
 
 
 export default function PersonalDetails({
-  isAvailableForCollabs,
-  setIsAvailableForCollabs,
   languages,
   onAddLanguage,
   onRemoveLanguage,
@@ -127,14 +118,12 @@ export default function PersonalDetails({
                 className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15] transition-transform duration-200"
                 options={[
                   { value: "", label: "Select your niche" },
-                  { value: "lifestyle", label: "Lifestyle" },
-                  { value: "tech", label: "Technology" },
+                  { value: "technology", label: "Technology" },
                   { value: "fashion", label: "Fashion & Beauty" },
                   { value: "fitness", label: "Fitness & Health" },
                   { value: "food", label: "Food & Cooking" },
                   { value: "travel", label: "Travel" },
                   { value: "gaming", label: "Gaming" },
-                  { value: "education", label: "Education" }
                 ]}
               >
               </Select>
@@ -156,23 +145,6 @@ export default function PersonalDetails({
             onRemoveLanguage={onRemoveLanguage}
             isEditing={isEditing}
           />
-        </div>
-        {/* Collaboration Toggle */}
-        <div className="md:col-span-2">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Available for Collaborations</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Let brands know if you're currently accepting new partnerships
-              </p>
-            </div>
-            <Toggle
-              enabled={isAvailableForCollabs}
-              onChange={setIsAvailableForCollabs}
-              className="ml-4"
-              disabled={!isEditing}
-            />
-          </div>
         </div>
       </div>
     </Card>

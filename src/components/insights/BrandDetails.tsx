@@ -5,6 +5,8 @@ import { MetricsCard } from './cards/MetricsCard';
 import { CompetitorsCard } from './cards/CompetitorCard';
 import { DemographicsCard } from './cards/DemographicsCard';
 import { ValueHistoryCard } from './cards/ValueHistoryCard';
+import { SocialStatsCard } from './cards/SocialStatsCard';
+import { SocialPostsCard } from './cards/SocialPostsCard';
 
 interface BrandDetailsProps {
   brand: BrandDetail;
@@ -37,12 +39,25 @@ export const BrandDetails: React.FC<BrandDetailsProps> = ({ brand, loading = fal
   return (
     <div className="space-y-6 animate-fadeIn">
       <BrandOverview brand={brand} />
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <MetricsCard brand={brand} />
+        {brand.performance_metrics && <MetricsCard brand={brand} />}
         <CompetitorsCard brand={brand} />
-        <DemographicsCard brand={brand} />
         <ValueHistoryCard brand={brand} />
+        <DemographicsCard brand={brand} />
+
+        {brand.social_stats && (
+          <>
+            <SocialStatsCard stats={brand.social_stats} />
+
+            {/* This div now spans two columns at md (≥768px) and above */}
+            <div className="col-span-1 md:col-span-2">
+              <SocialPostsCard posts={brand.social_stats.brand_posts} />
+            </div>
+          </>
+        )}
       </div>
     </div>
+
   );
 };

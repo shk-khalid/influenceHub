@@ -21,21 +21,24 @@ export const ValueHistoryCard: React.FC<ValueHistoryCardProps> = ({ brand }) => 
         <DollarSign className="w-6 h-6 text-green-600 dark:text-green-400" />
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Value History</h2>
       </div>
-      
+
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
+          <LineChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" />
             <YAxis />
-            <Tooltip 
+            <Tooltip
               formatter={(value: number) => `$${value}B`}
               labelFormatter={(year) => `Year ${year}`}
             />
-            <Line 
-              type="monotone" 
-              dataKey="amount" 
-              stroke="#10B981" 
+            <Line
+              type="monotone"
+              dataKey="amount"
+              stroke="#10B981"
               strokeWidth={2}
               dot={{ fill: '#10B981', strokeWidth: 2 }}
             />

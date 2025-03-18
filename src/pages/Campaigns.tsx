@@ -6,34 +6,35 @@ import SearchBar from '../components/campaigns/visuals/SearchBar';
 import CampaignOverview from '../components/campaigns/visuals/CampaignOverview';
 import { Layout } from '../components/layout/Layout';
 import { motion } from 'framer-motion';
-import type { CampaignStatus, Campaign } from '../components/types';
-import { mockCampaigns } from '../data/mockData';
+import type { CampaignStatus } from '../components/types';
 
 const Campaign: React.FC = () => {
-  const { setCampaigns, updateCampaignStatus, getFilteredCampaigns } = useCampaignStore();
+  const {
+    fetchCampaigns,
+    updateCampaignStatus,
+    getFilteredCampaigns,
+  } = useCampaignStore();
 
+  // Load dynamic data on mount
   useEffect(() => {
-    setCampaigns(mockCampaigns);
-  }, [setCampaigns]);
+    fetchCampaigns();
+  }, [fetchCampaigns]);
 
   const campaigns = getFilteredCampaigns();
 
-  const columns = useMemo(() => {
-    return {
-      pending: campaigns.filter((c) => c.status === 'pending'),
-      under_review: campaigns.filter((c) => c.status === 'under_review'),
-      in_progress: campaigns.filter((c) => c.status === 'in_progress'),
-      completed: campaigns.filter((c) => c.status === 'completed'),
-    };
-  }, [campaigns]);
+  const columns = useMemo(() => ({
+    pending: campaigns.filter((c) => c.status === 'pending'),
+    under_review: campaigns.filter((c) => c.status === 'under_review'),
+    in_progress: campaigns.filter((c) => c.status === 'in_progress'),
+    completed: campaigns.filter((c) => c.status === 'completed'),
+  }), [campaigns]);
 
-  const columnConfig: Record<CampaignStatus, { title: string; color: 'yellow' | 'blue' | 'green' | 'purple' }> =
-    {
-      pending: { title: 'Pending', color: 'yellow' },
-      under_review: { title: 'Under Review', color: 'blue' },
-      in_progress: { title: 'In Progress', color: 'green' },
-      completed: { title: 'Completed', color: 'purple' },
-    };
+  const columnConfig: Record<CampaignStatus, { title: string; color: 'yellow' | 'blue' | 'green' | 'purple' }> = {
+    pending: { title: 'Pending', color: 'yellow' },
+    under_review: { title: 'Under Review', color: 'blue' },
+    in_progress: { title: 'In Progress', color: 'green' },
+    completed: { title: 'Completed', color: 'purple' },
+  };
 
   const onDragEnd = (result: DropResult) => {
     const { destination, draggableId } = result;

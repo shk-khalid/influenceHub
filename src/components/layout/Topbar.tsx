@@ -44,7 +44,7 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
     }
   };
 
-  const userName = currentUser?.userName || "Default User";
+  const userName = currentUser?.username || "Default User";
   const userEmail = currentUser?.email || "";
   const profileImage = currentUser?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}`;
 

@@ -28,7 +28,7 @@ export default function Profile() {
   });
   const [languages, setLanguages] = useState<Language[]>(user?.languages || []);
   const [personalInfo, setPersonalInfo] = useState({
-    userName: user?.userName || "Default User",
+    userName: user?.username || "Default User",
     fullName: user?.fullName || '',
     location: user?.location || '',
     bio: user?.bio || '',
@@ -41,18 +41,18 @@ export default function Profile() {
     if (currentUser) {
       setUser(currentUser);
       setPersonalInfo({
-        userName: currentUser?.userName,
+        userName: currentUser?.username,
         fullName: currentUser.fullName,
         location: currentUser.location || '',
         bio: currentUser.bio || '',
-        niche: currentUser.niche || 'Lifestyle',
+        niche: currentUser.niche || 'Technology',
       });
       setSocialLinks({
         instagram: currentUser.socialLinks?.instagram || '',
         twitter: currentUser.socialLinks?.twitter || '',
         youtube: currentUser.socialLinks?.youtube || '',
       });
-      setProfileImage(currentUser.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.userName)}`);
+      setProfileImage(currentUser.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.username)}`);
       setLanguages(currentUser.languages || []);
     }
   };
@@ -75,7 +75,7 @@ export default function Profile() {
       }
 
       const updatedUserData = {
-        userName: personalInfo.userName,
+        username: personalInfo.userName,
         fullName: personalInfo.fullName,
         location: personalInfo.location,
         bio: personalInfo.bio,

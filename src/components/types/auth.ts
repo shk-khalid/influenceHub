@@ -8,7 +8,7 @@ export interface Language {
 
 export interface User {
   id: string;
-  userName: string;
+  username: string;
   email: string;
   fullName: string;
   location?: string;

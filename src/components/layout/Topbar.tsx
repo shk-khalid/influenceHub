@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import {/*  Bell, */ Sun, Moon, User, LogOut } from 'lucide-react';
+import {/*  Bell, */ Sun, Moon, User as UserIcon, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useThemeToggler } from '../../context/ThemeContext';
 import { useAuth } from '../../hooks/useAuth';
+import { authService } from '../../services/authService';
+import type { User } from '../types/auth';
 import MobileLightLogo from '../../assets/logo/LightLogoOnly.png';
 import MobileDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 
@@ -16,6 +18,9 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
   const [showProfile, setShowProfile] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
   const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const currentUser: User | null = authService.getCurrentUser();
 
   useEffect(() => {
     const handleResize = () => {
@@ -25,8 +30,6 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const navigate = useNavigate();
 
   const handleClick = () => {
     navigate('/profile');
@@ -41,6 +44,9 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
     }
   };
 
+  const userName = currentUser?.userName || "Default User";
+  const userEmail = currentUser?.email || "";
+  const profileImage = currentUser?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}`;
 
   return (
     <header
@@ -101,29 +107,33 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
             >
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=faces"
+                  src={profileImage}
                   alt="Profile"
                   className="w-8 h-8 rounded-lg object-cover transition-transform duration-200 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 rounded-lg ring-2 ring-indigo-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               </div>
               <span className="hidden md:block text-sm font-medium text-gray-700 dark:text-gray-200">
-                John Doe
+                {userName}
               </span>
             </button>
 
             {showProfile && (
               <div className="absolute right-0 mt-2 w-56 glass-effect rounded-xl shadow-glow-lg animate-slide-up">
                 <div className="p-3 border-b border-white/10 dark:border-gray-800/50">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">John Doe</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">john@example.com</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {userName}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {userEmail}
+                  </p>
                 </div>
                 <div className="p-2">
                   <button
                     className="w-full flex items-center px-3 py-2 text-sm text-gray-600 dark:text-gray-300 rounded-lg hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-200"
                     onClick={handleClick}
                   >
-                    <User className="w-4 h-4 mr-2" />
+                    <UserIcon className="w-4 h-4 mr-2" />
                     View Profile
                   </button>
 

@@ -1,21 +1,25 @@
 import api from './api';
 import type { User } from '../components/types/auth';
 
-interface ProfilePictureUpdate {
-  profilePicture: string;
-}
-
 interface UserResponse {
   message: string;
   user: User;
 }
 
 export const userService = {
-  // Update user profile
-  async updateUserProfile(data: Partial<User>): Promise<User | null> {
+  // Update user profile (supports FormData)
+  async updateUserProfile(data: Partial<User> | FormData): Promise<User | null> {
     try {
-      const response = await api.patch<UserResponse>('auth/update-profile/', data);
-
+      let response;
+      if (data instanceof FormData) {
+        response = await api.patch<UserResponse>('auth/update-profile/', data, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+      } else {
+        response = await api.patch<UserResponse>('auth/update-profile/', data);
+      }
       const { user } = response.data;
       // Update the user in localStorage with the response data
       localStorage.setItem("user", JSON.stringify(user));
@@ -25,19 +29,4 @@ export const userService = {
       return null;
     }
   },
-
-  // Upload profile picture
-  async uploadProfilePicture(data: ProfilePictureUpdate): Promise<User | null> {
-    try {
-      const response = await api.patch<UserResponse>('auth/update-profile/', data);
-
-      const { user } = response.data;
-      // Update the user in localStorage with the response data
-      localStorage.setItem("user", JSON.stringify(user));
-      return user;
-    } catch (error) {
-      console.error("Profile picture update failed: ", error);
-      return null;
-    }
-  }
-}
+};

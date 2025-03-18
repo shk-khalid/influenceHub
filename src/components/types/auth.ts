@@ -20,7 +20,7 @@ export interface User {
     twitter?: string;
     youtube?: string;
   };
-  language?: Language[];
+  languages?: Language[];
   isVerified?: boolean;
 }
 

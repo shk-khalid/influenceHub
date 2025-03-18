@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Campaign } from '../types';
 import { format } from 'date-fns';
 
@@ -6,7 +5,7 @@ interface CampaignTableProps {
   campaigns: Campaign[];
 }
 
-export const CampaignTable: React.FC<CampaignTableProps> = ({ campaigns }) => {
+export function CampaignTable ({ campaigns }: CampaignTableProps) {
   return (
     <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800">
       <table className="w-full text-sm text-left border-collapse text-gray-700 dark:text-gray-300">

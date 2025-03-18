@@ -85,9 +85,10 @@ function App() {
             <Route
               path="/insights"
               element={
-                <ProtectedRouteWrapper>
+                /* <ProtectedRouteWrapper>
                   <Insights />
-                </ProtectedRouteWrapper>
+                </ProtectedRouteWrapper> */
+                <Insights />
               }
             />
 

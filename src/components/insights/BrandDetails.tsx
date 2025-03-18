@@ -13,7 +13,7 @@ interface BrandDetailsProps {
   loading?: boolean;
 }
 
-export const BrandDetails: React.FC<BrandDetailsProps> = ({ brand, loading = false }) => {
+export function BrandDetails ({ brand, loading = false }: BrandDetailsProps) {
   if (loading) {
     return (
       <div className="space-y-6 animate-fadeIn">

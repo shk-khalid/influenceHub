@@ -26,7 +26,7 @@ export default function Profile() {
     twitter: user?.socialLinks?.twitter || '',
     youtube: user?.socialLinks?.youtube || '',
   });
-  const [languages, setLanguages] = useState<Language[]>(user?.language || []);
+  const [languages, setLanguages] = useState<Language[]>(user?.languages || []);
   const [personalInfo, setPersonalInfo] = useState({
     userName: user?.userName || "Default User",
     fullName: user?.fullName || '',
@@ -52,8 +52,8 @@ export default function Profile() {
         twitter: currentUser.socialLinks?.twitter || '',
         youtube: currentUser.socialLinks?.youtube || '',
       });
-      setProfileImage(currentUser.profilePicture);
-      setLanguages(currentUser.language || []);
+      setProfileImage(currentUser.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.userName)}`);
+      setLanguages(currentUser.languages || []);
     }
   };
 
@@ -81,7 +81,6 @@ export default function Profile() {
         bio: personalInfo.bio,
         niche: personalInfo.niche,
         socialLinks,
-        profilePicture: profileImage,
         languages,
       };
 
@@ -106,11 +105,12 @@ export default function Profile() {
     setIsEditing(false);
   };
 
-  const handleImageUpload = async (url: string) => {
+  const handleImageUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append("profilePicture", file);
+
     try {
-      const updatedUser = await userService.uploadProfilePicture({
-        profilePicture: url
-      });
+      const updatedUser = await userService.updateUserProfile(formData)
       if (updatedUser) {
         loadUserData(); // Reload user data from localStorage
         toast.success('Profile picture updated successfully');

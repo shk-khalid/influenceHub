@@ -1,7 +1,7 @@
 import { Loader2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { TrendCard } from './TrendingCard';
-import { Trend } from '../types';
+import { Trend } from '../types/trend';
 
 interface TrendListProps {
   trends: Trend[];

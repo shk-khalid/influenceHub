@@ -1,3 +1,5 @@
+export type TrendCategory = 'all' | 'technology' | 'food' | 'fashion' | 'fitness' | 'travel' | 'gaming';
+
 export interface Trend {
   id: number;
   name: string;
@@ -6,11 +8,12 @@ export interface Trend {
   region: string;
   growth: number;
   sentiment: number;
-  last_updated: string;
+  created_at: string;
+  popularity: number;
+  num_comments: number;
+  image_url: string | null;
+  subreddit: string;
 }
-
-export type TrendCategory = 'all' | 'technology' | 'food' | 'fashion' | 'fitness' | 'travel' | 'gaming';
-export type SortOption = 'latest' | 'growth' | 'volume';
 
 export interface TrendState {
   trends: Trend[];
@@ -21,3 +24,5 @@ export interface TrendState {
   selectedCategory: TrendCategory;
   sortBy: SortOption;
 }
+
+export type SortOption = 'latest' | 'growth' | 'volume';

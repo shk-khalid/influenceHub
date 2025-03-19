@@ -20,12 +20,32 @@ export default function TrendingTopics() {
     refresh,
     isLoading,
     fetchTrends,
-    filteredTrends
+    silentRefresh,
+    filteredTrends,
   } = useTrendStore();
 
+  // Fetch trends on component mount (or whenever fetchTrends changes)
   useEffect(() => {
     fetchTrends();
   }, [fetchTrends]);
+
+  // Scroll to top whenever the page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [page]);
+
+useEffect(() => {
+  // Fetch once on mount
+  silentRefresh();
+
+  // Set up a 15-minute interval (900000 ms)
+  const interval = setInterval(() => {
+    silentRefresh();
+  }, 900000);
+
+  // Clean up on unmounta
+  return () => clearInterval(interval);
+}, [silentRefresh]);
 
   const trends = filteredTrends();
 
@@ -42,7 +62,11 @@ export default function TrendingTopics() {
             animate={{ scale: 1, y: 0 }}
             className="absolute -top-4 left-1/2 -translate-x-1/2 w-48 h-48 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl"
           />
-          <motion.h1 className="text-6xl font-bold gradient-text mb-4 relative" initial={{ y: 20 }} animate={{ y: 0 }}>
+          <motion.h1
+            className="text-6xl font-bold gradient-text mb-4 relative"
+            initial={{ y: 20 }}
+            animate={{ y: 0 }}
+          >
             Trend Analysis Dashboard
           </motion.h1>
           <motion.p

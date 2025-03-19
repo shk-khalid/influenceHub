@@ -10,6 +10,7 @@ interface TrendStore extends TrendState {
   setPage: (page: number) => void;
   refresh: () => Promise<void>;
   fetchTrends: () => Promise<void>;
+  silentRefresh: () => Promise<void>;   // <--- NEW
   filteredTrends: () => Trend[];
 }
 
@@ -42,6 +43,7 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
     get().fetchTrends();
   },
 
+  // Regular fetch with toasts on error
   fetchTrends: async () => {
     const state = get();
     if (state.isLoading) return;
@@ -51,13 +53,13 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
       const response = await trendService.getTrends({
         search: state.searchTerm,
         category: state.selectedCategory,
-        page: state.page
+        page: state.page,
       });
 
       set({
         trends: response.results,
         totalPages: Math.ceil(response.count / 10),
-        isLoading: false
+        isLoading: false,
       });
     } catch (error) {
       console.error('Error fetching trends:', error);
@@ -66,43 +68,74 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
     }
   },
 
+  // Manual refresh with toasts
   refresh: async () => {
     const state = get();
     if (state.isLoading) return;
 
     try {
       toast.loading('Refreshing trends...');
-      
+
       // First, trigger the refresh endpoint
       const refreshResponse = await trendService.refreshTrends();
-      
-      // Then immediately fetch the updated trends
+
+      // Then fetch updated data
       const trendsResponse = await trendService.getTrends({
         search: state.searchTerm,
         category: state.selectedCategory,
-        page: state.page
+        page: state.page,
       });
 
-      // Update the store with new data
       set({
         trends: trendsResponse.results,
         totalPages: Math.ceil(trendsResponse.count / 10),
-        isLoading: false
+        isLoading: false,
       });
 
-      toast.dismiss(); // Remove the loading toast
+      toast.dismiss();
       toast.success(refreshResponse.message || 'Trends refreshed successfully');
     } catch (error) {
       console.error('Error refreshing trends:', error);
-      toast.dismiss(); // Remove the loading toast
+      toast.dismiss();
       toast.error('Failed to refresh trends');
       set({ isLoading: false });
     }
   },
 
+  // NEW: Silent refresh, no toasts
+  silentRefresh: async () => {
+    const state = get();
+    if (state.isLoading) return;
+
+    set({ isLoading: true });
+    try {
+      // 1) Call refresh endpoint
+      await trendService.refreshTrends();
+
+      // 2) Then fetch updated data
+      const trendsResponse = await trendService.getTrends({
+        search: state.searchTerm,
+        category: state.selectedCategory,
+        page: state.page,
+      });
+
+      set({
+        trends: trendsResponse.results,
+        totalPages: Math.ceil(trendsResponse.count / 10),
+        isLoading: false,
+      });
+      console.log("sucess refreshing silently");
+    } catch (error) {
+      console.error('Silent refresh error:', error);
+      set({ isLoading: false });
+      // No toast calls here
+    }
+  },
+
+  // Sort the in-memory data
   filteredTrends: () => {
     const { trends, sortBy } = get();
-    
+
     return [...trends].sort((a, b) => {
       switch (sortBy) {
         case 'growth':
@@ -110,7 +143,7 @@ export const useTrendStore = create<TrendStore>((set, get) => ({
         case 'volume':
           return b.volume - a.volume;
         default: // 'latest'
-          return new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime();
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       }
     });
   },

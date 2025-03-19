@@ -42,10 +42,21 @@ export function TrendFilters({
   isLoading
 }: TrendFiltersProps) {
   return (
-    <div className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-lg rounded-2xl 
-                    shadow-lg dark:shadow-gray-900/30 p-4 sm:p-6 space-y-4
-                    border border-gray-200/50 dark:border-gray-700/50">
-      {/* Search and Sort Section */}
+    <div
+      className="
+        mb-8 
+        bg-white/80 dark:bg-gray-800/50 
+        backdrop-blur-lg 
+        rounded-xl 
+        shadow-lg dark:shadow-gray-900/30 
+        p-4 sm:p-6 
+        space-y-4 
+        border border-gray-200/50 dark:border-gray-700/50 
+        transition-shadow 
+        hover:shadow-xl
+      "
+    >
+      {/* Search and Refresh Section */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Input
@@ -54,13 +65,12 @@ export function TrendFilters({
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             icon={<Search className="h-5 w-5 text-gray-400" />}
-            className="focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-transform duration-200"
+            className="focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-colors duration-200"
           />
           {searchTerm && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 
-                       text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -92,10 +102,10 @@ export function TrendFilters({
               variant={selectedCategory === category.value ? 'primary' : 'outline'}
               onClick={() => onCategoryChange(category.value)}
               className={cn(
-                "transition-transform duration-200",
+                'transition-transform duration-200',
                 selectedCategory === category.value
-                  ? "bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400"
-                  : "border-teal-500 hover:bg-teal-400 dark:border-rose-400 dark:hover:bg-rose-500"
+                  ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400'
+                  : 'border-teal-500 hover:bg-teal-400 dark:border-rose-400 dark:hover:bg-rose-500'
               )}
             >
               {category.label}
@@ -117,10 +127,10 @@ export function TrendFilters({
               variant={sortBy === option.value ? 'primary' : 'outline'}
               onClick={() => onSortChange(option.value as SortOption)}
               className={cn(
-                "transition-transform duration-200",
+                'transition-transform duration-200',
                 sortBy === option.value
-                  ? "bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400"
-                  : "border-teal-500 hover:bg-teal-400 dark:border-rose-400 dark:hover:bg-rose-500"
+                  ? 'bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400'
+                  : 'border-teal-500 hover:bg-teal-400 dark:border-rose-400 dark:hover:bg-rose-500'
               )}
             >
               {option.label}

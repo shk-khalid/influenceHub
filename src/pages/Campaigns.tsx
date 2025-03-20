@@ -6,22 +6,21 @@ import SearchBar from '../components/campaigns/visuals/SearchBar';
 import CampaignOverview from '../components/campaigns/visuals/CampaignOverview';
 import { Layout } from '../components/layout/Layout';
 import { motion } from 'framer-motion';
-import type { CampaignStatus } from '../components/types';
+import type { CampaignStatus } from '../components/types/campaign';
 
 const Campaign: React.FC = () => {
-  const {
-    fetchCampaigns,
-    updateCampaignStatus,
-    getFilteredCampaigns,
-  } = useCampaignStore();
+  const { fetchCampaigns, updateCampaignStatus, getFilteredCampaigns } = useCampaignStore();
 
-  // Load dynamic data on mount
+  // Fetch campaigns on mount
   useEffect(() => {
     fetchCampaigns();
   }, [fetchCampaigns]);
 
+  // Subscribe directly to the store’s filtered campaigns.
+  // When a new campaign is added (or status changes), the store updates and triggers a re-render.
   const campaigns = getFilteredCampaigns();
 
+  // Create columns from the filtered campaigns for immediate feedback.
   const columns = useMemo(() => ({
     pending: campaigns.filter((c) => c.status === 'pending'),
     under_review: campaigns.filter((c) => c.status === 'under_review'),
@@ -38,9 +37,11 @@ const Campaign: React.FC = () => {
 
   const onDragEnd = (result: DropResult) => {
     const { destination, draggableId } = result;
-    if (destination) {
-      updateCampaignStatus(draggableId, destination.droppableId as CampaignStatus);
-    }
+    if (!destination) return;
+
+    // Update the store directly. The store’s updateCampaignStatus
+    // should update the campaigns state, which in turn triggers a re-render.
+    updateCampaignStatus(draggableId, destination.droppableId as CampaignStatus);
   };
 
   return (
@@ -56,7 +57,11 @@ const Campaign: React.FC = () => {
             animate={{ scale: 1, y: 0 }}
             className="absolute -top-4 left-1/2 -translate-x-1/2 w-48 h-48 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl"
           />
-          <motion.h1 className="text-6xl font-bold gradient-text mb-4 relative" initial={{ y: 20 }} animate={{ y: 0 }}>
+          <motion.h1 
+            className="text-6xl font-bold gradient-text mb-4 relative" 
+            initial={{ y: 20 }} 
+            animate={{ y: 0 }}
+          >
             Campaign Overview
           </motion.h1>
           <motion.p

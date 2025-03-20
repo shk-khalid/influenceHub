@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { Campaign, CampaignStatus } from '../components/types';
+import toast from 'react-hot-toast';
+import { Campaign, CampaignStatus } from '../components/types/campaign';
 import { campaignService } from '../services/campaignService';
 
 interface Filters {
@@ -47,7 +48,9 @@ export const useCampaignStore = create<CampaignStore>((set, get) => ({
       const campaigns = await campaignService.getAllCampaigns();
       set({ campaigns });
     } catch (error) {
-      set({ error: error instanceof Error ? error.message : 'Failed to fetch Campaigns.' });
+      const message = error instanceof Error ? error.message : 'Failed to fetch campaigns.';
+      set({ error: message });
+      toast.error(message);
     } finally {
       set({ isLoading: false });
     }
@@ -60,10 +63,14 @@ export const useCampaignStore = create<CampaignStore>((set, get) => ({
       set((state) => ({
         campaigns: state.campaigns.map((campaign) =>
           campaign.id === id ? { ...campaign, status } : campaign
-        )
+        ),
       }));
+      toast.success('Campaign status updated successfully!');
     } catch (error) {
-      set({ error: error instanceof Error ? error.message : "Failed to update Campaign status." });
+      const message =
+        error instanceof Error ? error.message : 'Failed to update campaign status.';
+      set({ error: message });
+      toast.error(message);
     } finally {
       set({ isLoading: false });
     }
@@ -76,8 +83,11 @@ export const useCampaignStore = create<CampaignStore>((set, get) => ({
       set((state) => ({
         campaigns: [...state.campaigns, newCampaign],
       }));
+      toast.success('Campaign created successfully!');
     } catch (error) {
-      set({ error: error instanceof Error ? error.message : "Failed to create Campaign." });
+      const message = error instanceof Error ? error.message : 'Failed to create campaign.';
+      set({ error: message });
+      toast.error(message);
     } finally {
       set({ isLoading: false });
     }
@@ -90,12 +100,16 @@ export const useCampaignStore = create<CampaignStore>((set, get) => ({
       set((state) => ({
         campaigns: state.campaigns.map((c) =>
           c.id === campaign.id ? updatedCampaign : c
-        )
+        ),
       }));
+      toast.success('Campaign updated successfully!');
     } catch (error) {
-      set({error: error instanceof Error ? error.message: "Failed to update campaign"});
+      const message =
+        error instanceof Error ? error.message : 'Failed to update campaign.';
+      set({ error: message });
+      toast.error(message);
     } finally {
-      set({isLoading: false});
+      set({ isLoading: false });
     }
   },
 
@@ -109,23 +123,26 @@ export const useCampaignStore = create<CampaignStore>((set, get) => ({
 
     return campaigns
       .filter((campaign) => {
-        const matchesSearch = !filters.search
-          || campaign.title.toLowerCase().includes(filters.search.toLowerCase())
-          || campaign.brand.toLowerCase().includes(filters.search.toLowerCase());
+        const matchesSearch =
+          !filters.search ||
+          campaign.title.toLowerCase().includes(filters.search.toLowerCase());
 
-        const matchesPlatform = !filters.platform
-          || campaign.platforms?.includes(filters.platform);
+        const matchesPlatform =
+          !filters.platform ||
+          campaign.platform?.includes(filters.platform);
 
-        const matchesPriority = !filters.priority
-          || campaign.priority === filters.priority;
+        const matchesPriority =
+          !filters.priority || campaign.priority === filters.priority;
 
-        const matchesBudget = !filters.budgetRange || (() => {
-          const [min, max] = filters.budgetRange.split('-').map(Number);
-          if (filters.budgetRange === '5000+') {
-            return (campaign.budget ?? 0) >= 5000;
-          }
-          return (campaign.budget ?? 0) >= min && (campaign.budget ?? 0) <= max;
-        })();
+        const matchesBudget =
+          !filters.budgetRange ||
+          (() => {
+            const [min, max] = filters.budgetRange.split('-').map(Number);
+            if (filters.budgetRange === '5000+') {
+              return (campaign.budget ?? 0) >= 5000;
+            }
+            return (campaign.budget ?? 0) >= min && (campaign.budget ?? 0) <= max;
+          })();
 
         return matchesSearch && matchesPlatform && matchesPriority && matchesBudget;
       })
@@ -136,12 +153,19 @@ export const useCampaignStore = create<CampaignStore>((set, get) => ({
 
         switch (filters.sortBy) {
           case 'date':
-            return (new Date(a.startDate).getTime() - new Date(b.startDate).getTime()) * direction;
+            return (
+              (new Date(a.startDate).getTime() - new Date(b.startDate).getTime()) *
+              direction
+            );
           case 'budget':
             return ((a.budget ?? 0) - (b.budget ?? 0)) * direction;
           case 'priority': {
             const priorityWeight = { high: 3, medium: 2, low: 1 };
-            return ((priorityWeight[a.priority || 'low'] - priorityWeight[b.priority || 'low']) * direction);
+            return (
+              (priorityWeight[a.priority || 'low'] -
+                priorityWeight[b.priority || 'low']) *
+              direction
+            );
           }
           default:
             return 0;

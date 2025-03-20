@@ -156,7 +156,7 @@ export function TrendCard({ trend }: TrendCardProps) {
   );
 }
 
-/* -------------------- StatItem Component -------------------- */
+{/* StatItem Component */}
 interface StatItemProps {
   icon: React.ElementType;
   label: string;

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { Save, X } from 'lucide-react';
+import { Dialog, DialogTitle } from '@headlessui/react';
+import { X, Save } from 'lucide-react';
 import { useCampaignStore } from '../../../hooks/useCampaign';
-import { Campaign } from '../../types';
+import { Campaign, PriorityLevel, PlatformChoice } from '../../types/campaign';
 import { Button } from '../../common/Button';
 import { Input } from '../../common/Input';
 import { Card } from '../../common/Card';
+import { Select } from '../../common/Select';
 
 interface CreateCampaignModalProps {
   isOpen: boolean;
@@ -16,15 +17,12 @@ export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignM
   const addCampaign = useCampaignStore((state) => state.addCampaign);
   const [formData, setFormData] = useState({
     title: '',
-    brand: '',
     description: '',
     startDate: '',
     endDate: '',
     budget: '',
-    platforms: [] as string[],
-    goals: [] as string[],
-    deliverables: [] as string[],
-    requirements: [] as string[],
+    priority: 'medium' as PriorityLevel,
+    platforms: 'instagram' as PlatformChoice,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -33,6 +31,7 @@ export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignM
       id: Date.now().toString(),
       ...formData,
       budget: parseInt(formData.budget),
+      priority: formData.priority,
       status: 'pending',
     };
     addCampaign(campaign);
@@ -41,13 +40,14 @@ export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignM
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      {/* Blurry backdrop */}
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Card className="mx-auto max-w-2xl w-full p-8 shadow-lg rounded-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-md border border-gray-300/40 dark:border-gray-700/40">
-          <div className="flex items-center justify-between mb-6">
-            <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+        <Card className="mx-auto w-full max-w-md p-6 shadow-lg rounded-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-md border border-gray-300/40 dark:border-gray-700/40">
+          <div className="flex items-center justify-between mb-4">
+            <DialogTitle className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
               Create New Campaign
-            </Dialog.Title>
+            </DialogTitle>
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-gray-500 transition duration-150 ease-in-out"
@@ -55,7 +55,7 @@ export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignM
               <X className="h-6 w-6" />
             </button>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="Campaign Title"
               type="text"
@@ -64,14 +64,36 @@ export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignM
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
             />
-            <Input
-              label="Brand"
-              type="text"
-              required
-              value={formData.brand}
-              onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <Select
+                label="Priority"
+                value={formData.priority}
+                onChange={(e) =>
+                  setFormData({ ...formData, priority: e.target.value as PriorityLevel })
+                }
+                options={[
+                  { value: 'low', label: 'Low' },
+                  { value: 'medium', label: 'Medium' },
+                  { value: 'high', label: 'High' },
+                ]}
+                className="focus:ring-2 focus:ring-indigo-600 flex-1"
+              />
+              <Select
+                label="Platform"
+                value={formData.platforms}
+                onChange={(e) =>
+                  setFormData({ ...formData, platforms: e.target.value as PlatformChoice })
+                }
+                options={[
+                  { value: 'instagram', label: 'Instagram' },
+                  { value: 'youtube', label: 'Youtube' },
+                  { value: 'facebook', label: 'Facebook' },
+                  { value: 'discord', label: 'Discord' },
+                  { value: 'twitter', label: 'Twitter' },
+                ]}
+                className="focus:ring-2 focus:ring-indigo-600 flex-1"
+              />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <Input
                 label="Start Date"
@@ -96,6 +118,14 @@ export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignM
               required
               value={formData.budget}
               onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+              className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
+            />
+            <Input
+              label="Description"
+              type="text"
+              required
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               className="focus:ring-2 focus:ring-[#2563eb] dark:focus:ring-[#facc15]"
             />
             <div className="flex justify-end space-x-4">

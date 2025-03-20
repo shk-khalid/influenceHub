@@ -4,7 +4,6 @@ import { BrandDetails } from '../components/insights/BrandDetails';
 import { Brand } from '../components/types/brand';
 import { ArrowLeft } from 'lucide-react';
 import { useBrandService } from '../hooks/useBrand';
-import { Layout } from '../components/layout/Layout';
 
 export const Insights: React.FC = () => {
   const {
@@ -26,30 +25,27 @@ export const Insights: React.FC = () => {
 
   if (error) {
     return (
-      <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 
                       dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 
                       transition-colors duration-500">
-          <div className="max-w-7xl mx-auto px-4 py-8">
-            <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 
                          rounded-xl p-6 text-center">
-              <p className="text-red-600 dark:text-red-400 mb-4">{error.message}</p>
-              <button
-                onClick={fetchBrands}
-                className="px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-lg
+            <p className="text-red-600 dark:text-red-400 mb-4">{error.message}</p>
+            <button
+              onClick={fetchBrands}
+              className="px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-lg
                        hover:bg-red-700 dark:hover:bg-red-600 transition-colors"
-              >
-                Try Again
-              </button>
-            </div>
+            >
+              Try Again
+            </button>
           </div>
         </div>
-      </Layout>
+      </div>
     );
   }
 
   return (
-    <Layout>
     <div className="min-h-screen transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {selectedBrand ? (
@@ -76,6 +72,5 @@ export const Insights: React.FC = () => {
         )}
       </div>
     </div>
-    </Layout>
   );
 };

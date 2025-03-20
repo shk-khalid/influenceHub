@@ -5,7 +5,6 @@ import InfluencerStats from '../components/profile/ProfileStats';
 import PersonalDetails from '../components/profile/PersonalDetails';
 import ProfilePicture from '../components/profile/ProfilePicture';
 import SocialLinkInput from '../components/common/SocialLinks';
-import { Layout } from '../components/layout/Layout';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Edit2, Save, X } from 'lucide-react';
@@ -144,95 +143,91 @@ export default function Profile() {
 
   if (!user) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center min-h-screen">
-          <p className="text-lg text-gray-600 dark:text-gray-400">Loading profile...</p>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg text-gray-600 dark:text-gray-400">Loading profile...</p>
+      </div>
     );
   }
 
   return (
-    <Layout>
-      <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
-        {/* Header Section */}
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-6">
-          <ProfileHeader isVerified={user.isVerified || false} personalInfo={personalInfo} />
-          <div className="flex gap-2 sm:gap-4 flex-wrap">
-            {isEditing ? (
-              <>
-                <Button
-                  variant="outline"
-                  icon={<X className="w-5 h-5" />}
-                  onClick={handleCancel}
-                  disabled={isLoading}
-                  className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="primary"
-                  icon={<Save className="w-5 h-5" />}
-                  onClick={handleSave}
-                  isLoading={isLoading}
-                  className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400"
-                >
-                  Save Changes
-                </Button>
-              </>
-            ) : (
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-6">
+        <ProfileHeader isVerified={user.isVerified || false} personalInfo={personalInfo} />
+        <div className="flex gap-2 sm:gap-4 flex-wrap">
+          {isEditing ? (
+            <>
+              <Button
+                variant="outline"
+                icon={<X className="w-5 h-5" />}
+                onClick={handleCancel}
+                disabled={isLoading}
+                className="border-teal-500 hover:bg-teal-400 focus:ring-teal-500 dark:border-rose-400 dark:hover:bg-rose-500 dark:focus:ring-rose-400"
+              >
+                Cancel
+              </Button>
               <Button
                 variant="primary"
-                icon={<Edit2 className="w-5 h-5" />}
-                onClick={() => setIsEditing(true)}
+                icon={<Save className="w-5 h-5" />}
+                onClick={handleSave}
+                isLoading={isLoading}
                 className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400"
               >
-                Edit Profile
+                Save Changes
               </Button>
-            )}
-          </div>
+            </>
+          ) : (
+            <Button
+              variant="primary"
+              icon={<Edit2 className="w-5 h-5" />}
+              onClick={() => setIsEditing(true)}
+              className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400"
+            >
+              Edit Profile
+            </Button>
+          )}
         </div>
-
-        {/* Profile Picture */}
-        <ProfilePicture
-          imageUrl={profileImage}
-          onImageUpload={handleImageUpload}
-          isEditing={isEditing}
-        />
-
-        {/* Influencer Stats */}
-        <InfluencerStats rating={4.8} />
-
-        {/* Personal Details */}
-        <PersonalDetails
-          isVerified={user.isVerified || false}
-          languages={languages}
-          onAddLanguage={handleAddLanguage}
-          onRemoveLanguage={handleRemoveLanguage}
-          isEditing={isEditing}
-          personalInfo={personalInfo}
-          onUpdatePersonalInfo={handleUpdatePersonalInfo}
-        />
-
-        {/* Social Links */}
-        <Card>
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
-            Social Links
-          </h2>
-          <div className="space-y-4 sm:space-y-6 p-2">
-            {Object.entries(socialLinks).map(([platform, url]) => (
-              <SocialLinkInput
-                key={platform}
-                platform={platform}
-                url={url}
-                onChange={(newUrl) => updateSocialLink(platform as keyof typeof socialLinks, newUrl)}
-                isValid={!url || isValidSocialUrl(platform, url)}
-                isEditing={isEditing}
-              />
-            ))}
-          </div>
-        </Card>
       </div>
-    </Layout>
+
+      {/* Profile Picture */}
+      <ProfilePicture
+        imageUrl={profileImage}
+        onImageUpload={handleImageUpload}
+        isEditing={isEditing}
+      />
+
+      {/* Influencer Stats */}
+      <InfluencerStats rating={4.8} />
+
+      {/* Personal Details */}
+      <PersonalDetails
+        isVerified={user.isVerified || false}
+        languages={languages}
+        onAddLanguage={handleAddLanguage}
+        onRemoveLanguage={handleRemoveLanguage}
+        isEditing={isEditing}
+        personalInfo={personalInfo}
+        onUpdatePersonalInfo={handleUpdatePersonalInfo}
+      />
+
+      {/* Social Links */}
+      <Card>
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
+          Social Links
+        </h2>
+        <div className="space-y-4 sm:space-y-6 p-2">
+          {Object.entries(socialLinks).map(([platform, url]) => (
+            <SocialLinkInput
+              key={platform}
+              platform={platform}
+              url={url}
+              onChange={(newUrl) => updateSocialLink(platform as keyof typeof socialLinks, newUrl)}
+              isValid={!url || isValidSocialUrl(platform, url)}
+              isEditing={isEditing}
+            />
+          ))}
+        </div>
+      </Card>
+    </div>
   );
 }

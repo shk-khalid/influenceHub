@@ -14,6 +14,7 @@ import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
 import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
 import TrendingTopics from './pages/TrendingTopic';
+import { Layout } from './components/layout/Layout';
 
 function ProtectedRouteWrapper({ children }: { children: JSX.Element }) {
   const { isAuthenticated } = useAuth();
@@ -38,66 +39,33 @@ function App() {
 
   return (
     <Router>
-      <Toaster position="top-right" /> {/* Toast notifications for the app */}
+      <Toaster position="top-right" />
       <AuthProvider>
         <Routes>
-          {/* Protected Routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRouteWrapper>
-                <Dashboard />
-              </ProtectedRouteWrapper>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRouteWrapper>
-                <Profile />
-              </ProtectedRouteWrapper>
-            }
-          />
-          <Route
-            path="/campaigns"
-            element={
-              <ProtectedRouteWrapper>
-                <Campaign />
-              </ProtectedRouteWrapper>
-            }
-          />
-          <Route
-            path="/match"
-            element={
-              <ProtectedRouteWrapper>
-                <BrandMatchingDashboard />
-              </ProtectedRouteWrapper>
-            }
-          />
-          <Route
-            path="/analytics"
-            element={
-              <ProtectedRouteWrapper>
-                <TrendingTopics />
-              </ProtectedRouteWrapper>
-            }
-          />
-          <Route
-            path="/insights"
-            element={
-              <ProtectedRouteWrapper>
-                <Insights />
-              </ProtectedRouteWrapper>
-            }
-          />
-
-          {/* Authentication Routes */}
+          {/* Authentication Routes (Outside Layout) */}
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/forgot" element={<ForgotPasswordForm />} />
 
-          {/* Default Fallback Route */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          {/* Protected Routes with Layout */}
+          <Route
+            path="/*"
+            element={
+              <ProtectedRouteWrapper>
+                <Layout>
+                  <Routes>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/campaigns" element={<Campaign />} />
+                    <Route path="/match" element={<BrandMatchingDashboard />} />
+                    <Route path="/analytics" element={<TrendingTopics />} />
+                    <Route path="/insights" element={<Insights />} />
+                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                  </Routes>
+                </Layout>
+              </ProtectedRouteWrapper>
+            }
+          />
         </Routes>
       </AuthProvider>
     </Router>

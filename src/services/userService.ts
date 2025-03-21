@@ -6,6 +6,14 @@ interface UserResponse {
   user: User;
 }
 
+interface InstagramStatsResponse {
+  message: string;
+  result: {
+    insta_id: string | null;
+    media_count: number;
+  };
+}
+
 export const userService = {
   // Update user profile (supports FormData)
   async updateUserProfile(data: Partial<User> | FormData): Promise<User | null> {
@@ -29,4 +37,16 @@ export const userService = {
       return null;
     }
   },
+
+  async fetchInstagramStats(socialLinks: { instagram: string }): Promise<InstagramStatsResponse> {
+    try {
+      const response = await api.post<InstagramStatsResponse>('auth/get-stats/', { socialLinks });
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      }
+      throw new Error('Failed to fetch Instagram stats');
+    }
+  }
 };

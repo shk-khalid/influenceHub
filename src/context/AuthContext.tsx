@@ -1,17 +1,16 @@
-import React, { createContext, useReducer, useEffect } from 'react';
+import React, { createContext, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 import { authService } from '../services/authService';
-import { User } from '../components/types/auth'
- 
-interface AuthState {
+import { User } from '../components/types/auth';
+import { setUser, setLoading, setError, clearUser } from '../slices/userSlice';
+
+interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-}
-
-interface AuthContextType extends AuthState {
-  register: (username: string, email: string, password: string, confirmPassword: string) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
+  register: (username: string, email: string, password: string, password_confirmation: string) => Promise<void>;
+  login: (email_or_username: string, password: string) => Promise<boolean>;
   verifyOTP: (email: string, otp: string, action: 'login' | 'forgot_password') => Promise<void>;
   resendOTP: (email: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<boolean>;
@@ -19,148 +18,105 @@ interface AuthContextType extends AuthState {
   logout: () => Promise<void>;
 }
 
-const initialState: AuthState = {
-  user: authService.getCurrentUser(),
-  isAuthenticated: authService.isAuthenticated(),
-  isLoading: false,
-  error: null,
-};
-
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-type AuthAction =
-  | { type: 'SET_USER'; payload: User }
-  | { type: 'LOGOUT' }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string | null };
-
-function authReducer(state: AuthState, action: AuthAction): AuthState {
-  switch (action.type) {
-    case 'SET_USER':
-      return {
-        ...state,
-        user: action.payload,
-        isAuthenticated: true,
-        isLoading: false,
-      };
-    case 'LOGOUT':
-      return {
-        ...initialState,
-        user: null,
-        isAuthenticated: false,
-        isLoading: false,
-      };
-    case 'SET_LOADING':
-      return {
-        ...state,
-        isLoading: action.payload,
-      };
-    case 'SET_ERROR':
-      return {
-        ...state,
-        error: action.payload,
-        isLoading: false,
-      };
-    default:
-      return state;
-  }
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(authReducer, initialState);
+  const dispatch = useAppDispatch();
+  const { user, isLoading, error } = useAppSelector(state => state.user);
 
   useEffect(() => {
-    const user = authService.getCurrentUser();
-    if (user) {
-      dispatch({ type: 'SET_USER', payload: user });
-    } else {
-      dispatch({ type: 'SET_LOADING', payload: false });
+    const token = authService.getToken();
+    if (token) {
+      const currentUser = authService.getCurrentUser();
+      if (currentUser) {
+        dispatch(setUser(currentUser));
+      }
     }
-  }, []);
+    dispatch(setLoading(false));
+  }, [dispatch]);
 
-  const register = async (username: string, email: string, password: string, confirmPassword: string) => {
+  const register = async (
+    username: string,
+    email: string,
+    password: string,
+    password_confirmation: string
+  ) => {
     try {
-      dispatch({ type: 'SET_LOADING', payload: true });
+      dispatch(setLoading(true));
       await authService.register({
         username,
         email,
         password,
-        password_confirmation: confirmPassword,
+        password_confirmation,
       });
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch(setLoading(false));
     } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: 'Registration failed' });
+      dispatch(setError('Registration failed'));
       throw error;
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (email_or_username: string, password: string) => {
     try {
-      dispatch({ type: 'SET_LOADING', payload: true });
-      await authService.login({
-        email_or_username: email, 
-        password
-      });
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch(setLoading(true));
+      await authService.login({ email_or_username, password });
+      dispatch(setLoading(false));
+      return true;
     } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: 'Login failed' });
-      throw error;
+      dispatch(setError('Login failed'));
+      return false;
     }
   };
 
   const verifyOTP = async (email: string, otp: string, action: 'login' | 'forgot_password') => {
     try {
-      dispatch({ type: 'SET_LOADING', payload: true });
-      const response = await authService.verifyOTP({
-        email,
-        otp,
-        action,
-      });
+      dispatch(setLoading(true));
+      const response = await authService.verifyOTP({ email, otp, action });
       
-      if (response.user && action === 'login') {
-        dispatch({ type: 'SET_USER', payload: response.user });
+      if (action === 'login' && response.user) {
+        dispatch(setUser(response.user));
       }
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch(setLoading(false));
     } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: 'OTP verification failed' });
+      dispatch(setError('OTP verification failed'));
       throw error;
     }
   };
 
   const resendOTP = async (email: string) => {
     try {
-      dispatch({ type: 'SET_LOADING', payload: true });
-      await authService.resendOTP({email});
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch(setLoading(true));
+      await authService.resendOTP({ email });
+      dispatch(setLoading(false));
     } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: 'Failed to resend OTP' });
+      dispatch(setError('Failed to resend OTP'));
       throw error;
     }
   };
 
   const forgotPassword = async (email: string) => {
     try {
-      dispatch({ type: 'SET_LOADING', payload: true });
+      dispatch(setLoading(true));
       await authService.forgotPassword(email);
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch(setLoading(false));
       return true;
     } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: 'Failed to send reset email' });
+      dispatch(setError('Failed to send reset email'));
       return false;
     }
   };
 
   const resetPassword = async (email: string, newPassword: string) => {
     try {
-      dispatch({ type: 'SET_LOADING', payload: true });
+      dispatch(setLoading(true));
       const reset_token = authService.getToken();
       if (!reset_token) {
-        throw new Error("Reset Token not found");
+        throw new Error('Reset token not found');
       }
       await authService.resetPassword({ email, new_password: newPassword, reset_token });
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch(setLoading(false));
     } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: 'Password reset failed' });
+      dispatch(setError('Password reset failed'));
       throw error;
     }
   };
@@ -168,26 +124,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       await authService.logout();
-      dispatch({ type: 'LOGOUT' });
+      dispatch(clearUser());
     } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: 'Logout failed' });
+      dispatch(setError('Logout failed'));
       throw error;
     }
   };
 
+  const value = {
+    user,
+    isAuthenticated: !!user && !!authService.getToken(),
+    isLoading,
+    error,
+    register,
+    login,
+    verifyOTP,
+    resendOTP,
+    forgotPassword,
+    resetPassword,
+    logout,
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        ...state,
-        register,
-        login,
-        verifyOTP,
-        resendOTP,
-        forgotPassword,
-        resetPassword,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

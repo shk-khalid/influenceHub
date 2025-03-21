@@ -1,5 +1,7 @@
 import api from './api';
 import type { User } from '../components/types/auth';
+import { store } from '../hooks/useReduxStore';
+import { updateUserDetails } from '../slices/userSlice';
 
 interface UserResponse {
   message: string;
@@ -29,8 +31,9 @@ export const userService = {
         response = await api.patch<UserResponse>('auth/update-profile/', data);
       }
       const { user } = response.data;
-      // Update the user in localStorage with the response data
-      localStorage.setItem("user", JSON.stringify(user));
+      // Update the user in sessionStorage with the response data
+      sessionStorage.setItem("user", JSON.stringify(user));
+      store.dispatch(updateUserDetails(user));
       return user;
     } catch (error) {
       console.error("Profile update failed:", error);

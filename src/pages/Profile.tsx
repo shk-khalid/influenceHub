@@ -261,7 +261,7 @@ export default function Profile() {
               Social Links
             </h2>
             <Button
-              variant="outline"
+              variant="primary"
               icon={<RefreshCw className={`w-5 h-5 ${isFetchingStats ? 'animate-spin' : ''}`} />}
               onClick={handleFetchInstagramStats}
               isLoading={isFetchingStats}

@@ -43,8 +43,8 @@ class SessionService {
   }
 
   private clearSession() {
-    // Clear all items from localStorage
-    localStorage.clear();
+    // Clear all items from sessionStorage
+    sessionStorage.clear();
 
     // Reload the page to reset the application state
     window.location.reload();

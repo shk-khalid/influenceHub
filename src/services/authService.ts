@@ -1,5 +1,7 @@
 import api from './api';
 import { User } from '../components/types/auth';
+import { store } from '../hooks/useReduxStore';
+import { setUser, clearUser } from '../slices/userSlice';
 
 interface RegisterPayload {
   username: string;
@@ -26,6 +28,7 @@ interface ResendOTPPayload {
 interface ResetPasswordPayload {
   email: string;
   new_password: string;
+  reset_token: string;
 }
 
 interface AuthResponse {
@@ -37,93 +40,98 @@ interface AuthResponse {
 
 export const authService = {
   async register(data: RegisterPayload): Promise<AuthResponse> {
-    return handleRequest(() => api.post('auth/register/', data));
+    try {
+      const response = await api.post('auth/register/', data);
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.error || "Registration Failed");
+    }
   },
 
   async login(data: LoginPayload): Promise<AuthResponse> {
-    return handleRequest(async () => {
+    try {
       const response = await api.post('auth/login/', data);
-      storeAuthData(response.data);
       return response.data;
-    });
+    } catch (error: any) {
+      throw new Error(error.response?.data?.error || "Login Failed");
+    }
   },
 
   async verifyOTP(data: VerifyOTPPayload): Promise<AuthResponse> {
-    return handleRequest(async () => {
+    try {
       const response = await api.post('auth/verify-otp/', data);
 
-      if (response.data.token) {
-        if (data.action === 'login') {
-          storeAuthData(response.data);
-        } else if (data.action === 'forgot_password') {
-          localStorage.setItem('reset_token', response.data.token);
-        }
+      if (response.data.token && data.action === 'login') {
+        sessionStorage.setItem('token', response.data.token);
+        store.dispatch(setUser(response.data.user));
+      } else if (response.data.token && data.action === 'forgot_password') {
+        sessionStorage.setItem("reset_token", response.data.token);
       }
+
       return response.data;
-    });
+    } catch (error: any) {
+      throw new Error(error.response?.data?.error || "OTP Verification Failed");
+    }
   },
 
   async resendOTP(data: ResendOTPPayload): Promise<AuthResponse> {
-    return handleRequest(() => api.post('auth/resend-otp/', data));
+    const response = await api.post('/auth/resend-otp/', data);
+    return response.data;
   },
 
   async forgotPassword(email: string): Promise<AuthResponse> {
-    return handleRequest(() => api.post('auth/forgot-password/', { email }));
+    try {
+      const response = await api.post('auth/forgot-password/', { email });
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error?.response?.data?.error || "Failed to Initiate Password Reset Request");
+    }
   },
 
   async resetPassword(data: ResetPasswordPayload): Promise<AuthResponse> {
-    return handleRequest(async () => {
-      const reset_token = localStorage.getItem('reset_token');
-      if (!reset_token) throw new Error('Reset token not found. Please request a new password reset.');
-
-      const response = await api.post('auth/reset-password/', { ...data, reset_token });
-
-      localStorage.removeItem('reset_token');
-      return response.data;
-    });
-  },
-
-  async logout() {
     try {
-      await api.post('auth/logout/');
-    } finally {
-      clearAuthData();
+      const reset_token = sessionStorage.getItem('reset_token');
+      if (!reset_token) {
+        throw new Error("Reset token not found. Please request a new password reset.");
+      }
+
+      const response = await api.post('auth/reset-password/', {
+        ...data,
+        reset_token,
+      });
+
+      sessionStorage.removeItem('reset_token');
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.status === 400) {
+        sessionStorage.removeItem("reset_token");
+      }
+      throw new Error(error?.response?.data?.error || "Password Reset Failed");
     }
   },
 
   hasValidResetToken(): boolean {
-    return !!localStorage.getItem('reset_token');
+    return !!sessionStorage.getItem("reset_token");
   },
 
   getCurrentUser(): User | null {
-    const userStr = localStorage.getItem('user');
-    return userStr ? JSON.parse(userStr) : null;
+    const userString = sessionStorage.getItem("user");
+    return userString ? JSON.parse(userString) : store.getState().user.user;
   },
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem("token");
   },
 
+  async logout() {
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('reset_token');
+    sessionStorage.removeItem('user');
+    store.dispatch(clearUser());
+    await api.get('auth/logout/');
+  },
+  
   isAuthenticated(): boolean {
-    return !!this.getToken();
-  },
-};
-
-function storeAuthData(data: AuthResponse) {
-  if (data.token) localStorage.setItem('token', data.token);
-  if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
-}
-
-function clearAuthData() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  localStorage.removeItem('reset_token');
-}
-
-async function handleRequest(request: () => Promise<any>): Promise<AuthResponse> {
-  try {
-    return await request();
-  } catch (error: any) {
-    throw new Error(error.response?.data?.error || 'An unexpected error occurred');
+    return !!this.getToken() && !!this.getCurrentUser();
   }
-}
+};

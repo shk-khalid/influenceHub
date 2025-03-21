@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {/*  Bell, */ Sun, Moon, User as UserIcon, LogOut } from 'lucide-react';
+import { /* Bell, */ Sun, Moon, User as UserIcon, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useThemeToggler } from '../../context/ThemeContext';
 import { useAuth } from '../../hooks/useAuth';
@@ -30,6 +30,20 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Collapse dropdown on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowProfile(false);
+      }
+    };
+
+    if (showProfile) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showProfile]);
 
   const handleClick = () => {
     navigate('/profile');
@@ -74,32 +88,6 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
 
-          {/* <div className="relative">
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              className="p-2 text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 rounded-xl hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-105"
-            >
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            </button>
-
-            {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 glass-effect rounded-xl shadow-glow-lg animate-slide-up">
-                <div className="p-4 border-b border-white/10 dark:border-gray-800/50">
-                  <h3 className="text-sm font-semibold">Notifications</h3>
-                </div>
-                <div className="max-h-96 overflow-y-auto">
-                  <div className="p-4 hover:bg-white/10 dark:hover:bg-gray-800/50 transition-colors">
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
-                      New campaign request from Brand X
-                    </p>
-                    <span className="text-xs text-gray-400">2 minutes ago</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div> */}
-
           <div className="relative">
             <button
               onClick={() => setShowProfile(!showProfile)}
@@ -119,7 +107,10 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
             </button>
 
             {showProfile && (
-              <div className="absolute right-0 mt-2 w-56 glass-effect rounded-xl shadow-glow-lg animate-slide-up">
+              <div 
+                className="absolute right-0 mt-2 w-56 glass-effect rounded-xl shadow-glow-lg animate-slide-up"
+                onMouseLeave={() => setShowProfile(false)}
+              >
                 <div className="p-3 border-b border-white/10 dark:border-gray-800/50">
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {userName}

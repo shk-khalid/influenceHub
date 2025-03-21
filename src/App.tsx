@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { sessionService } from './services/sessionService';
+import { Provider } from 'react-redux';
+import { store } from './hooks/useReduxStore';
 // Components and Pages
 import { Dashboard } from './pages/Dashboard';
 import Profile from './pages/Profile';
@@ -38,6 +40,7 @@ function App() {
   }, []);
 
   return (
+    <Provider store={store}>
     <Router>
       <Toaster position="top-right" />
       <AuthProvider>
@@ -69,6 +72,7 @@ function App() {
         </Routes>
       </AuthProvider>
     </Router>
+    </Provider>
   );
 }
 

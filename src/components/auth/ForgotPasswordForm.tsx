@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
 import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
+import { useAppSelector } from '../../hooks/useRedux';
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -38,7 +39,7 @@ export function ForgotPasswordForm() {
     const [step, setStep] = useState<'email' | 'reset'>('email');
     const navigate = useNavigate();
     const { forgotPassword, resetPassword, verifyOTP, resendOTP } = useAuth();
-    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDarkMode = useAppSelector((state) => state.theme.darkMode);
 
     const {
         register: registerEmail,

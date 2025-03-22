@@ -1,7 +1,7 @@
 import api from './api';
 import { User } from '../components/types/auth';
 import { store } from '../hooks/useReduxStore';
-import { setUser, clearUser } from '../slices/userSlice';
+import { setUser, clearUser } from '../context/slices/userSlice';
 
 interface RegisterPayload {
   username: string;

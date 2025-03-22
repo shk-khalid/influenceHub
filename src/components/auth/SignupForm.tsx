@@ -1,6 +1,7 @@
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { useAppSelector } from '../../hooks/useRedux';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Card } from '../common/Card';
@@ -14,7 +15,7 @@ import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 export function SignupForm() {
   const { register: registerUser } = useAuth();
   const navigate = useNavigate();
-  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDarkMode = useAppSelector((state) => state.theme.darkMode);
 
   const {
     register,

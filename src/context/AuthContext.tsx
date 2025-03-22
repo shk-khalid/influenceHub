@@ -2,7 +2,7 @@ import React, { createContext, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 import { authService } from '../services/authService';
 import { User } from '../components/types/auth';
-import { setUser, setLoading, setError, clearUser } from '../slices/userSlice';
+import { setUser, setLoading, setError, clearUser } from './slices/userSlice';
 
 interface AuthContextType {
   user: User | null;

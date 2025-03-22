@@ -1,7 +1,7 @@
 import api from './api';
 import type { User } from '../components/types/auth';
 import { store } from '../hooks/useReduxStore';
-import { updateUserDetails } from '../slices/userSlice';
+import { updateUserDetails } from '../context/slices/userSlice';
 
 interface UserResponse {
   message: string;

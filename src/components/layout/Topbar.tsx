@@ -1,26 +1,28 @@
-import { useEffect, useState } from 'react';
-import { /* Bell, */ Sun, Moon, User as UserIcon, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useThemeToggler } from '../../context/ThemeContext';
+import { useEffect, useState, useRef } from 'react';
+import { Sun, Moon, User as UserIcon, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; 
 import { useAuth } from '../../hooks/useAuth';
 import { authService } from '../../services/authService';
 import type { User } from '../types/auth';
 import MobileLightLogo from '../../assets/logo/LightLogoOnly.png';
 import MobileDarkLogo from '../../assets/logo/DarkLogoOnly.png';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { toggleTheme } from '../../context/slices/themeSlice';
 
 interface TopbarProps {
   sidebarCollapsed: boolean;
 }
 
 export function Topbar({ sidebarCollapsed }: TopbarProps) {
-  const { darkMode, toggleDarkMode } = useThemeToggler();
-  //const [showNotifications, setShowNotifications] = useState(false);
+  const dispatch = useAppDispatch();
+  const darkMode = useAppSelector((state) => state.theme.darkMode);
   const [showProfile, setShowProfile] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
   const { logout } = useAuth();
   const navigate = useNavigate();
 
   const currentUser: User | null = authService.getCurrentUser();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -45,6 +47,26 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [showProfile]);
 
+  // Collapse dropdown on mouse leave using a ref and effect
+  useEffect(() => {
+    if (!showProfile) return;
+
+    const handleMouseLeave = () => {
+      setShowProfile(false);
+    };
+
+    const dropdownElement = dropdownRef.current;
+    if (dropdownElement) {
+      dropdownElement.addEventListener('mouseleave', handleMouseLeave);
+    }
+
+    return () => {
+      if (dropdownElement) {
+        dropdownElement.removeEventListener('mouseleave', handleMouseLeave);
+      }
+    };
+  }, [showProfile]);
+
   const handleClick = () => {
     navigate('/profile');
   };
@@ -58,14 +80,21 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
     }
   };
 
+  const handeleThemeToggle = () => {
+    dispatch(toggleTheme());
+  }
+
   const userName = currentUser?.username || "Default User";
   const userEmail = currentUser?.email || "";
-  const profileImage = currentUser?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}`;
+  const profileImage =
+    currentUser?.profilePicture ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}`;
 
   return (
     <header
-      className={`fixed top-0 right-0 z-30 h-16 glass-effect transition-all duration-300 shadow-glow ${isDesktop ? (sidebarCollapsed ? 'left-20' : 'left-64') : 'left-0'
-        }`}
+      className={`fixed top-0 right-0 z-30 h-16 glass-effect transition-all duration-300 shadow-glow ${
+        isDesktop ? (sidebarCollapsed ? 'left-20' : 'left-64') : 'left-0'
+      }`}
     >
       <div className="h-full px-4 flex items-center justify-between">
         {/* Logo Section */}
@@ -82,7 +111,7 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
         {/* Right Side Actions */}
         <div className="flex items-center space-x-4">
           <button
-            onClick={toggleDarkMode}
+            onClick={handeleThemeToggle}
             className="p-2 text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 rounded-xl hover:bg-white/10 dark:hover:bg-gray-800/50 transition-all duration-200 hover:scale-105"
           >
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -107,11 +136,11 @@ export function Topbar({ sidebarCollapsed }: TopbarProps) {
             </button>
 
             {showProfile && (
-              <div 
+              <div
+                ref={dropdownRef}
                 className="absolute right-0 mt-2 w-56 glass-effect rounded-xl shadow-glow-lg animate-slide-up"
-                onMouseLeave={() => setShowProfile(false)}
               >
-                <div className="p-3 border-b border-white/10 dark:border-gray-800/50">
+                <div className="p-3 border-b border-white/10 dark:border-gray-800/90">
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {userName}
                   </p>

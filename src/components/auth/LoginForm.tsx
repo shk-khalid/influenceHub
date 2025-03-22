@@ -11,12 +11,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginFormData } from '../types/auth';
 import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
 import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
+import { useAppSelector } from '../../hooks/useRedux';
 
 export function LoginForm() {
   const [showTwoFactor, setShowTwoFactor] = useState(false);
   const { login, verifyOTP, resendOTP } = useAuth();
   const navigate = useNavigate();
-  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDarkMode = useAppSelector((state) => state.theme.darkMode);
 
   const {
     register,

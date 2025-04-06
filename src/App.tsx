@@ -8,7 +8,7 @@
   import { Dashboard } from './pages/Dashboard';
   import Profile from './pages/Profile';
   import Campaign from './pages/Campaigns';
-  import { BrandMatchingDashboard } from './pages/Matching';
+  import { BrandMatchingDashboard } from './pages/Suggestion';
   import { SignupForm } from './components/auth/SignupForm';
   import { LoginForm } from './components/auth/LoginForm';
   import { Insights } from './pages/Insights';

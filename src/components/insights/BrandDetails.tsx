@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrandDetail } from '../types/brand';
 import { BrandOverview } from './BrandOverview';
 import { MetricsCard } from './cards/MetricsCard';

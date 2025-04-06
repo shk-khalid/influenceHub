@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
-import { Brand } from '../components/types';
-import { BrandCard } from '../components/matching/BrandCard';
-import { SidePanel } from '../components/matching/SidePanel';
+import { Brand } from '../components/types/brand';
+import { BrandCard } from '../components/suggestion/BrandCard';
+import { ActivityFeed } from '../components/suggestion/ActivityFeed';
 import { mockBrands } from '../data/mockData';
 
 export const BrandMatchingDashboard = () => {
@@ -49,41 +49,42 @@ export const BrandMatchingDashboard = () => {
           for you.
         </motion.p>
       </header>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/50 p-8 transition-colors duration-300">
-            <div className="flex justify-center items-center min-h-[600px]">
-              <AnimatePresence mode="wait">
-                {currentBrandIndex < mockBrands.length ? (
-                  <BrandCard
-                    key={mockBrands[currentBrandIndex].id}
-                    brand={mockBrands[currentBrandIndex]}
-                    onAccept={handleAccept}
-                    onDecline={handleDecline}
-                  />
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="text-center"
-                  >
-                    <Sparkles className="w-16 h-16 text-blue-500 dark:text-blue-400 mx-auto mb-4" />
-                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                      You're all caught up!
-                    </h2>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      Check back later for new brand matches.
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+
+      {/* Main Content */}
+      <div className="space-y-8">
+        <div className="bg-white/5 backdrop-blur-xl rounded-2xl shadow-lg p-8 transition-colors duration-300">
+          <div className="flex justify-center items-center">
+            <AnimatePresence mode="wait">
+              {currentBrandIndex < mockBrands.length ? (
+                <BrandCard
+                  key={mockBrands[currentBrandIndex].id}
+                  brand={mockBrands[currentBrandIndex]}
+                  onAccept={handleAccept}
+                  onDecline={handleDecline}
+                />
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-center"
+                >
+                  <Sparkles className="w-16 h-16 text-blue-500 dark:text-blue-400 mx-auto mb-4" />
+                  <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    You're all caught up!
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Check back later for new brand matches.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
-        <SidePanel />
-      </div>
 
+        {/* Activity Feed at Bottom */}
+        <ActivityFeed />
+      </div>
     </motion.div>
   );
 };

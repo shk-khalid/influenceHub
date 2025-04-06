@@ -1,190 +1,157 @@
-import { Campaign, DemographicData, Brand, User, Language, Trend } from '../components/types';
-
-export const mockUsers: User[] = [
-  {
-    email: 'john@example.com',
-    userName: 'johndoe123',
-    fullName: 'John Doe',
-    location: 'San Francisco, CA',
-    bio: 'Senior Software Engineer passionate about building great products',
-    socialLinks: {
-      instagram: 'johndoe',
-      twitter: 'johndoe',
-      youtube: 'johndoecodes'
-    },
-    primaryNiche: 'food',
-    isAvailableForCollabs: true,
-    languages: [
-      { id: '1', name: 'English', level: 'Native' },
-      { id: '2', name: 'Spanish', level: 'Fluent' }
-    ] as Language[],
-    profileImage: 'https://via.placeholder.com/150',
-    is_admin_verfied: true,
-  },
-  {
-    email: 'jane@example.com',
-    userName: 'janesmith89',
-    fullName: 'Jane Smith',
-    location: 'New York, NY',
-    bio: 'UX Designer with 5+ years of experience',
-    socialLinks: {
-      instagram: 'janesmith',
-      twitter: 'janesdesigns'
-    },
-    primaryNiche: 'design',
-    isAvailableForCollabs: false,
-    languages: [
-      { id: '1', name: 'English', level: 'Native' },
-      { id: '3', name: 'French', level: 'Fluent' }
-    ],
-    profileImage: 'https://via.placeholder.com/150',
-    is_admin_verfied: false,
-  }
-];
-
-export const mockCredentials = {
-  'john@example.com': 'password123',
-  'jane@example.com': 'password123'
-};
+import { DemographicData } from '../components/types';
+import { BrandDetail as Brand } from '../components/types/brand';
+import { Trend } from '../components/types';
 
 export const mockBrands: Brand[] = [
   {
     id: '1',
     name: 'TechVision',
-    logo: 'https://images.unsplash.com/photo-1535303311164-664fc9ec6532?w=100&h=100&fit=crop',
+    sector: 'electronics',
     location: 'San Francisco, USA',
-    sector: 'Electronics',
-    rating: 4.8,
-    value: [
-      { year: 2020, amount: 5.2 },
-      { year: 2021, amount: 6.8 },
-      { year: 2022, amount: 8.4 },
-      { year: 2023, amount: 10.1 },
-      { year: 2024, amount: 12.5 }
-    ],
-    competitors: ['ApexTech', 'InnovatePro', 'TechGiant'],
-    demographics: {
-      gender: {
-        male: 65,
-        female: 32,
-        other: 3
+    overall_rating: '4.80',
+    market_share: '15.50',
+    growth_percentage: '20.00',
+    recent_valuation: '12500000000.00',
+    performance_metrics: null,
+    social_stats: {
+      brand: '1',
+      username: 'techvision_global',
+      bio: 'Innovating the future with smart tech.',
+      is_verified: true,
+      followers: 150000,
+      followings: 500,
+      post_count: 120,
+      follower_ratio: '300.00',
+      engagement_score: '8.90',
+      engagement_per_follower: '0.06',
+      estimated_reach: '85.00',
+      estimated_impression: '240.00',
+      reach_ratio: '0.57',
+      avg_likes_computed: '4500.00',
+      avg_comments_computed: '380.00',
+      avg_views: '52000.00',
+      highest_post: {
+        caption: 'Exploring the future of AI with TechVision Labs 🚀 #TechInnovation',
+        likeCount: 9200,
+        mediaType: 'Video',
+        viewCount: 150000,
+        contains_in: true,
+        commentCount: 480
       }
-    },
-    metrics: {
-      engagementRate: 8.9,
-      marketShare: 15.5
-    },
-    sentiment: {
-      positive: 75,
-      neutral: 18,
-      negative: 7,
-      keywords: ['Innovation', 'Quality', 'Premium'],
-      trends: ['#TechInnovation', '#FutureTech', '#SmartLiving']
     }
   },
   {
     id: '2',
     name: 'GlamGlow',
-    logo: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=100&h=100&fit=crop',
+    sector: 'cosmetics',
     location: 'Paris, France',
-    sector: 'Cosmetics',
-    rating: 4.6,
-    value: [
-      { year: 2020, amount: 3.1 },
-      { year: 2021, amount: 4.2 },
-      { year: 2022, amount: 5.8 },
-      { year: 2023, amount: 7.3 },
-      { year: 2024, amount: 9.0 }
-    ],
-    competitors: ['BeautyPro', 'LuxGlow', 'PureEssence'],
-    demographics: {
-      gender: {
-        male: 25,
-        female: 72,
-        other: 3
+    overall_rating: '4.60',
+    market_share: '12.30',
+    growth_percentage: '18.00',
+    recent_valuation: '9000000000.00',
+    performance_metrics: null,
+    social_stats: {
+      brand: '2',
+      username: 'glamglow_beauty',
+      bio: 'Glow naturally with GlamGlow 🌿',
+      is_verified: true,
+      followers: 98000,
+      followings: 320,
+      post_count: 75,
+      follower_ratio: '306.25',
+      engagement_score: '6.70',
+      engagement_per_follower: '0.04',
+      estimated_reach: '67.00',
+      estimated_impression: '190.00',
+      reach_ratio: '0.50',
+      avg_likes_computed: '3900.00',
+      avg_comments_computed: '260.00',
+      avg_views: '41000.00',
+      highest_post: {
+        caption: 'Your skin deserves the best. 🌸 #CleanBeauty #GlowUp',
+        likeCount: 7200,
+        mediaType: 'Photo',
+        viewCount: 89000,
+        contains_in: true,
+        commentCount: 320
       }
-    },
-    metrics: {
-      engagementRate: 6.7,
-      marketShare: 12.3
-    },
-    sentiment: {
-      positive: 82,
-      neutral: 15,
-      negative: 3,
-      keywords: ['Natural', 'Organic', 'Effective'],
-      trends: ['#CleanBeauty', '#GlowUp', '#SkincareCommunity']
     }
   },
   {
     id: '3',
     name: 'AutoElite',
-    logo: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=100&h=100&fit=crop',
+    sector: 'automobile',
     location: 'Munich, Germany',
-    sector: 'Automobile',
-    rating: 4.9,
-    value: [
-      { year: 2020, amount: 15.5 },
-      { year: 2021, amount: 18.2 },
-      { year: 2022, amount: 22.7 },
-      { year: 2023, amount: 25.9 },
-      { year: 2024, amount: 30.1 }
-    ],
-    competitors: ['SpeedKing', 'AutoPrime', 'DriveMax'],
-    demographics: {
-      gender: {
-        male: 70,
-        female: 28,
-        other: 2
+    overall_rating: '4.90',
+    market_share: '18.70',
+    growth_percentage: '25.00',
+    recent_valuation: '30100000000.00',
+    performance_metrics: null,
+    social_stats: {
+      brand: '3',
+      username: 'autoelite_official',
+      bio: 'Luxury meets performance. 🏁',
+      is_verified: true,
+      followers: 210000,
+      followings: 180,
+      post_count: 210,
+      follower_ratio: '1166.67',
+      engagement_score: '5.40',
+      engagement_per_follower: '0.03',
+      estimated_reach: '90.00',
+      estimated_impression: '300.00',
+      reach_ratio: '0.43',
+      avg_likes_computed: '6000.00',
+      avg_comments_computed: '500.00',
+      avg_views: '72000.00',
+      highest_post: {
+        caption: 'Feel the power of innovation. #LuxuryCars #DrivingExcellence',
+        likeCount: 11300,
+        mediaType: 'Video',
+        viewCount: 175000,
+        contains_in: true,
+        commentCount: 510
       }
-    },
-    metrics: {
-      engagementRate: 5.4,
-      marketShare: 18.7
-    },
-    sentiment: {
-      positive: 88,
-      neutral: 10,
-      negative: 2,
-      keywords: ['Luxury', 'Performance', 'Engineering'],
-      trends: ['#DrivingExcellence', '#LuxuryCars', '#AutoInnovation']
     }
   },
   {
     id: '4',
     name: 'StyleVogue',
-    logo: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=100&h=100&fit=crop',
+    sector: 'fashion',
     location: 'Milan, Italy',
-    sector: 'Fashion',
-    rating: 4.7,
-    value: [
-      { year: 2020, amount: 4.8 },
-      { year: 2021, amount: 6.3 },
-      { year: 2022, amount: 8.1 },
-      { year: 2023, amount: 10.5 },
-      { year: 2024, amount: 13.2 }
-    ],
-    competitors: ['TrendPro', 'FashionElite', 'StyleIcon'],
-    demographics: {
-      gender: {
-        male: 35,
-        female: 62,
-        other: 3
+    overall_rating: '4.70',
+    market_share: '14.20',
+    growth_percentage: '21.00',
+    recent_valuation: '13200000000.00',
+    performance_metrics: null,
+    social_stats: {
+      brand: '4',
+      username: 'stylevogue_official',
+      bio: 'Where trend meets tradition 👗',
+      is_verified: false,
+      followers: 87000,
+      followings: 410,
+      post_count: 95,
+      follower_ratio: '212.20',
+      engagement_score: '7.80',
+      engagement_per_follower: '0.05',
+      estimated_reach: '72.00',
+      estimated_impression: '210.00',
+      reach_ratio: '0.48',
+      avg_likes_computed: '4100.00',
+      avg_comments_computed: '300.00',
+      avg_views: '55000.00',
+      highest_post: {
+        caption: 'Spring ‘24 just dropped 🌸✨ #FashionForward #EthicalFashion',
+        likeCount: 8500,
+        mediaType: 'Photo',
+        viewCount: 110000,
+        contains_in: true,
+        commentCount: 390
       }
-    },
-    metrics: {
-      engagementRate: 7.8,
-      marketShare: 14.2
-    },
-    sentiment: {
-      positive: 79,
-      neutral: 16,
-      negative: 5,
-      keywords: ['Trendy', 'Sustainable', 'Chic'],
-      trends: ['#FashionForward', '#StyleInspo', '#EthicalFashion']
     }
   }
-]
+];
 
 export const mockTrends: Trend[] = [
   {
@@ -250,125 +217,6 @@ export const mockTrends: Trend[] = [
 ];
 
 
-export const mockCampaigns: Campaign[] = [
-  {
-    id: '1',
-    title: 'Summer Collection Launch',
-    brand: 'Fashion Co',
-    description: 'Launch of the new summer collection',
-    goals: ['Increase brand awareness', 'Drive sales'],
-    deliverables: ['Instagram posts', 'TikTok videos'],
-    startDate: '2024-06-01',
-    endDate: '2024-07-31',
-    budget: 50000,
-    status: 'in_progress',
-    metrics: {
-      reach: 150000,
-      engagement: 4.5,
-      conversion: 2.3,
-      impressions: 200000
-    },
-    platforms: ['Instagram', 'TikTok'],
-    requirements: ['Minimum 100k followers', 'Fashion niche'],
-    priority: 'high',
-    progress: 45,
-    roi: 320
-  },
-  {
-    id: '2',
-    title: 'Back to School Campaign',
-    brand: 'EduTech Inc',
-    description: 'Promoting educational technology products',
-    goals: ['Lead generation', 'Product demos'],
-    deliverables: ['YouTube reviews', 'Blog posts'],
-    startDate: '2024-08-01',
-    endDate: '2024-09-15',
-    budget: 35000,
-    status: 'pending',
-    metrics: {
-      reach: 120000,
-      engagement: 3.8,
-      conversion: 1.8,
-      impressions: 180000
-    },
-    platforms: ['YouTube', 'Blog'],
-    requirements: ['Tech focus', 'Educational content'],
-    priority: 'medium',
-    progress: 0,
-    roi: 280
-  },
-  {
-    id: '3',
-    title: 'Holiday Season Promotion',
-    brand: 'Giftorama',
-    description: 'Promoting holiday gift packages',
-    goals: ['Boost sales', 'Increase engagement'],
-    deliverables: ['Instagram ads', 'Facebook stories'],
-    startDate: '2024-11-01',
-    endDate: '2024-12-31',
-    budget: 70000,
-    status: 'in_progress',
-    metrics: {
-      reach: 250000,
-      engagement: 5.0,
-      conversion: 3.0,
-      impressions: 300000
-    },
-    platforms: ['Instagram', 'Facebook'],
-    requirements: ['Holiday-themed content', 'Creative visuals'],
-    priority: 'high',
-    progress: 60,
-    roi: 400
-  },
-  {
-    id: '4',
-    title: 'Tech Gadget Launch',
-    brand: 'GizmoWorld',
-    description: 'Launching the latest smartphone model',
-    goals: ['Increase brand awareness', 'Drive pre-orders'],
-    deliverables: ['Unboxing videos', 'Tech influencer posts'],
-    startDate: '2024-09-15',
-    endDate: '2024-10-30',
-    budget: 100000,
-    status: 'in_progress',
-    metrics: {
-      reach: 400000,
-      engagement: 6.2,
-      conversion: 4.5,
-      impressions: 500000
-    },
-    platforms: ['YouTube', 'Instagram'],
-    requirements: ['Tech influencers', 'Engaging storytelling'],
-    priority: 'high',
-    progress: 80,
-    roi: 500
-  },
-  {
-    id: '5',
-    title: 'Fitness Gear Promo',
-    brand: 'ActiveLife',
-    description: 'Promoting new fitness gear and accessories',
-    goals: ['Increase brand visibility', 'Generate reviews'],
-    deliverables: ['Instagram reels', 'TikTok challenges'],
-    startDate: '2024-05-01',
-    endDate: '2024-06-15',
-    budget: 45000,
-    status: 'completed',
-    metrics: {
-      reach: 180000,
-      engagement: 4.0,
-      conversion: 2.1,
-      impressions: 220000
-    },
-    platforms: ['Instagram', 'TikTok'],
-    requirements: ['Fitness influencers', 'Lifestyle content'],
-    priority: 'medium',
-    progress: 100,
-    roi: 360
-  },
-];
-
-
 export const performanceData = [
   { name: 'Jan', value: 4000 },
   { name: 'Feb', value: 3000 },
@@ -411,352 +259,3 @@ export const demographicData: DemographicData = {
     { country: 'Brazil', users: 14000 },
   ],
 };
-
-
-{/**extra campaign mockdata
-   {
-    id: '6',
-    title: 'Eco-Friendly Products Awareness',
-    brand: 'GreenEarth',
-    description: 'Promoting sustainable and eco-friendly products',
-    goals: ['Educate audience', 'Encourage purchases'],
-    deliverables: ['Informative videos', 'Blog series'],
-    startDate: '2024-04-01',
-    endDate: '2024-05-30',
-    budget: 30000,
-    status: 'completed',
-    metrics: {
-      reach: 130000,
-      engagement: 3.5,
-      conversion: 1.7,
-      impressions: 150000
-    },
-    platforms: ['YouTube', 'Blog'],
-    requirements: ['Sustainability advocates', 'Eco-conscious messaging'],
-    priority: 'medium',
-    progress: 100,
-    roi: 250
-  },
-  {
-    id: '7',
-    title: 'Gaming Console Launch',
-    brand: 'PixelPlay',
-    description: 'Introducing the new PixelPlay gaming console',
-    goals: ['Pre-orders', 'Community engagement'],
-    deliverables: ['Gameplay reviews', 'Live streams'],
-    startDate: '2024-10-01',
-    endDate: '2024-11-15',
-    budget: 150000,
-    status: 'in_progress',
-    metrics: {
-      reach: 600000,
-      engagement: 8.0,
-      conversion: 5.5,
-      impressions: 800000
-    },
-    platforms: ['YouTube', 'Twitch'],
-    requirements: ['Gaming influencers', 'Exciting content'],
-    priority: 'high',
-    progress: 75,
-    roi: 550
-  },
-  {
-    id: '8',
-    title: 'Health & Wellness Campaign',
-    brand: 'PureHealth',
-    description: 'Promoting health supplements and organic products',
-    goals: ['Build trust', 'Increase sales'],
-    deliverables: ['Testimonials', 'Influencer partnerships'],
-    startDate: '2024-02-01',
-    endDate: '2024-03-15',
-    budget: 40000,
-    status: 'completed',
-    metrics: {
-      reach: 160000,
-      engagement: 3.7,
-      conversion: 2.0,
-      impressions: 180000
-    },
-    platforms: ['Instagram', 'YouTube'],
-    requirements: ['Health advocates', 'Informative posts'],
-    priority: 'medium',
-    progress: 100,
-    roi: 300
-  },
-  {
-    id: '9',
-    title: 'Luxury Car Reveal',
-    brand: 'AutoLux',
-    description: 'Showcasing the latest luxury car model',
-    goals: ['Generate buzz', 'Drive test drives'],
-    deliverables: ['Event coverage', 'High-quality videos'],
-    startDate: '2024-09-01',
-    endDate: '2024-09-30',
-    budget: 120000,
-    status: 'pending',
-    metrics: {
-      reach: 450000,
-      engagement: 5.5,
-      conversion: 3.0,
-      impressions: 500000
-    },
-    platforms: ['Instagram', 'YouTube'],
-    requirements: ['Auto enthusiasts', 'Luxury focus'],
-    priority: 'high',
-    progress: 0,
-    roi: 420
-  },
-  {
-    id: '10',
-    title: 'Music Festival Promotion',
-    brand: 'SoundWave',
-    description: 'Promoting the annual SoundWave music festival',
-    goals: ['Sell tickets', 'Engage music fans'],
-    deliverables: ['Event teasers', 'Behind-the-scenes content'],
-    startDate: '2024-03-01',
-    endDate: '2024-04-30',
-    budget: 50000,
-    status: 'completed',
-    metrics: {
-      reach: 250000,
-      engagement: 6.0,
-      conversion: 3.5,
-      impressions: 300000
-    },
-    platforms: ['Instagram', 'TikTok'],
-    requirements: ['Music fans', 'Exciting visuals'],
-    priority: 'medium',
-    progress: 100,
-    roi: 360
-  },
-  {
-    id: '11',
-    title: 'Virtual Reality Experience Launch',
-    brand: 'NextGenVR',
-    description: 'Introducing an immersive virtual reality experience',
-    goals: ['Increase awareness', 'Boost sign-ups'],
-    deliverables: ['Product demo videos', 'User testimonials'],
-    startDate: '2024-07-15',
-    endDate: '2024-08-30',
-    budget: 80000,
-    status: 'in_progress',
-    metrics: {
-      reach: 500000,
-      engagement: 7.2,
-      conversion: 4.1,
-      impressions: 600000
-    },
-    platforms: ['YouTube', 'Instagram'],
-    requirements: ['Tech influencers', 'VR content creators'],
-    priority: 'high',
-    progress: 55,
-    roi: 430
-  },
-  {
-    id: '12',
-    title: 'Food Delivery Service Launch',
-    brand: 'QuickBites',
-    description: 'Promoting the launch of a new food delivery app',
-    goals: ['Drive app downloads', 'Increase user engagement'],
-    deliverables: ['Influencer partnerships', 'Instagram ads'],
-    startDate: '2024-05-01',
-    endDate: '2024-06-15',
-    budget: 35000,
-    status: 'completed',
-    metrics: {
-      reach: 200000,
-      engagement: 4.2,
-      conversion: 2.8,
-      impressions: 250000
-    },
-    platforms: ['Instagram', 'Facebook'],
-    requirements: ['Food bloggers', 'Lifestyle influencers'],
-    priority: 'medium',
-    progress: 100,
-    roi: 320
-  },
-  {
-    id: '13',
-    title: 'Smart Home Devices Campaign',
-    brand: 'HomeTech',
-    description: 'Promoting smart home technology products',
-    goals: ['Increase sales', 'Raise brand awareness'],
-    deliverables: ['YouTube reviews', 'Facebook ads'],
-    startDate: '2024-06-01',
-    endDate: '2024-07-15',
-    budget: 60000,
-    status: 'in_progress',
-    metrics: {
-      reach: 350000,
-      engagement: 5.0,
-      conversion: 3.2,
-      impressions: 400000
-    },
-    platforms: ['YouTube', 'Facebook'],
-    requirements: ['Tech reviewers', 'Smart home enthusiasts'],
-    priority: 'high',
-    progress: 70,
-    roi: 420
-  },
-  {
-    id: '14',
-    title: 'Online Course Promotion',
-    brand: 'LearnTech',
-    description: 'Promoting a new online course platform',
-    goals: ['Increase course sign-ups', 'Generate leads'],
-    deliverables: ['Webinars', 'LinkedIn posts'],
-    startDate: '2024-01-15',
-    endDate: '2024-02-28',
-    budget: 25000,
-    status: 'completed',
-    metrics: {
-      reach: 100000,
-      engagement: 3.0,
-      conversion: 1.5,
-      impressions: 120000
-    },
-    platforms: ['LinkedIn', 'YouTube'],
-    requirements: ['Education influencers', 'Professional development content'],
-    priority: 'low',
-    progress: 100,
-    roi: 220
-  },
-  {
-    id: '15',
-    title: 'Luxury Watches Campaign',
-    brand: 'Timepiece Co',
-    description: 'Promoting high-end luxury watches',
-    goals: ['Increase brand prestige', 'Drive website traffic'],
-    deliverables: ['Instagram lifestyle posts', 'YouTube reviews'],
-    startDate: '2024-03-01',
-    endDate: '2024-04-15',
-    budget: 90000,
-    status: 'in_progress',
-    metrics: {
-      reach: 450000,
-      engagement: 5.7,
-      conversion: 3.9,
-      impressions: 500000
-    },
-    platforms: ['Instagram', 'YouTube'],
-    requirements: ['Luxury lifestyle influencers', 'High-quality imagery'],
-    priority: 'high',
-    progress: 80,
-    roi: 480
-  },
-  {
-    id: '16',
-    title: 'Online Fashion Show',
-    brand: 'FashionNow',
-    description: 'Host an online fashion show to showcase new designs',
-    goals: ['Generate buzz', 'Increase website visits'],
-    deliverables: ['Live stream event', 'Behind-the-scenes footage'],
-    startDate: '2024-10-01',
-    endDate: '2024-10-15',
-    budget: 70000,
-    status: 'pending',
-    metrics: {
-      reach: 400000,
-      engagement: 6.5,
-      conversion: 4.2,
-      impressions: 450000
-    },
-    platforms: ['Instagram', 'TikTok'],
-    requirements: ['Fashion influencers', 'High-production videos'],
-    priority: 'high',
-    progress: 0,
-    roi: 500
-  },
-  {
-    id: '17',
-    title: 'Sustainable Fashion Campaign',
-    brand: 'EcoWear',
-    description: 'Promoting eco-friendly clothing and sustainable fashion',
-    goals: ['Increase brand awareness', 'Drive online sales'],
-    deliverables: ['Instagram ads', 'Collaborations with eco-influencers'],
-    startDate: '2024-04-01',
-    endDate: '2024-05-15',
-    budget: 50000,
-    status: 'completed',
-    metrics: {
-      reach: 220000,
-      engagement: 4.8,
-      conversion: 2.7,
-      impressions: 270000
-    },
-    platforms: ['Instagram', 'Pinterest'],
-    requirements: ['Sustainability advocates', 'Eco-conscious influencers'],
-    priority: 'medium',
-    progress: 100,
-    roi: 380
-  },
-  {
-    id: '18',
-    title: 'New Fitness App Launch',
-    brand: 'FitTrack',
-    description: 'Launching a new fitness tracking app',
-    goals: ['Increase downloads', 'Build community'],
-    deliverables: ['App walkthroughs', 'User-generated content'],
-    startDate: '2024-08-01',
-    endDate: '2024-09-30',
-    budget: 60000,
-    status: 'pending',
-    metrics: {
-      reach: 300000,
-      engagement: 5.0,
-      conversion: 3.1,
-      impressions: 350000
-    },
-    platforms: ['Instagram', 'YouTube'],
-    requirements: ['Fitness influencers', 'App users with healthy lifestyle content'],
-    priority: 'medium',
-    progress: 0,
-    roi: 450
-  },
-  {
-    id: '19',
-    title: 'Event Ticketing Platform Promotion',
-    brand: 'TicketEasy',
-    description: 'Promoting a platform for buying and selling event tickets',
-    goals: ['Drive traffic', 'Increase app downloads'],
-    deliverables: ['Influencer endorsements', 'Facebook ads'],
-    startDate: '2024-11-01',
-    endDate: '2024-12-15',
-    budget: 55000,
-    status: 'in_progress',
-    metrics: {
-      reach: 250000,
-      engagement: 4.3,
-      conversion: 2.2,
-      impressions: 280000
-    },
-    platforms: ['Facebook', 'Instagram'],
-    requirements: ['Event planners', 'Social media influencers'],
-    priority: 'medium',
-    progress: 40,
-    roi: 350
-  },
-  {
-    id: '20',
-    title: 'Pet Supplies Sale',
-    brand: 'Pawsitive',
-    description: 'Promoting discounts on pet food and accessories',
-    goals: ['Increase sales', 'Grow customer base'],
-    deliverables: ['Instagram stories', 'Pet influencer partnerships'],
-    startDate: '2024-07-01',
-    endDate: '2024-08-15',
-    budget: 45000,
-    status: 'completed',
-    metrics: {
-      reach: 180000,
-      engagement: 3.9,
-      conversion: 2.0,
-      impressions: 220000
-    },
-    platforms: ['Instagram', 'TikTok'],
-    requirements: ['Pet influencers', 'User-generated content'],
-    priority: 'medium',
-    progress: 100,
-    roi: 290
-  }
-*/}

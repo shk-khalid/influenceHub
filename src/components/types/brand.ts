@@ -48,7 +48,7 @@ interface SocialStats {
   avg_likes_computed: string;
   avg_comments_computed: string;
   avg_views: string;
-  brand_posts: BrandPost[];
+  brand_posts?: BrandPost[];
   highest_post: HighestPost;
 }
 
@@ -63,12 +63,12 @@ export interface BrandDetail extends Brand {
     market_share: string;
     growth_rate: string;
   } | null;
-  competitors: Competitor[];
-  gender_demographics: {
+  competitors?: Competitor[];
+  gender_demographics?: {
     male_percentage: string;
     female_percentage: string;
   };
-  valuation_history: {
+  valuation_history?: {
     year: number;
     valuation: string;
   }[];

@@ -1,23 +1,75 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 import { Brand } from '../components/types/brand';
 import { BrandCard } from '../components/suggestion/BrandCard';
 import { ActivityFeed } from '../components/suggestion/ActivityFeed';
-import { mockBrands } from '../data/mockData';
+import { suggestionService } from '../services/sugesstionService';
+
 
 export const BrandMatchingDashboard = () => {
   const [currentBrandIndex, setCurrentBrandIndex] = useState(0);
+  const [suggestedBrands, setSuggestedBrands] = useState<Brand[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<String | null>(null);
 
-  const handleAccept = (brand: Brand) => {
-    console.log('Accepted brand:', brand);
-    setCurrentBrandIndex((prev) => prev + 1);
+  useEffect(() => {
+    fetchSuggestedBrands();
+  }, []);
+
+  const fetchSuggestedBrands = async () => {
+    try {
+      setIsLoading(true);
+      const response = await suggestionService.getSuggestedBrands()
+      setSuggestedBrands(response.suggested_brands);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch brand suggestions');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleDecline = (brand: Brand) => {
-    console.log('Declined brand:', brand);
-    setCurrentBrandIndex((prev) => prev + 1);
+  const handleAccept = async (brand: Brand) => {
+    try {
+      await suggestionService.respondToBrand(brand.id, 'accept');
+      setCurrentBrandIndex((prev) => prev + 1);
+    } catch (err) {
+      console.error('Failed to accept brand:', err);
+    }
   };
+
+  const handleDecline = async (brand: Brand) => {
+    try {
+      await suggestionService.respondToBrand(brand.id, 'decline');
+      setCurrentBrandIndex((prev) => prev + 1);
+    } catch (err) {
+      console.error('Failed to decline brand:', err);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-xl mb-4">{error}</div>
+          <button
+            onClick={fetchSuggestedBrands}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -55,10 +107,10 @@ export const BrandMatchingDashboard = () => {
         <div className="bg-white/5 backdrop-blur-xl rounded-2xl shadow-lg p-8 transition-colors duration-300">
           <div className="flex justify-center items-center">
             <AnimatePresence mode="wait">
-              {currentBrandIndex < mockBrands.length ? (
+            {currentBrandIndex < suggestedBrands.length ? (
                 <BrandCard
-                  key={mockBrands[currentBrandIndex].id}
-                  brand={mockBrands[currentBrandIndex]}
+                  key={suggestedBrands[currentBrandIndex].id}
+                  brand={suggestedBrands[currentBrandIndex]}
                   onAccept={handleAccept}
                   onDecline={handleDecline}
                 />

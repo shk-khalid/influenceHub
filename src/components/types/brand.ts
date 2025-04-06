@@ -58,8 +58,8 @@ interface Competitor {
 }
 
 export interface BrandDetail extends Brand {
-  recent_valuation: string;
-  performance_metrics: {
+  recent_valuation?: string;
+  performance_metrics?: {
     market_share: string;
     growth_rate: string;
   } | null;
@@ -72,5 +72,5 @@ export interface BrandDetail extends Brand {
     year: number;
     valuation: string;
   }[];
-  social_stats: SocialStats;
+  social_stats?: SocialStats;
 }

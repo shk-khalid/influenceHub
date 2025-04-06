@@ -2,6 +2,124 @@ import { DemographicData } from '../components/types';
 import { BrandDetail as Brand } from '../components/types/brand';
 import { Trend } from '../components/types';
 
+export const mockCampaigns: Campaign[] = [
+  {
+    id: '1',
+    title: 'Summer Collection Launch',
+    brand: 'Fashion Co',
+    description: 'Launch of the new summer collection',
+    goals: ['Increase brand awareness', 'Drive sales'],
+    deliverables: ['Instagram posts', 'TikTok videos'],
+    startDate: '2024-06-01',
+    endDate: '2024-07-31',
+    budget: 50000,
+    status: 'in_progress',
+    metrics: {
+      reach: 150000,
+      engagement: 4.5,
+      conversion: 2.3,
+      impressions: 200000
+    },
+    platforms: ['Instagram', 'TikTok'],
+    requirements: ['Minimum 100k followers', 'Fashion niche'],
+    priority: 'high',
+    progress: 45,
+    roi: 320
+  },
+  {
+    id: '2',
+    title: 'Back to School Campaign',
+    brand: 'EduTech Inc',
+    description: 'Promoting educational technology products',
+    goals: ['Lead generation', 'Product demos'],
+    deliverables: ['YouTube reviews', 'Blog posts'],
+    startDate: '2024-08-01',
+    endDate: '2024-09-15',
+    budget: 35000,
+    status: 'pending',
+    metrics: {
+      reach: 120000,
+      engagement: 3.8,
+      conversion: 1.8,
+      impressions: 180000
+    },
+    platforms: ['YouTube', 'Blog'],
+    requirements: ['Tech focus', 'Educational content'],
+    priority: 'medium',
+    progress: 0,
+    roi: 280
+  },
+  {
+    id: '3',
+    title: 'Holiday Season Promotion',
+    brand: 'Giftorama',
+    description: 'Promoting holiday gift packages',
+    goals: ['Boost sales', 'Increase engagement'],
+    deliverables: ['Instagram ads', 'Facebook stories'],
+    startDate: '2024-11-01',
+    endDate: '2024-12-31',
+    budget: 70000,
+    status: 'in_progress',
+    metrics: {
+      reach: 250000,
+      engagement: 5.0,
+      conversion: 3.0,
+      impressions: 300000
+    },
+    platforms: ['Instagram', 'Facebook'],
+    requirements: ['Holiday-themed content', 'Creative visuals'],
+    priority: 'high',
+    progress: 60,
+    roi: 400
+  },
+  {
+    id: '4',
+    title: 'Tech Gadget Launch',
+    brand: 'GizmoWorld',
+    description: 'Launching the latest smartphone model',
+    goals: ['Increase brand awareness', 'Drive pre-orders'],
+    deliverables: ['Unboxing videos', 'Tech influencer posts'],
+    startDate: '2024-09-15',
+    endDate: '2024-10-30',
+    budget: 100000,
+    status: 'in_progress',
+    metrics: {
+      reach: 400000,
+      engagement: 6.2,
+      conversion: 4.5,
+      impressions: 500000
+    },
+    platforms: ['YouTube', 'Instagram'],
+    requirements: ['Tech influencers', 'Engaging storytelling'],
+    priority: 'high',
+    progress: 80,
+    roi: 500
+  },
+  {
+    id: '5',
+    title: 'Fitness Gear Promo',
+    brand: 'ActiveLife',
+    description: 'Promoting new fitness gear and accessories',
+    goals: ['Increase brand visibility', 'Generate reviews'],
+    deliverables: ['Instagram reels', 'TikTok challenges'],
+    startDate: '2024-05-01',
+    endDate: '2024-06-15',
+    budget: 45000,
+    status: 'completed',
+    metrics: {
+      reach: 180000,
+      engagement: 4.0,
+      conversion: 2.1,
+      impressions: 220000
+    },
+    platforms: ['Instagram', 'TikTok'],
+    requirements: ['Fitness influencers', 'Lifestyle content'],
+    priority: 'medium',
+    progress: 100,
+    roi: 360
+  },
+];
+
 export const mockBrands: Brand[] = [
   {
     id: '1',
@@ -155,65 +273,65 @@ export const mockBrands: Brand[] = [
 
 export const mockTrends: Trend[] = [
   {
-            "id": 10000050,
-            "name": "Daily Simple Questions Thread - December 23, 2024",
-            "volume": 9,
-            "category": "fitness",
-            "region": "Global",
-            "growth": 12.5,
-            "sentiment": 0.0,
-            "last_updated": "2024-12-24T09:53:17.780329Z"
-        },
-        {
-            "id": 10000015,
-            "name": "December 20-22 Box Office Recap: 'Sonic the Hedgehog 3' tops 'Mufasa: The Lion King' in the domestic market. While 'Mufasa' leads overseas, its $122.2 million worldwide debut is very underwhelming. Meanwhile, 'Kraven' and 'War of the Rohirrim' collapsed 72% and 73%, respectively.",
-            "volume": 15,
-            "category": "entertainment",
-            "region": "Global",
-            "growth": 7.142857142857142,
-            "sentiment": 0.06666666666666667,
-            "last_updated": "2024-12-23T22:10:33.978751Z"
-        },
-        {
-            "id": 10000033,
-            "name": "LPT: Cold weather kills car batteries. Here are some tips for jump starting your vehicle this holiday season. ",
-            "volume": 230,
-            "category": "lifestyle",
-            "region": "Global",
-            "growth": -1.7699115044247788,
-            "sentiment": -0.3,
-            "last_updated": "2024-12-23T22:21:30.648175Z"
-        },
-        {
-            "id": 10000013,
-            "name": "outfit for a wedding with my boyfriend as his plus one. ",
-            "volume": 495,
-            "category": "fashion",
-            "region": "Global",
-            "growth": 1.642710472279261,
-            "sentiment": 0.0,
-            "last_updated": "2024-12-23T22:10:33.971774Z"
-        },
-        {
-            "id": 10000003,
-            "name": "PayPal Honey has been caught poaching affiliate revenue, and it often hides the best deals from users | Promoted by influencers, this popular browser extension has been a scam all along",
-            "volume": 751,
-            "category": "tech",
-            "region": "Global",
-            "growth": 0.9408602150537635,
-            "sentiment": 0.8,
-            "last_updated": "2024-12-23T22:10:33.939820Z"
-        },
-        {
-            "id": 10000030,
-            "name": "A Quick Reminder: We have a strictly NO POLITICS rule in this subreddit.",
-            "volume": 1388,
-            "category": "lifestyle",
-            "region": "Global",
-            "growth": 0.5797101449275363,
-            "sentiment": 0.3333333333333333,
-            "last_updated": "2024-12-24T08:49:48.818506Z"
-        }
+    "id": 10000050,
+    "name": "Daily Simple Questions Thread - December 23, 2024",
+    "volume": 9,
+    "category": "fitness",
+    "region": "Global",
+    "growth": 12.5,
+    "sentiment": 0.0,
+    "last_updated": "2024-12-24T09:53:17.780329Z"
+  },
+  {
+    "id": 10000015,
+    "name": "December 20-22 Box Office Recap: 'Sonic the Hedgehog 3' tops 'Mufasa: The Lion King' in the domestic market. While 'Mufasa' leads overseas, its $122.2 million worldwide debut is very underwhelming. Meanwhile, 'Kraven' and 'War of the Rohirrim' collapsed 72% and 73%, respectively.",
+    "volume": 15,
+    "category": "entertainment",
+    "region": "Global",
+    "growth": 7.142857142857142,
+    "sentiment": 0.06666666666666667,
+    "last_updated": "2024-12-23T22:10:33.978751Z"
+  },
+  {
+    "id": 10000033,
+    "name": "LPT: Cold weather kills car batteries. Here are some tips for jump starting your vehicle this holiday season. ",
+    "volume": 230,
+    "category": "lifestyle",
+    "region": "Global",
+    "growth": -1.7699115044247788,
+    "sentiment": -0.3,
+    "last_updated": "2024-12-23T22:21:30.648175Z"
+  },
+  {
+    "id": 10000013,
+    "name": "outfit for a wedding with my boyfriend as his plus one. ",
+    "volume": 495,
+    "category": "fashion",
+    "region": "Global",
+    "growth": 1.642710472279261,
+    "sentiment": 0.0,
+    "last_updated": "2024-12-23T22:10:33.971774Z"
+  },
+  {
+    "id": 10000003,
+    "name": "PayPal Honey has been caught poaching affiliate revenue, and it often hides the best deals from users | Promoted by influencers, this popular browser extension has been a scam all along",
+    "volume": 751,
+    "category": "tech",
+    "region": "Global",
+    "growth": 0.9408602150537635,
+    "sentiment": 0.8,
+    "last_updated": "2024-12-23T22:10:33.939820Z"
+  },
+  {
+    "id": 10000030,
+    "name": "A Quick Reminder: We have a strictly NO POLITICS rule in this subreddit.",
+    "volume": 1388,
+    "category": "lifestyle",
+    "region": "Global",
+    "growth": 0.5797101449275363,
+    "sentiment": 0.3333333333333333,
+    "last_updated": "2024-12-24T08:49:48.818506Z"
+  }
 ];
 
 

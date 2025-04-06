@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema, type SignupFormData } from '../types/auth';
 import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
 import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
+import { LoadingPulse } from '../common/LoadingPulse';
 
 export function SignupForm() {
   const { register: registerUser } = useAuth();
@@ -36,18 +37,34 @@ export function SignupForm() {
 
   const onSubmit = async (data: SignupFormData) => {
     try {
-      await registerUser(data.userName, data.email, data.password, data.confirmPassword);
-      navigate('/login');
+      const result = await registerUser(
+        data.userName,
+        data.email,
+        data.password,
+        data.confirmPassword
+      );
+      // Only redirect if the registration response is 200 OK.
+      if (result && result.status === 200) {
+        navigate('/login');
+      }
     } catch (error) {
-      console.error('Registration failed. Please try again.');
+      console.error('Registration failed. Please try again.', error);
     }
   };
+
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingPulse count={3} sizeClass="w-6 h-6" gapClass="space-x-2" duration={1500} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
       {/* Logo Section */}
       <div className="flex items-center justify-center mb-8 space-x-4">
-        <img 
+        <img
           src={isDarkMode ? DesktopDarkLogo : DesktopLightLogo}
           alt="Logo"
           className="h-12"

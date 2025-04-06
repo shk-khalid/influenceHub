@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 import { isValidSocialUrl } from '../lib/SocialValidation';
 import { authService } from '../services/authService';
 import { User, Language } from '../components/types/auth';
-
+import { LoadingPulse } from '../components/common/LoadingPulse';
 
 export default function Profile() {
   const [user, setUser] = useState<User | null>(null);
@@ -40,7 +40,7 @@ export default function Profile() {
     if (currentUser) {
       setUser(currentUser);
       setPersonalInfo({
-        userName: currentUser?.username,
+        userName: currentUser.username,
         fullName: currentUser.fullName,
         location: currentUser.location || '',
         bio: currentUser.bio || '',
@@ -51,7 +51,10 @@ export default function Profile() {
         twitter: currentUser.socialLinks?.twitter || '',
         youtube: currentUser.socialLinks?.youtube || '',
       });
-      setProfileImage(currentUser.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.username)}`);
+      setProfileImage(
+        currentUser.profilePicture ||
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.username)}`
+      );
       setLanguages(currentUser.languages || []);
     }
   };
@@ -109,7 +112,7 @@ export default function Profile() {
     formData.append("profilePicture", file);
 
     try {
-      const updatedUser = await userService.updateUserProfile(formData)
+      const updatedUser = await userService.updateUserProfile(formData);
       if (updatedUser) {
         loadUserData(); // Reload user data from localStorage
         toast.success('Profile picture updated successfully');
@@ -127,7 +130,7 @@ export default function Profile() {
       toast.error("Please add the Instagram URL first.");
       return;
     }
-  
+
     // Check if the Instagram URL in state is different from the one stored in the user profile
     if (user?.socialLinks?.instagram !== socialLinks.instagram) {
       try {
@@ -153,7 +156,7 @@ export default function Profile() {
         return;
       }
     }
-  
+
     setIsFetchingStats(true);
     try {
       const result = await userService.fetchInstagramStats({ instagram: socialLinks.instagram });
@@ -164,7 +167,6 @@ export default function Profile() {
       setIsFetchingStats(false);
     }
   };
-  
 
   const handleAddLanguage = (language: Language) => {
     setLanguages((prev) => [...prev, language]);
@@ -185,10 +187,12 @@ export default function Profile() {
     }));
   };
 
+  // Show a loading indicator while user data is not loaded.
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg text-gray-600 dark:text-gray-400">Loading profile...</p>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <LoadingPulse count={5} sizeClass="w-6 h-6" duration={2000} />
+        <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">Loading profile...</p>
       </div>
     );
   }
@@ -256,33 +260,38 @@ export default function Profile() {
 
       {/* Social Links */}
       <Card>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-              Social Links
-            </h2>
-            <Button
-              variant="primary"
-              icon={<RefreshCw className={`w-5 h-5 ${isFetchingStats ? 'animate-spin' : ''}`} />}
-              onClick={handleFetchInstagramStats}
-              isLoading={isFetchingStats}
-              disabled={isFetchingStats || !socialLinks.instagram}
-              className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400"
-            >
-            </Button>
-          </div>
-          <div className="space-y-4 sm:space-y-6 p-2">
-            {Object.entries(socialLinks).map(([platform, url]) => (
-              <SocialLinkInput
-                key={platform}
-                platform={platform}
-                url={url}
-                onChange={(newUrl) => updateSocialLink(platform as keyof typeof socialLinks, newUrl)}
-                isValid={!url || isValidSocialUrl(platform, url)}
-                isEditing={isEditing}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+            Social Links
+          </h2>
+          <Button
+            variant="primary"
+            icon={
+              <RefreshCw
+                className={`w-5 h-5 ${isFetchingStats ? 'animate-spin' : ''}`}
               />
-            ))}
-          </div>
-        </Card>
+            }
+            onClick={handleFetchInstagramStats}
+            isLoading={isFetchingStats}
+            disabled={isFetchingStats || !socialLinks.instagram}
+            className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400"
+          />
+        </div>
+        <div className="space-y-4 sm:space-y-6 p-2">
+          {Object.entries(socialLinks).map(([platform, url]) => (
+            <SocialLinkInput
+              key={platform}
+              platform={platform}
+              url={url}
+              onChange={(newUrl) =>
+                updateSocialLink(platform as keyof typeof socialLinks, newUrl)
+              }
+              isValid={!url || isValidSocialUrl(platform, url)}
+              isEditing={isEditing}
+            />
+          ))}
+        </div>
+      </Card>
     </div>
   );
 }

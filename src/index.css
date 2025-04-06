@@ -187,3 +187,12 @@
     opacity: 1;
   }
 }
+
+@keyframes pulseScale {
+  0%, 100% { transform: scale(0.85); opacity: 1; }
+  50%      { transform: scale(1);    opacity: 0.6; }
+}
+
+.animate-pulse-scale {
+  animation: pulseScale 1.5s ease-in-out infinite;
+}

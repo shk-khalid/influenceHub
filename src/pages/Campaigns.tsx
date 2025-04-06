@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import BoardColumn from '../components/campaigns/board/BoardColumn';
 import { useCampaignStore } from '../hooks/useCampaign';
@@ -6,13 +6,16 @@ import SearchBar from '../components/campaigns/visuals/SearchBar';
 import CampaignOverview from '../components/campaigns/visuals/CampaignOverview';
 import { motion } from 'framer-motion';
 import type { CampaignStatus } from '../components/types/campaign';
+import { LoadingPulse } from '../components/common/LoadingPulse';
 
 const Campaign: React.FC = () => {
   const { fetchCampaigns, updateCampaignStatus, getFilteredCampaigns } = useCampaignStore();
+  const [loading, setLoading] = useState(true);
 
   // Fetch campaigns on mount
   useEffect(() => {
-    fetchCampaigns();
+    // Assuming fetchCampaigns returns a promise
+    fetchCampaigns().finally(() => setLoading(false));
   }, [fetchCampaigns]);
 
   // Subscribe directly to the store’s filtered campaigns.
@@ -42,6 +45,15 @@ const Campaign: React.FC = () => {
     // should update the campaigns state, which in turn triggers a re-render.
     updateCampaignStatus(draggableId, destination.droppableId as CampaignStatus);
   };
+
+  // If still loading, render the LoadingPulse component.
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingPulse count={5} sizeClass="w-6 h-6" duration={2000} />
+      </div>
+    );
+  }
 
   return (
     <motion.div

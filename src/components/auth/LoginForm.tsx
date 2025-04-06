@@ -12,6 +12,7 @@ import { loginSchema, type LoginFormData } from '../types/auth';
 import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
 import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 import { useAppSelector } from '../../hooks/useRedux';
+import { LoadingPulse } from '../common/LoadingPulse';
 
 export function LoginForm() {
   const [showTwoFactor, setShowTwoFactor] = useState(false);
@@ -35,7 +36,8 @@ export function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const result = await login(data.email, data.password);
-      if (result) {
+      // Only open two factor modal if the response is 200 OK.
+      if (result && result.status === 200) {
         setShowTwoFactor(true);
       }
     } catch (error) {
@@ -61,11 +63,19 @@ export function LoginForm() {
     }
   };
 
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingPulse count={3} sizeClass="w-6 h-6" gapClass="space-x-2" duration={1500} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">
       {/* Logo Section */}
       <div className="flex items-center justify-center mb-8 space-x-4">
-      <img
+        <img
           src={isDarkMode ? DesktopDarkLogo : DesktopLightLogo}
           alt="Logo"
           className="h-12"

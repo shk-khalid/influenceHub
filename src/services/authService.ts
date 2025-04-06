@@ -31,7 +31,7 @@ interface ResetPasswordPayload {
   reset_token: string;
 }
 
-interface AuthResponse {
+export interface AuthResponse {
   message: string;
   redirect?: string;
   token?: string;
@@ -39,19 +39,20 @@ interface AuthResponse {
 }
 
 export const authService = {
-  async register(data: RegisterPayload): Promise<AuthResponse> {
+  async register(data: RegisterPayload): Promise<{ status: number; data: AuthResponse }> {
     try {
       const response = await api.post('auth/register/', data);
-      return response.data;
+      return { status: response.status, data: response.data };
     } catch (error: any) {
       throw new Error(error.response?.data?.error || "Registration Failed");
     }
   },
 
-  async login(data: LoginPayload): Promise<AuthResponse> {
+  // Updated login function returning an object with status and data.
+  async login(data: LoginPayload): Promise<{ status: number; data: AuthResponse }> {
     try {
       const response = await api.post('auth/login/', data);
-      return response.data;
+      return { status: response.status, data: response.data };
     } catch (error: any) {
       throw new Error(error.response?.data?.error || "Login Failed");
     }
@@ -75,14 +76,15 @@ export const authService = {
   },
 
   async resendOTP(data: ResendOTPPayload): Promise<AuthResponse> {
-    const response = await api.post('/auth/resend-otp/', data);
+    const response = await api.post('auth/resend-otp/', data);
     return response.data;
   },
 
-  async forgotPassword(email: string): Promise<AuthResponse> {
+  // Updated forgotPassword to return an object with status and data.
+  async forgotPassword(email: string): Promise<{ status: number; data: AuthResponse }> {
     try {
       const response = await api.post('auth/forgot-password/', { email });
-      return response.data;
+      return { status: response.status, data: response.data };
     } catch (error: any) {
       throw new Error(error?.response?.data?.error || "Failed to Initiate Password Reset Request");
     }
@@ -130,7 +132,7 @@ export const authService = {
     store.dispatch(clearUser());
     await api.get('auth/logout/');
   },
-  
+
   isAuthenticated(): boolean {
     return !!this.getToken() && !!this.getCurrentUser();
   }

@@ -36,12 +36,12 @@ export const SocialPostsCard: React.FC<SocialPostsCardProps> = ({ posts }) => {
   // We measure each post’s paragraph after rendering or on window resize
   useEffect(() => {
     // measure on mount/update
-    posts.forEach((post) => {
+    posts.forEach((post: any) => {
       measureTruncation(post.post_number);
     });
     // measure again if window resizes (text wrapping can change)
     const handleResize = () => {
-      posts.forEach((post) => {
+      posts.forEach((post: any) => {
         measureTruncation(post.post_number);
       });
     };
@@ -58,7 +58,7 @@ export const SocialPostsCard: React.FC<SocialPostsCardProps> = ({ posts }) => {
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Recent Posts</h2>
       
       <div className="space-y-4">
-        {posts.slice(0, 5).map((post) => {
+        {posts.slice(0, 5).map((post: any) => {
           const isExpanded = expandedPost === post.post_number;
           const isTruncated = isTruncatedMap[post.post_number];
 

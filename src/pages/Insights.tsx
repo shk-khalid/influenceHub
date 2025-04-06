@@ -1,27 +1,16 @@
+// Insights.tsx
 import React, { useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { BrandList } from '../components/insights/BrandList';
-import { BrandDetails } from '../components/insights/BrandDetails';
-import { Brand } from '../components/types/brand';
-import { ArrowLeft } from 'lucide-react';
 import { useBrandService } from '../hooks/useBrand';
+import BrandDetailsPage from '../components/insights/BrandDetails';
 
 export const Insights: React.FC = () => {
-  const {
-    brands,
-    selectedBrand,
-    loading,
-    error,
-    fetchBrands,
-    fetchBrandById,
-  } = useBrandService();
+  const { brands, fetchBrands, loading, error } = useBrandService();
 
   useEffect(() => {
     fetchBrands();
   }, [fetchBrands]);
-
-  const handleSelectBrand = async (brand: Brand) => {
-    await fetchBrandById(brand.id);
-  };
 
   if (error) {
     return (
@@ -48,28 +37,15 @@ export const Insights: React.FC = () => {
   return (
     <div className="min-h-screen transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {selectedBrand ? (
-          <div className="space-y-6 animate-fadeIn">
-            <button
-              onClick={() => fetchBrands()}
-              className="inline-flex items-center gap-2 px-4 py-2 text-blue-600 dark:text-blue-400 
-                       hover:text-blue-700 dark:hover:text-blue-300 transition-colors
-                       bg-white/80 dark:bg-gray-800/50 rounded-xl shadow-md
-                       backdrop-blur-lg border border-gray-200/50 dark:border-gray-700/50
-                       hover:shadow-lg group"
-            >
-              <ArrowLeft className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" />
-              <span className="font-medium">Back to Brands</span>
-            </button>
-            <BrandDetails brand={selectedBrand} loading={loading} />
-          </div>
-        ) : (
-          <BrandList
-            brands={brands}
-            onSelectBrand={handleSelectBrand}
-            loading={loading}
+        <Routes>
+          {/* Brand list view */}
+          <Route
+            path="/"
+            element={<BrandList brands={brands} loading={loading} />}
           />
-        )}
+          {/* Brand details view */}
+          <Route path=":id" element={<BrandDetailsPage />} />
+        </Routes>
       </div>
     </div>
   );

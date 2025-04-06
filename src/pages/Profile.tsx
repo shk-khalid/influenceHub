@@ -12,7 +12,6 @@ import toast from 'react-hot-toast';
 import { isValidSocialUrl } from '../lib/SocialValidation';
 import { authService } from '../services/authService';
 import { User, Language } from '../components/types/auth';
-import { LoadingPulse } from '../components/common/LoadingPulse';
 
 export default function Profile() {
   const [user, setUser] = useState<User | null>(null);
@@ -187,12 +186,10 @@ export default function Profile() {
     }));
   };
 
-  // Show a loading indicator while user data is not loaded.
   if (!user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <LoadingPulse count={5} sizeClass="w-6 h-6" duration={2000} />
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">Loading profile...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg text-gray-600 dark:text-gray-400">Loading profile...</p>
       </div>
     );
   }

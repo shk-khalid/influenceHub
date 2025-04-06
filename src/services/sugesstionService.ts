@@ -1,5 +1,5 @@
 import api from './api';
-import { Brand } from '../components/types/brand';
+import { BrandSuggestion } from '../components/types/brand';
 
 interface BrandSuggestionResponse {
   user_profile_metrics: {
@@ -13,7 +13,7 @@ interface BrandSuggestionResponse {
     avg_comments_computed: number;
   };
   suggested_count: number;
-  suggested_brands: Brand[];
+  suggested_brands: BrandSuggestion[];
 }
 
 export const suggestionService = {

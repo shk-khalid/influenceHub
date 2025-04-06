@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
-import { Brand } from '../components/types/brand';
+import { BrandSuggestion } from '../components/types/brand';
 import { BrandCard } from '../components/suggestion/BrandCard';
 import { ActivityFeed } from '../components/suggestion/ActivityFeed';
 import { suggestionService } from '../services/sugesstionService';
-import { LoadingPulse } from '../components/common/LoadingPulse';
 
 
 export const BrandMatchingDashboard = () => {
   const [currentBrandIndex, setCurrentBrandIndex] = useState(0);
-  const [suggestedBrands, setSuggestedBrands] = useState<Brand[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [suggestedBrands, setSuggestedBrands] = useState<BrandSuggestion[]>([]);
   const [error, setError] = useState<String | null>(null);
 
   useEffect(() => {
@@ -20,17 +18,15 @@ export const BrandMatchingDashboard = () => {
 
   const fetchSuggestedBrands = async () => {
     try {
-      setIsLoading(true);
       const response = await suggestionService.getSuggestedBrands()
       setSuggestedBrands(response.suggested_brands);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch brand suggestions');
     } finally {
-      setIsLoading(false);
     }
   };
 
-  const handleAccept = async (brand: Brand) => {
+  const handleAccept = async (brand: BrandSuggestion) => {
     try {
       await suggestionService.respondToBrand(brand.id, 'accept');
       setCurrentBrandIndex((prev) => prev + 1);
@@ -39,7 +35,7 @@ export const BrandMatchingDashboard = () => {
     }
   };
 
-  const handleDecline = async (brand: Brand) => {
+  const handleDecline = async (brand: BrandSuggestion) => {
     try {
       await suggestionService.respondToBrand(brand.id, 'decline');
       setCurrentBrandIndex((prev) => prev + 1);
@@ -47,15 +43,6 @@ export const BrandMatchingDashboard = () => {
       console.error('Failed to decline brand:', err);
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        {/* Custom Loader */}
-        <LoadingPulse count={3} sizeClass="w-4 h-4" gapClass="space-x-3" duration={1500} />
-      </div>
-    );
-  }
 
   if (error) {
     return (

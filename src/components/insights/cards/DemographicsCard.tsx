@@ -8,10 +8,18 @@ interface DemographicsCardProps {
 }
 
 export const DemographicsCard: React.FC<DemographicsCardProps> = ({ brand }) => {
+  if (!brand.gender_demographics) {
+    return null;
+  }
+
+  const malePct = brand.gender_demographics.male_percentage ?? '0';
+  const femalePct = brand.gender_demographics.female_percentage ?? '0';
+
   const data = [
-    { name: 'Male', value: parseFloat(brand.gender_demographics.male_percentage) },
-    { name: 'Female', value: parseFloat(brand.gender_demographics.female_percentage) }
+    { name: 'Male', value: parseFloat(malePct) },
+    { name: 'Female', value: parseFloat(femalePct) },
   ];
+
 
   const COLORS = ['#3B82F6', '#EC4899'];
 
@@ -22,7 +30,7 @@ export const DemographicsCard: React.FC<DemographicsCardProps> = ({ brand }) => 
         <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Gender Demographics</h2>
       </div>
-      
+
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -39,7 +47,13 @@ export const DemographicsCard: React.FC<DemographicsCardProps> = ({ brand }) => 
                 <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip formatter={(value) => `${value.toFixed(1)}%`} />
+            <Tooltip
+              formatter={(value: number | string) => {
+                // coerce to number
+                const num = typeof value === 'number' ? value : parseFloat(value);
+                return `${num.toFixed(1)}%`;
+              }}
+            />
             <Legend />
           </PieChart>
         </ResponsiveContainer>

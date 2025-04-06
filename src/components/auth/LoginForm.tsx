@@ -12,7 +12,6 @@ import { loginSchema, type LoginFormData } from '../types/auth';
 import DesktopLightLogo from '../../assets/logo/LightLogoOnly.png';
 import DesktopDarkLogo from '../../assets/logo/DarkLogoOnly.png';
 import { useAppSelector } from '../../hooks/useRedux';
-import { LoadingPulse } from '../common/LoadingPulse';
 
 export function LoginForm() {
   const [showTwoFactor, setShowTwoFactor] = useState(false);
@@ -62,14 +61,6 @@ export function LoginForm() {
       console.error("OTP Reset failed: ", error);
     }
   };
-
-  if (isSubmitting) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingPulse count={3} sizeClass="w-6 h-6" gapClass="space-x-2" duration={1500} />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20">

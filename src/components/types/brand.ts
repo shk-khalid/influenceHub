@@ -48,17 +48,17 @@ interface SocialStats {
   avg_likes_computed: string;
   avg_comments_computed: string;
   avg_views: string;
-  brand_posts?: BrandPost[];
+  brand_posts: BrandPost[];
   highest_post: HighestPost;
 }
 
 interface Competitor {
-  id: string;
+  competitor_id: string;
   competitor_name: string;
 }
 
 export interface BrandDetail extends Brand {
-  recent_valuation?: string;
+  recent_valuation: string;
   performance_metrics?: {
     market_share: string;
     growth_rate: string;
@@ -68,9 +68,25 @@ export interface BrandDetail extends Brand {
     male_percentage: string;
     female_percentage: string;
   };
-  valuation_history?: {
+  valuation_history: {
     year: number;
     valuation: string;
   }[];
-  social_stats?: SocialStats;
+  social_stats: SocialStats;
+}
+
+export interface BrandSuggestion {
+  id: string;
+  name: string;
+  sector: string;
+  location: string;
+  overall_rating: string;
+  market_share: string;
+  growth_percentage: string;
+  recent_valuation: string;
+  valuation_history: {
+    year: number;
+    valuation: string;
+  }[];
+  social_stats: SocialStats;
 }

@@ -4,7 +4,7 @@ import {
   Edit2,
   Calendar,
   FileText,
-  DollarSign,
+  IndianRupeeIcon,
   // Some brand icons may show deprecation warnings, but still work
   Facebook as FacebookIcon,
   Instagram as InstagramIcon,
@@ -102,13 +102,12 @@ export default function CampaignCard({ campaign, index }: CampaignCardProps) {
                 </div>
                 {campaign.status && (
                   <span
-                  className={`px-2 py-0.5 rounded-full text-[10px] font-medium text-white whitespace-nowrap ${
-                    statusColors[campaign.status] ?? 'bg-gray-500'
-                  }`}
-                >
-                  {campaign.status.replace('_', ' ').toUpperCase()}
-                </span>
-                
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-medium text-white whitespace-nowrap ${statusColors[campaign.status] ?? 'bg-gray-500'
+                      }`}
+                  >
+                    {campaign.status.replace('_', ' ').toUpperCase()}
+                  </span>
+
                 )}
               </div>
 
@@ -128,11 +127,11 @@ export default function CampaignCard({ campaign, index }: CampaignCardProps) {
                 {/* Budget */}
                 <div className="flex-1">
                   <div className="flex items-center gap-1 text-sm font-medium text-gray-500 dark:text-gray-400">
-                    <DollarSign className="w-4 h-4" />
+                    <IndianRupeeIcon className="w-4 h-4" />
                     <span>Budget</span>
                   </div>
                   <span className="text-sm text-gray-700 dark:text-gray-200">
-                    {campaign.budget ? campaign.budget.toLocaleString() : '0'}
+                    ₹{campaign.budget ? campaign.budget.toLocaleString() : '0'}
                   </span>
                 </div>
 

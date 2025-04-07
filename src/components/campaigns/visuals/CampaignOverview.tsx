@@ -1,4 +1,4 @@
-import { TrendingUp, Users, DollarSign, Calendar } from 'lucide-react';
+import { TrendingUp, Users, Calendar, IndianRupeeIcon } from 'lucide-react';
 import { useCampaignStore } from '../../../hooks/useCampaign';
 
 export default function CampaignOverview() {
@@ -75,7 +75,7 @@ export default function CampaignOverview() {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 min-w-[250px] sm:col-span-3 xl:col-span-1">
           <div className="flex items-center">
             <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
-              <DollarSign className="h-6 w-6 text-yellow-600 dark:text-yellow-200" />
+              <IndianRupeeIcon className="h-6 w-6 text-yellow-600 dark:text-yellow-200" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">

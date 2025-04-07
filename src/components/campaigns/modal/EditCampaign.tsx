@@ -124,25 +124,7 @@ export default function EditCampaignModal({ isOpen, onClose, campaign }: EditCam
             />
 
             {/* Progress slider */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Progress
-              </label>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={formData.progress}
-                onChange={(e) =>
-                  setFormData({ ...formData, progress: Number(e.target.value) })
-                }
-                className="mt-1 block w-full appearance-none h-2 rounded-full bg-gray-200 cursor-pointer 
-                           accent-teal-500 focus:outline-none focus:ring-2 focus:ring-[#2563eb] dark:bg-gray-600"
-              />
-              <div className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                {formData.progress}%
-              </div>
-            </div>
+            
 
             <div className="flex justify-end space-x-4">
               <Button

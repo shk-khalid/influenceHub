@@ -1,29 +1,35 @@
-import { Campaign } from '../components/types';
+import { format } from 'date-fns';
+import type { Campaign } from '../components/types/campaign';
 
 export const generateCSVReport = (campaigns: Campaign[]): string => {
   const headers = [
     'Campaign Title',
-    'Brand',
+    'Description',
     'Status',
-    'Progress',
+    'Priority',
+    'Budget (INR)',
     'Start Date',
     'End Date',
-    'Reach',
-    'Engagement',
-    'ROI'
+    'Platforms',
   ].join(',');
 
-  const rows = campaigns.map(campaign => [
-    `"${campaign.title}"`,
-    `"${campaign.brand}"`,
-    `"${campaign.status}"`,
-    campaign.progress,
-    campaign.startDate,
-    campaign.endDate,
-    campaign.metrics?.reach,
-    `${campaign.metrics?.engagement}%`,
-    `${campaign.roi}%`
-  ].join(','));
+  const rows = campaigns.map(campaign => {
+    const formattedStartDate = campaign.startDate ? format(new Date(campaign.startDate), 'MMM d, yyyy') : '';
+    const formattedEndDate = campaign.endDate ? format(new Date(campaign.endDate), 'MMM d, yyyy') : '';
+    const formattedBudget = campaign.budget ? campaign.budget.toLocaleString() : '0';
+    const platforms = campaign.platform ? campaign.platform.toLowerCase() : 'No Platform';
+
+    return [
+      `"${campaign.title}"`,
+      `"${campaign.description}"`,
+      `"${campaign.status || 'pending'}"`,
+      `"${campaign.priority || 'low'}"`,
+      `"₹${formattedBudget}"`,
+      `"${formattedStartDate}"`,
+      `"${formattedEndDate}"`,
+      `"${platforms}"`,
+    ].join(',');
+  });
 
   return [headers, ...rows].join('\n');
 };

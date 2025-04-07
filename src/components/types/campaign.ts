@@ -8,9 +8,8 @@ export interface Campaign {
   description: string;
   startDate: string;
   endDate: string;
-  priority: PriorityLevel;
+  priority?: PriorityLevel;
   status?: CampaignStatus;
   budget?: number;
   platform?: PlatformChoice;
-  progress?: number;
 }

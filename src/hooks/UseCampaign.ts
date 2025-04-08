@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { Campaign, CampaignStatus } from '../components/types/campaign';
 import { campaignService } from '../services/campaignService';
 
+
 interface Filters {
   search: string;
   platform: string;
@@ -35,7 +36,7 @@ const defaultFilters: Filters = {
   sortDirection: 'desc',
 };
 
-export const useCampaignStore = create<CampaignStore>((set, get) => ({
+export const useCampaign = create<CampaignStore>((set, get) => ({
   campaigns: [],
   filters: defaultFilters,
   isLoading: false,

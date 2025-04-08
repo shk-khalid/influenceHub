@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo } from 'react';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import BoardColumn from '../components/campaigns/board/BoardColumn';
-import { useCampaignStore } from '../hooks/useCampaign.ts';
+import { useCampaign } from '../hooks/useCampaign';
 import SearchBar from '../components/campaigns/visuals/SearchBar';
 import CampaignOverview from '../components/campaigns/visuals/CampaignOverview';
 import { motion } from 'framer-motion';
 import type { CampaignStatus } from '../components/types/campaign';
 
 const Campaign: React.FC = () => {
-  const { fetchCampaigns, updateCampaignStatus, getFilteredCampaigns } = useCampaignStore();
+  const { fetchCampaigns, updateCampaignStatus, getFilteredCampaigns } = useCampaign();
 
   // Fetch campaigns on mount
   useEffect(() => {

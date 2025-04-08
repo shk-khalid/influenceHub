@@ -1,8 +1,8 @@
 import { TrendingUp, Users, Calendar, IndianRupeeIcon } from 'lucide-react';
-import { useCampaignStore } from '../../../hooks/useCampaign';
+import { useCampaign } from '../../../hooks/useCampaign';
 
 export default function CampaignOverview() {
-  const campaigns = useCampaignStore((state) => state.campaigns);
+  const campaigns = useCampaign((state) => state.campaigns);
 
   // Summaries
   const stats = {

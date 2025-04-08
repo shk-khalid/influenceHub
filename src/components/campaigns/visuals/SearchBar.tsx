@@ -7,7 +7,7 @@ import {
   ArrowUpDown,
 } from "lucide-react";
 import CreateCampaignModal from "../modal/CreateCampaign";
-import { useCampaignStore } from "../../../hooks/useCampaign";
+import { useCampaign } from "../../../hooks/useCampaign";
 import { Button } from "../../common/Button";
 import { Input } from "../../common/Input";
 import { Select } from "../../common/Select";
@@ -16,7 +16,7 @@ export default function SearchBar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [showSort, setShowSort] = useState(false);
-  const { filters, setFilters } = useCampaignStore();
+  const { filters, setFilters } = useCampaign();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({ search: e.target.value });

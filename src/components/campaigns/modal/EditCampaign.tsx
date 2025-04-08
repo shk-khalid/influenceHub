@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle } from '@headlessui/react';
 import { X, Save } from 'lucide-react';
-import { useCampaignStore } from '../../../hooks/useCampaign';
+import { useCampaign } from '../../../hooks/useCampaign';
 import { Campaign, PriorityLevel, PlatformChoice } from '../../types/campaign';
 import { Button } from '../../common/Button';
 import { Input } from '../../common/Input';
@@ -15,7 +15,7 @@ interface EditCampaignModalProps {
 }
 
 export default function EditCampaignModal({ isOpen, onClose, campaign }: EditCampaignModalProps) {
-  const updateCampaign = useCampaignStore((state) => state.updateCampaign);
+  const updateCampaign = useCampaign((state) => state.updateCampaign);
   const [formData, setFormData] = useState(campaign);
 
   useEffect(() => {

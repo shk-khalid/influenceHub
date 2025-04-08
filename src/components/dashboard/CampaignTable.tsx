@@ -1,16 +1,17 @@
+import { useState, useEffect } from 'react';
 import type { Campaign } from '../types/campaign';
 import { format } from 'date-fns';
 import {
+  Download,
   Facebook as FacebookIcon,
   Instagram as InstagramIcon,
   Twitter as TwitterIcon,
   Youtube as YoutubeIcon,
   MessageSquare as DiscordIcon,
-} from 'lucide-react'; // Adjust your import paths if needed
-
-interface CampaignTableProps {
-  campaigns: Campaign[];
-}
+} from 'lucide-react';
+import { campaignService } from '../../services/campaignService';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../common/Button';
 
 const priorityColors: Record<string, string> = {
   high: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
@@ -34,7 +35,85 @@ const platformIcons: Record<string, React.ElementType> = {
   youtube: YoutubeIcon,
 };
 
-export function CampaignTable({ campaigns }: CampaignTableProps) {
+export function CampaignTable() {
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      try {
+        const data = await campaignService.getAllCampaigns();
+        setCampaigns(data);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch campaigns');
+        console.error('Error fetching campaigns:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCampaigns();
+  }, []);
+
+  // Loading State
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <svg
+          className="animate-spin h-8 w-8 text-blue-500"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v8H4z"
+          ></path>
+        </svg>
+      </div>
+    );
+  }
+
+  // Error State
+  if (error) {
+    return (
+      <div className="p-4 bg-red-100 text-red-800 rounded-md">
+        {error}
+      </div>
+    );
+  }
+
+  // Empty State
+  if (!isLoading && campaigns.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16">
+        <p className="mb-4 text-lg font-medium text-gray-700 dark:text-gray-300">
+          No Campaigns found.
+        </p>
+        <Button
+          variant="primary"
+          icon={<Download className="w-5 h-5" />}
+          onClick={() => navigate('/campaigns')}
+          className="bg-teal-500 hover:bg-teal-400 dark:bg-rose-500 dark:hover:bg-rose-400 focus:ring-teal-500 dark:focus:ring-rose-400 transition-transform duration-200"
+        >
+          Create a Campaign
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-x-auto rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -74,9 +153,7 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
             return (
               <tr
                 key={campaign.id}
-                className={`transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                  index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-800'
-                }`}
+                className={`transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 ${index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-800'}`}
               >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex flex-col space-y-1">
@@ -87,7 +164,7 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
                       {campaign.description}
                     </span>
                     {platformsArray.length > 0 ? (
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 mt-1">
                         {platformsArray.map((platform) => {
                           const Icon = platformIcons[platform];
                           const colorClasses =
@@ -123,9 +200,7 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
                 <td className="px-6 py-4 whitespace-nowrap">
                   {campaign.priority && (
                     <span
-                      className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium whitespace-nowrap ${
-                        priorityColors[campaign.priority.toLowerCase()]
-                      }`}
+                      className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium whitespace-nowrap ${priorityColors[campaign.priority.toLowerCase()]}`}
                     >
                       {campaign.priority.toUpperCase()}
                     </span>

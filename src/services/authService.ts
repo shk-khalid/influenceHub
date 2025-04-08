@@ -126,12 +126,13 @@ export const authService = {
   },
 
   async logout() {
+    await api.post('auth/logout/');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('reset_token');
     sessionStorage.removeItem('user');
     store.dispatch(clearUser());
-    await api.get('auth/logout/');
   },
+  
 
   isAuthenticated(): boolean {
     return !!this.getToken() && !!this.getCurrentUser();

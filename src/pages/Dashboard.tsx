@@ -88,7 +88,7 @@ export const Dashboard: React.FC = () => {
           </div>
           <div className="overflow-x-auto -mx-4 md:-mx-6">
             <div className="min-w-[800px] px-4 md:px-6">
-              <CampaignTable campaigns={campaignsMock} />
+              <CampaignTable />
             </div>
           </div>
         </Card>

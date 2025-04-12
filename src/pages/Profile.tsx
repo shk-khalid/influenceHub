@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { userService } from '../services/userService';
 import ProfileHeader from '../components/profile/ProfileHeader';
-import InfluencerStats from '../components/profile/ProfileStats';
 import PersonalDetails from '../components/profile/PersonalDetails';
 import ProfilePicture from '../components/profile/ProfilePicture';
 import SocialLinkInput from '../components/common/SocialLinks';
@@ -240,9 +239,6 @@ export default function Profile() {
         onImageUpload={handleImageUpload}
         isEditing={isEditing}
       />
-
-      {/* Influencer Stats */}
-      <InfluencerStats rating={4.8} />
 
       {/* Personal Details */}
       <PersonalDetails
